@@ -192,7 +192,7 @@ public class frCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_btAceptarActionPerformed
 
     private void btCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelarActionPerformed
-        Cliente cl=new Cliente(3);
+        Cliente cl=new Cliente();
         cl.recuperaDatos();
         this.txtApellidos.setText(cl.getApellidos());
         this.txtCorreo.setText(cl.getEmail());
@@ -203,7 +203,7 @@ public class frCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_btCancelarActionPerformed
 
     private void btAyudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAyudaActionPerformed
-        Cliente cl=new Cliente(3);
+        Cliente cl=new Cliente();
         cl.eliminar();
     }//GEN-LAST:event_btAyudaActionPerformed
 
