@@ -16,15 +16,30 @@ import java.sql.Statement;
 public class bd {
 
     private static final String driver = "com.mysql.cj.jdbc.Driver";
-    private static final String bbdd = "jdbc:mysql://localhost:3306/tpvtienda?zeroDateTimeBehavior=CONVERT_TO_NULL";
+    private static final String bbdd = "jdbc:mysql://localhost:3306/tpv?zeroDateTimeBehavior=CONVERT_TO_NULL";
     private static final String usuario = "root";
     private static final String clave = "";
+    private static Connection conex=null;
 
+    public static boolean cargarDriver() {
+        try {
+            System.out.print("Cargando Driver...");
+            Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
+            System.out.println("OK!");
+            return true;
+        } catch (ClassNotFoundException ex) {
+            ex.printStackTrace();
+            return false;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
+    }
     
     public static Connection Conexion() {
         /*Declaramos una variable para almacenar la cadena de conexión.
     Primero la iniciamos en null.*/
-        Connection conex = null;
+         
 
         //Controlamos la excepciones que puedan surgir al conectarnos a la BBDD
         try {
@@ -44,17 +59,21 @@ public class bd {
     }
     
     public static int Sentencia(String sql){        
-        int nr=-1;
+        int numFilas=-1;
         Connection con = Conexion();
         try {
             Statement st = con.createStatement();
-            nr = st.executeUpdate(sql);
-            System.out.println("numero de registros actualizados:" + nr);
+            numFilas = st.executeUpdate(sql);
+            System.out.println("numero de registros actualizados:" + numFilas);
         } catch (Exception ex) {            
 
         }
         
-        return nr;        
+        return numFilas;        
+    }
+    
+    public static void close(){
+        
     }
     
     public static ResultSet Consulta(String sql){
@@ -64,10 +83,9 @@ public class bd {
             // Informamos que la conexión es correcta
             try {
                 Statement st = cone.createStatement();
-                rs = st.executeQuery(sql);
-                
-                st.close();
-                cone.close();
+                rs = st.executeQuery(sql);                
+               // st.close();
+               // cone.close();
             } catch (Exception ex) {
                 
             }

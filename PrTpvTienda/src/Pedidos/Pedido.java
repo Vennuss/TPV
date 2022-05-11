@@ -11,6 +11,7 @@ import java.sql.Statement;
  */
 public class Pedido {
     
+    //final private String url = "jdbc:mysql://localhost:3306/mysql?zeroDateTimeBehavior=CONVERT_TO_NULL";
     private int id;
     private boolean estadoPago;
     private String fecha = null, formaPago, cliente;
@@ -31,6 +32,10 @@ public class Pedido {
     public Pedido(int _id){
         this.id = _id;
         recuperarDatos();
+    }
+
+    public Pedido() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     public int getId() {
@@ -74,7 +79,7 @@ public class Pedido {
     }
     
     public void recuperarDatos() {
-        String sql = "select * from pedidos where dni = " + this.id;
+        String sql = "select * from pedidos where id = " + this.id;
         Connection con = bd.Conexion();
         if (con != null) {
             // Informamos que la conexión es correcta
@@ -93,13 +98,15 @@ public class Pedido {
         }
     }
     
-    public void registrar() {
+    public boolean registrar() {
         String sql;
         if (fecha == null){
-            sql = "insert into pedidos (formaPago, estadoPago, cliente) VALUES("+ this.formaPago + "," + this.estadoPago + "," + this.cliente + ")";
+            sql = "insert into pedidos (formaPago, estadoPago, cliente) "
+                    + "VALUES('" + formaPago +"'," + estadoPago +",'" + cliente + "');";
         }
         else{
-            sql = "insert into pedidos (fecha, formaPago, estadoPago, cliente) VALUES(" + this.fecha + "," + this.formaPago + "," + this.estadoPago + "," + this.cliente + ")";
+            sql = "insert into pedidos (fecha, formaPago, estadoPago, cliente) "
+                    + "VALUES('" + fecha + "','"+ formaPago +"'," + estadoPago +",'" + cliente + "');";
         }
 //        int nr = stmt.executeUpdate
         Connection con = bd.Conexion();
@@ -107,14 +114,17 @@ public class Pedido {
             Statement st = con.createStatement();
             int nr = st.executeUpdate(sql);
             System.out.println("numero de registros actualizados:" + nr);
+            return true;
         } catch (Exception ex) {
             System.out.println("Error de Registro");
+            return false;
         }   
     }
     
     public void actualizar() {
         //Actualizar la ficha del Cliente
-        String sql = "update pedidos set " + " fecha = '" + this.fecha +"', formaPago = '" + this.formaPago + "', estadoPago = '" + this.estadoPago + "',cliente = '" + this.cliente + "' where id = " + this.id;
+        String sql = "update pedidos set " + " fecha = '" + this.fecha +"', formaPago = '" + this.formaPago + "', estadoPago = '" + this.estadoPago + "',cliente = '" + this.cliente 
+                + "' where id = " + this.id;
         Connection con = bd.Conexion();
         try {
             Statement st = con.createStatement();

@@ -11,23 +11,23 @@ import java.sql.Statement;
  */
 public class ArticuloPedido {
     final private int pedidoId;
-    private int articuloId, cantidad;
+    private int articuloRef, cantidad;
     private double precio;
     
     public ArticuloPedido(int _articulo, int _pedido, int _cantidad){
-        this.articuloId = _articulo;
+        this.articuloRef = _articulo;
         this.pedidoId = _pedido;
         this.cantidad = _cantidad;
     }
     
     public ArticuloPedido(int _articulo, int _pedido){
-        this.articuloId = _articulo;
+        this.articuloRef = _articulo;
         this.pedidoId = _pedido;
         recuperarDatos();
     }
 
-    public int getArticuloId() {
-        return articuloId;
+    public int getArticuloRef() {
+        return articuloRef;
     }
 
     public int getPedidoId() {
@@ -51,7 +51,7 @@ public class ArticuloPedido {
     }
     
     public void recuperarDatos() {
-        String sql = "select * from contiene where articulosID = " + this.articuloId + " and pedidosId = " + this.pedidoId;
+        String sql = "select * from contiene where articulosRef = " + this.articuloRef + " and pedidosId = " + this.pedidoId;
         Connection con = bd.Conexion();
         if (con != null) {
             // Informamos que la conexión es correcta
@@ -69,7 +69,7 @@ public class ArticuloPedido {
     }
     
     public void registrar() {
-        String sql = "insert into contiene VALUES(" + this.articuloId + "," + this.pedidoId + "," + this.cantidad + "," + this.precio + ")";
+        String sql = "insert into contiene VALUES(" + this.articuloRef + "," + this.pedidoId + "," + this.cantidad + "," + this.precio + ")";
         
 //        int nr = stmt.executeUpdate
         Connection con = bd.Conexion();
@@ -84,8 +84,8 @@ public class ArticuloPedido {
     
     public void actualizar() {
         //Actualizar la ficha del Cliente
-        String sql = "update contiene set " + " articulosID = '" + this.articuloId +"', pedidosID = '" + this.pedidoId + "', cantidad = '" + this.cantidad + "',precio = '" + this.precio + "'"
-                + " where articulosId = " + this.articuloId + " and pedidosId = " + this.pedidoId;
+        String sql = "update contiene set " + " articulosRef = '" + this.articuloRef +"', pedidosID = '" + this.pedidoId + "', cantidad = '" + this.cantidad + "',precio = '" + this.precio + "'"
+                + " where articulosRef = " + this.articuloRef + " and pedidosId = " + this.pedidoId;
         Connection con = bd.Conexion();
         try {
             Statement st = con.createStatement();
@@ -95,7 +95,7 @@ public class ArticuloPedido {
     }
     
     public void eliminar() {
-        String sql = "delete from contiene where articulosId = " + this.articuloId + " and pedidosId = " + this.pedidoId;
+        String sql = "delete from contiene where articulosRef = " + this.articuloRef + " and pedidosId = " + this.pedidoId;
         Connection con = bd.Conexion();
         try {
             Statement st = con.createStatement();
