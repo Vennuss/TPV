@@ -59,15 +59,49 @@ public class ArticuloPedido {
                 Statement st = con.createStatement();
                 ResultSet rs = st.executeQuery(sql);
                 while (rs.next()) {
-//                    this.fecha = rs.getString("fecha");
-//                    this.formaPago = rs.getString("formaPago");
-//                    this.estadoPago = Boolean.getBoolean("estadoPago");
-//                    this.cliente = rs.getString("cliete");
+                    this.cantidad = rs.getInt("cantidad");
+                    this.precio = (double) rs.getLong("precio");
                 }
             } catch (Exception ex) {}
         } else { // Sino informamos que no nos podemos conectar.
             System.out.println("No hay conexion");
         }
+    }
+    
+    public void registrar() {
+        String sql = "insert into contiene VALUES(" + this.articuloId + "," + this.pedidoId + "," + this.cantidad + "," + this.precio + ")";
+        
+//        int nr = stmt.executeUpdate
+        Connection con = bd.Conexion();
+        try {
+            Statement st = con.createStatement();
+            int nr = st.executeUpdate(sql);
+            System.out.println("numero de registros actualizados:" + nr);
+        } catch (Exception ex) {
+            System.out.println("Error de Registro");
+        }   
+    }
+    
+    public void actualizar() {
+        //Actualizar la ficha del Cliente
+        String sql = "update contiene set " + " articulosID = '" + this.articuloId +"', pedidosID = '" + this.pedidoId + "', cantidad = '" + this.cantidad + "',precio = '" + this.precio + "'"
+                + " where articulosId = " + this.articuloId + " and pedidosId = " + this.pedidoId;
+        Connection con = bd.Conexion();
+        try {
+            Statement st = con.createStatement();
+            int nr = st.executeUpdate(sql);
+            System.out.println("numero de registros actualizados:" + nr);
+        } catch (Exception ex) {}
+    }
+    
+    public void eliminar() {
+        String sql = "delete from contiene where articulosId = " + this.articuloId + " and pedidosId = " + this.pedidoId;
+        Connection con = bd.Conexion();
+        try {
+            Statement st = con.createStatement();
+            int nr = st.executeUpdate(sql);
+            System.out.println("numero de registros actualizados:" + nr);
+        } catch (Exception ex) {}
     }
     
 }
