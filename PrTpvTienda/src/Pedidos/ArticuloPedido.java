@@ -7,7 +7,7 @@ import java.sql.Statement;
 
 /**
  *
- * @author admin
+ * @author Hugo
  */
 public class ArticuloPedido {
     final private int pedidoId;

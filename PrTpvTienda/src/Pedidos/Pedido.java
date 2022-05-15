@@ -7,7 +7,7 @@ import java.sql.Statement;
 
 /**
  *
- * @author admin
+ * @author Hugo
  */
 public class Pedido {
     
@@ -32,10 +32,6 @@ public class Pedido {
     public Pedido(int _id){
         this.id = _id;
         recuperarDatos();
-    }
-
-    public Pedido() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     public int getId() {

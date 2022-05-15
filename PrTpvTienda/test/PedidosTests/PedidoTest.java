@@ -19,7 +19,7 @@ import org.junit.runners.Parameterized;
 
 /**
  *
- * @author admin
+ * @author Hugo
  */
 
 @RunWith(Parameterized.class)
@@ -81,7 +81,7 @@ public class PedidoTest {
     @Test //Esto tiene que dar error. Si da error saldra como bien
     public void testCrearPedido03(){
         try{
-            Pedido p1 = new Pedido();
+            Pedido p1 = new Pedido(fecha,formaPago,estadoPago,cliente);
             assertNotNull(null);
         }
         catch(Exception e){
