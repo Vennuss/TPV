@@ -7,10 +7,13 @@ package Ofertas;
 import Maqueta.Maqueta;
 import bd.bd;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -106,11 +109,11 @@ public class Oferta implements Maqueta {
         }
     }
     public void actualizarLineas(){
-        Iterator itera=this.lineas.iterator();
+       /* Iterator itera=this.lineas.iterator();
         while(itera.hasNext()){
             Aplican li=(Aplican)itera.next();
             li.actualizar();
-        }
+        }*/
     }
     
     public void recuperarLineas(){
@@ -152,11 +155,11 @@ public class Oferta implements Maqueta {
     public void registrar() {        
         
         String sql="insert into ofertas(nombre, descripcion, fechaini, fechafin, vip) values('"+this.getNombre()+
-                "','"+this.getDescripcion()+"','"+simpleDateFormat.format(this.getFechaIni())+"','"+simpleDateFormat.format(this.getFechaIni())+"',"+this.isVip()+")";
-        int resultado=bd.Sentencia(sql);
-        if(resultado>0){
+                    "','"+this.getDescripcion()+"','"+simpleDateFormat.format(this.getFechaIni())+"','"+simpleDateFormat.format(this.getFechaIni())+"',"+this.isVip()+")";
+        int resultado = bd.Sentencia2(sql);
+        if (resultado > 0) {
             JOptionPane.showMessageDialog(null, "Registro Exitoso");
-            
+
         }
     }
 
