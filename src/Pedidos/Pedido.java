@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 public class Pedido {
     
     //final private String url = "jdbc:mysql://localhost:3306/mysql?zeroDateTimeBehavior=CONVERT_TO_NULL";
+    private static final bd bd = new bd();
     private int id;
     private boolean estadoPago;
     private String fecha = null, formaPago, cliente;
@@ -81,12 +82,8 @@ public class Pedido {
     
     public void recuperarDatos() {
         String sql = "select * from pedidos where id = " + this.id;
-        Connection con = bd.Conexion();
-        if (con != null) {
-            // Informamos que la conexión es correcta
             try {
-                Statement st = con.createStatement();
-                ResultSet rs = st.executeQuery(sql);
+                ResultSet rs = bd.Consulta(sql);
                 while (rs.next()) {
                     this.fecha = rs.getString("fecha");
                     this.formaPago = rs.getString("formaPago");
@@ -94,12 +91,10 @@ public class Pedido {
                     this.cliente = rs.getString("cliete");
                 }
             } catch (Exception ex) {}
-        } else { // Sino informamos que no nos podemos conectar.
-            System.out.println("No hay conexion");
-        }
+        
     }
     
-    public boolean registrar() {
+    public void registrar() {
         String sql;
         if (fecha == null){
             sql = "insert into pedidos (formaPago, estadoPago, cliente) "
@@ -110,33 +105,24 @@ public class Pedido {
                     + "VALUES('" + fecha + "','"+ formaPago +"'," + estadoPago +",'" + cliente + "');";
         }
 //        int nr = stmt.executeUpdate
-        int resultado=bd.Sentencia(sql);
-        if(resultado>0){
-            JOptionPane.showMessageDialog(null, "Registro Exitoso");
-            return true;
-        }
-        else return false;
+        int resultado = bd.Sentencia(sql);
+        if (resultado > 0) JOptionPane.showMessageDialog(null, "Registro Exitoso");
+        else JOptionPane.showMessageDialog(null, "Error al Registrar");
     }
     
     public void actualizar() {
         //Actualizar la ficha del Cliente
         String sql = "update pedidos set " + " fecha = '" + this.fecha +"', formaPago = '" + this.formaPago + "', estadoPago = '" + this.estadoPago + "',cliente = '" + this.cliente 
                 + "' where id = " + this.id;
-        Connection con = bd.Conexion();
         try {
-            Statement st = con.createStatement();
-            int nr = st.executeUpdate(sql);
-            System.out.println("numero de registros actualizados:" + nr);
+            bd.Sentencia(sql);
         } catch (Exception ex) {}
     }
     
     public void eliminar() {
         String sql = "delete from pedidos where id = " + this.id;
-        Connection con = bd.Conexion();
         try {
-            Statement st = con.createStatement();
-            int nr = st.executeUpdate(sql);
-            System.out.println("numero de registros actualizados:" + nr);
+            bd.Sentencia(sql);
         } catch (Exception ex) {}
     }
 }
