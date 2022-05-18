@@ -52,13 +52,28 @@ public class frOferta extends javax.swing.JDialog {
         cargarIMG("/Imagenes/edit.png", this.btModificar);
         cargarIMG("/Imagenes/delete.png", this.btEliminar);
     }
-    
+
+    public final void registrarLineas() {
+        int resultado = bd.Sentencia("delete from aplican where ofertasid=" + this.ofer.getId());
+        for (int i = 0; i < modelo.getRowCount(); i++) {
+            Aplican apli = new Aplican();
+            String referencia = String.valueOf(modelo.getValueAt(i, 0));
+            double cantidad = (double) modelo.getValueAt(i, 2);
+            double dto = (double) modelo.getValueAt(i, 1);
+            apli.setCantidad(cantidad);
+            apli.setDescuento(dto);
+            apli.setReferencia(referencia);
+            apli.setOfertasId(ofer.getId());
+            apli.registrar();
+        }
+    }
+
     public final void recuperarDatos() {
-        
+
         DefaultTableModel tm = (DefaultTableModel) this.tLineas.getModel();
         this.tLineas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        String sql = "select * from ofertas " ;
+        String sql = "select * from ofertas ";
         try {
 
             ResultSet rs = bd.Consulta(sql);
@@ -69,17 +84,17 @@ public class frOferta extends javax.swing.JDialog {
                 ofer.setFechaIni(rs.getDate("fechaini"));
                 ofer.setFechaFin(rs.getDate("fechafin"));
                 ofer.setVip(rs.getBoolean("vip"));
-                
+
                 this.lId.setText(String.valueOf(ofer.getId()));
                 this.txtDescripcion.setText(ofer.getDescripcion());
                 this.txtNombre.setText(ofer.getNombre());
                 this.txtFechaIni.setText(String.valueOf(ofer.getFechaIni()));
                 this.txtFechaFin.setText(String.valueOf(ofer.getFechaFin()));
-                
+
             }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
-        }        
+        }
     }
 
     private void Modelo() {
@@ -90,7 +105,7 @@ public class frOferta extends javax.swing.JDialog {
                         "Referencia",
                         "Descuento", "Cantidad"}) {
                 Class[] types = new Class[]{
-                    java.lang.String.class,                    
+                    java.lang.String.class,
                     java.lang.Double.class,
                     java.lang.Double.class
                 };
@@ -112,9 +127,6 @@ public class frOferta extends javax.swing.JDialog {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.toString() + "error2");
         }
-//        this.tLineas.getColumnModel().getColumn(0).setPreferredWidth(50);
-//        this.tLineas.getColumnModel().getColumn(1).setPreferredWidth(100);
-//        this.tLineas.getColumnModel().getColumn(2).setPreferredWidth(100);
         this.tLineas.setRowHeight(30);
     }
 
@@ -375,16 +387,16 @@ public class frOferta extends javax.swing.JDialog {
         }
         if (operacion) {
             ofer.registrar();
-            ofer.registrarLineas();
+            this.registrarLineas();
             this.result = JOptionPane.OK_OPTION;
-            this.setVisible(false);
-            this.dispose();
+            /*  this.setVisible(false);
+            this.dispose();*/
         } else {
             ofer.actualizar();
             ofer.actualizarLineas();
             this.result = JOptionPane.OK_OPTION;
-            this.setVisible(false);
-            this.dispose();
+            /* this.setVisible(false);
+            this.dispose();*/
         }
     }//GEN-LAST:event_btAceptarActionPerformed
 
@@ -409,7 +421,7 @@ public class frOferta extends javax.swing.JDialog {
         dialog.setVisible(true);
         if (dialog.getResult() == JOptionPane.YES_NO_OPTION) {
             DefaultTableModel tm = (DefaultTableModel) this.tLineas.getModel();
-            Object nuev[] = {dialog.getApli().getReferencia(),dialog.getApli().getDescuento() ,dialog.getApli().getCantidad() };
+            Object nuev[] = {dialog.getApli().getReferencia(), dialog.getApli().getDescuento(), dialog.getApli().getCantidad()};
             tm.addRow(nuev);
         } else {
 
@@ -419,11 +431,10 @@ public class frOferta extends javax.swing.JDialog {
     private void btModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btModificarActionPerformed
         int fila = this.tLineas.getSelectedRow();
         if (this.tLineas.getSelectedRow() != -1) {
-            Aplican apli=new Aplican();
-            String referencia=String.valueOf(modelo.getValueAt(fila, 1));
-            System.out.println("Referecia:"+referencia);
-            double cantidad=(double)modelo.getValueAt(fila, 3);
-            double dto=(double)modelo.getValueAt(fila, 2);
+            Aplican apli = new Aplican();
+            String referencia = String.valueOf(modelo.getValueAt(fila, 0));
+            double cantidad = (double) modelo.getValueAt(fila, 2);
+            double dto = (double) modelo.getValueAt(fila, 1);
             apli.setCantidad(cantidad);
             apli.setDescuento(dto);
             apli.setReferencia(referencia);
@@ -435,33 +446,26 @@ public class frOferta extends javax.swing.JDialog {
                 }
             });
             dialog.setVisible(true);
-            if (dialog.getResult()==JOptionPane.YES_NO_OPTION) {
-                modelo.setValueAt(apli.getReferencia(), fila, 1);
+            if (dialog.getResult() == JOptionPane.YES_NO_OPTION) {
+                modelo.setValueAt(apli.getReferencia(), fila, 0);
+                modelo.setValueAt(apli.getDescuento(), fila, 1);
                 modelo.setValueAt(apli.getCantidad(), fila, 2);
-                modelo.setValueAt(apli.getCantidad(), fila, 3);
             } else {
                 System.out.println("Mostar ajsjdj");
             }
-        }
-        else {
+        } else {
             JOptionPane.showMessageDialog(null, "Seleccione un registro");
         }
     }//GEN-LAST:event_btModificarActionPerformed
 
     private void btEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEliminarActionPerformed
-        /*int fila = this.tFamilias.getSelectedRow();
-        System.out.println("Fila seleccionada es" + fila);
-        if (this.tFamilias.getSelectedRow() != -1) {
-            int codigo = (Integer) modelo.getValueAt(fila, 0);
-            System.out.println("El codigo es:" + codigo);
-            Familia fami = new Familia(codigo);
+        int fila = this.tLineas.getSelectedRow();
+        if (this.tLineas.getSelectedRow() != -1) {
             int resp = JOptionPane.showConfirmDialog(null, "¿Esta seguro?", "Alerta!", JOptionPane.YES_NO_OPTION);
             if (resp == JOptionPane.OK_OPTION) {
-                fami.eliminar();
-                fami = null;
                 this.modelo.removeRow(fila);
             }
-        }*/
+        }
     }//GEN-LAST:event_btEliminarActionPerformed
 
     /**
@@ -529,4 +533,3 @@ public class frOferta extends javax.swing.JDialog {
     private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables
 }
-
