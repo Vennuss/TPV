@@ -4,12 +4,20 @@
  */
 package Ofertas;
 
+import bd.bd;
+import java.awt.Image;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -24,10 +32,12 @@ public class frOferta extends javax.swing.JDialog {
     private boolean operacion = false;
     private int result = JOptionPane.OK_OPTION;
     Oferta ofer;
+    DefaultTableModel modelo;
 
     public frOferta(Oferta ofer, boolean operacion, java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        Modelo();
         this.ofer = ofer;
         this.operacion = operacion;
         if (!operacion) {
@@ -38,6 +48,80 @@ public class frOferta extends javax.swing.JDialog {
             this.txtFechaIni.setText(String.valueOf(ofer.getFechaIni()));
             this.txtFechaFin.setText(String.valueOf(ofer.getFechaFin()));
         }
+        cargarIMG("/Imagenes/add.png", this.btAñadir);
+        cargarIMG("/Imagenes/edit.png", this.btModificar);
+        cargarIMG("/Imagenes/delete.png", this.btEliminar);
+    }
+    
+    public final void recuperarDatos() {
+        
+        DefaultTableModel tm = (DefaultTableModel) this.tLineas.getModel();
+        this.tLineas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        String sql = "select * from ofertas " ;
+        try {
+
+            ResultSet rs = bd.Consulta(sql);
+            while (rs.next()) {
+                ofer.setDescripcion(rs.getString("descripcion"));
+                ofer.setId(rs.getInt("id"));
+                ofer.setNombre(rs.getString("nombre"));
+                ofer.setFechaIni(rs.getDate("fechaini"));
+                ofer.setFechaFin(rs.getDate("fechafin"));
+                ofer.setVip(rs.getBoolean("vip"));
+                
+                this.lId.setText(String.valueOf(ofer.getId()));
+                this.txtDescripcion.setText(ofer.getDescripcion());
+                this.txtNombre.setText(ofer.getNombre());
+                this.txtFechaIni.setText(String.valueOf(ofer.getFechaIni()));
+                this.txtFechaFin.setText(String.valueOf(ofer.getFechaFin()));
+                
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }        
+    }
+
+    private void Modelo() {
+
+        try {
+            modelo = (new DefaultTableModel(
+                    null, new String[]{
+                        "Referencia",
+                        "Descuento", "Cantidad"}) {
+                Class[] types = new Class[]{
+                    java.lang.String.class,                    
+                    java.lang.Double.class,
+                    java.lang.Double.class
+                };
+                boolean[] canEdit = new boolean[]{
+                    false, true, true
+                };
+
+                @Override
+                public Class getColumnClass(int columnIndex) {
+                    return types[columnIndex];
+                }
+
+                @Override
+                public boolean isCellEditable(int rowIndex, int colIndex) {
+                    return canEdit[colIndex];
+                }
+            });
+            this.tLineas.setModel(modelo);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.toString() + "error2");
+        }
+//        this.tLineas.getColumnModel().getColumn(0).setPreferredWidth(50);
+//        this.tLineas.getColumnModel().getColumn(1).setPreferredWidth(100);
+//        this.tLineas.getColumnModel().getColumn(2).setPreferredWidth(100);
+        this.tLineas.setRowHeight(30);
+    }
+
+    private void cargarIMG(String url, JButton boton) {
+        ImageIcon icon = new ImageIcon(getClass().getResource(url));
+        ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT));
+        boton.setIcon(icono);
     }
 
     /**
@@ -61,10 +145,14 @@ public class frOferta extends javax.swing.JDialog {
         jLabel4 = new javax.swing.JLabel();
         chVip = new javax.swing.JCheckBox();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tFamilias = new javax.swing.JTable();
+        tLineas = new javax.swing.JTable();
         btAceptar = new javax.swing.JButton();
         btCancelar = new javax.swing.JButton();
         btAyuda = new javax.swing.JButton();
+        jToolBar1 = new javax.swing.JToolBar();
+        btAñadir = new javax.swing.JButton();
+        btModificar = new javax.swing.JButton();
+        btEliminar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -103,8 +191,8 @@ public class frOferta extends javax.swing.JDialog {
 
         chVip.setText("Solo para Vip");
 
-        tFamilias.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        tFamilias.setModel(new javax.swing.table.DefaultTableModel(
+        tLineas.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        tLineas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -112,9 +200,9 @@ public class frOferta extends javax.swing.JDialog {
 
             }
         ));
-        tFamilias.setRowHeight(30);
-        tFamilias.setRowMargin(1);
-        jScrollPane1.setViewportView(tFamilias);
+        tLineas.setRowHeight(30);
+        tLineas.setRowMargin(1);
+        jScrollPane1.setViewportView(tLineas);
 
         btAceptar.setText("Aceptar");
         btAceptar.addActionListener(new java.awt.event.ActionListener() {
@@ -136,6 +224,50 @@ public class frOferta extends javax.swing.JDialog {
                 btAyudaActionPerformed(evt);
             }
         });
+
+        jToolBar1.setRollover(true);
+
+        btAñadir.setFocusable(false);
+        btAñadir.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btAñadir.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        btAñadir.setMaximumSize(new java.awt.Dimension(40, 40));
+        btAñadir.setMinimumSize(new java.awt.Dimension(40, 40));
+        btAñadir.setPreferredSize(new java.awt.Dimension(40, 40));
+        btAñadir.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btAñadir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btAñadirActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btAñadir);
+
+        btModificar.setFocusable(false);
+        btModificar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btModificar.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        btModificar.setMaximumSize(new java.awt.Dimension(40, 40));
+        btModificar.setMinimumSize(new java.awt.Dimension(40, 40));
+        btModificar.setPreferredSize(new java.awt.Dimension(40, 40));
+        btModificar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btModificarActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btModificar);
+
+        btEliminar.setFocusable(false);
+        btEliminar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btEliminar.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        btEliminar.setMaximumSize(new java.awt.Dimension(40, 40));
+        btEliminar.setMinimumSize(new java.awt.Dimension(40, 40));
+        btEliminar.setPreferredSize(new java.awt.Dimension(40, 40));
+        btEliminar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btEliminarActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btEliminar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -164,10 +296,6 @@ public class frOferta extends javax.swing.JDialog {
                             .addComponent(txtDescripcion)
                             .addComponent(txtNombre, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addContainerGap())))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1)
-                .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -181,6 +309,12 @@ public class frOferta extends javax.swing.JDialog {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(chVip)
                         .addGap(189, 189, 189))))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
+                    .addComponent(jToolBar1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -204,13 +338,15 @@ public class frOferta extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chVip)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btAceptar)
                     .addComponent(btCancelar)
                     .addComponent(btAyuda))
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -262,6 +398,72 @@ public class frOferta extends javax.swing.JDialog {
 
     }//GEN-LAST:event_btAyudaActionPerformed
 
+    private void btAñadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAñadirActionPerformed
+        frLineas dialog = new frLineas(new Aplican(), true, new javax.swing.JFrame(), true);
+        dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                System.exit(0);
+            }
+        });
+        dialog.setVisible(true);
+        if (dialog.getResult() == JOptionPane.YES_NO_OPTION) {
+            DefaultTableModel tm = (DefaultTableModel) this.tLineas.getModel();
+            Object nuev[] = {dialog.getApli().getReferencia(),dialog.getApli().getDescuento() ,dialog.getApli().getCantidad() };
+            tm.addRow(nuev);
+        } else {
+
+        }
+    }//GEN-LAST:event_btAñadirActionPerformed
+
+    private void btModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btModificarActionPerformed
+        int fila = this.tLineas.getSelectedRow();
+        if (this.tLineas.getSelectedRow() != -1) {
+            Aplican apli=new Aplican();
+            String referencia=String.valueOf(modelo.getValueAt(fila, 1));
+            System.out.println("Referecia:"+referencia);
+            double cantidad=(double)modelo.getValueAt(fila, 3);
+            double dto=(double)modelo.getValueAt(fila, 2);
+            apli.setCantidad(cantidad);
+            apli.setDescuento(dto);
+            apli.setReferencia(referencia);
+            frLineas dialog = new frLineas(apli, false, new javax.swing.JFrame(), true);
+            dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent e) {
+                    //System.exit(0);
+                }
+            });
+            dialog.setVisible(true);
+            if (dialog.getResult()==JOptionPane.YES_NO_OPTION) {
+                modelo.setValueAt(apli.getReferencia(), fila, 1);
+                modelo.setValueAt(apli.getCantidad(), fila, 2);
+                modelo.setValueAt(apli.getCantidad(), fila, 3);
+            } else {
+                System.out.println("Mostar ajsjdj");
+            }
+        }
+        else {
+            JOptionPane.showMessageDialog(null, "Seleccione un registro");
+        }
+    }//GEN-LAST:event_btModificarActionPerformed
+
+    private void btEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEliminarActionPerformed
+        /*int fila = this.tFamilias.getSelectedRow();
+        System.out.println("Fila seleccionada es" + fila);
+        if (this.tFamilias.getSelectedRow() != -1) {
+            int codigo = (Integer) modelo.getValueAt(fila, 0);
+            System.out.println("El codigo es:" + codigo);
+            Familia fami = new Familia(codigo);
+            int resp = JOptionPane.showConfirmDialog(null, "¿Esta seguro?", "Alerta!", JOptionPane.YES_NO_OPTION);
+            if (resp == JOptionPane.OK_OPTION) {
+                fami.eliminar();
+                fami = null;
+                this.modelo.removeRow(fila);
+            }
+        }*/
+    }//GEN-LAST:event_btEliminarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -307,7 +509,10 @@ public class frOferta extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btAceptar;
     private javax.swing.JButton btAyuda;
+    private javax.swing.JButton btAñadir;
     private javax.swing.JButton btCancelar;
+    private javax.swing.JButton btEliminar;
+    private javax.swing.JButton btModificar;
     private javax.swing.JCheckBox chVip;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -315,11 +520,13 @@ public class frOferta extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JToolBar jToolBar1;
     private javax.swing.JLabel lId;
-    private javax.swing.JTable tFamilias;
+    private javax.swing.JTable tLineas;
     private javax.swing.JTextField txtDescripcion;
     private javax.swing.JTextField txtFechaFin;
     private javax.swing.JTextField txtFechaIni;
     private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables
 }
+

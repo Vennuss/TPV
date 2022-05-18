@@ -4,7 +4,6 @@
  */
 package Articulos;
 
-
 import java.awt.Image;
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,6 +12,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -39,8 +41,8 @@ public class frArticulos extends javax.swing.JDialog {
         this.cargarIcono("/Imagenes/lupa.png", this.btFamilia);
         this.operacion = operacion;
         this.art = art;
-        if (!operacion) {            
-            this.txtReferencia.setEnabled(false);            
+        if (!operacion) {
+            this.txtReferencia.setEnabled(false);
             this.txtReferencia.setText(art.getReferencia());
             this.txtANotas.setText(art.getNotas());
             this.txtStock.setText(String.valueOf(art.getStock()));
@@ -49,7 +51,7 @@ public class frArticulos extends javax.swing.JDialog {
             this.txtMarca.setText(art.getMarca());
             this.txtFamilia.setText(String.valueOf(art.getFa().getId()));
             this.lFamilia.setText(art.getFa().getNombre());
-            this.cargarImg("Imagenes/" + art.getRutaImg());
+            this.cargarImg("/Imagenes/" + art.getRutaImg());
         }
     }
 
@@ -64,41 +66,23 @@ public class frArticulos extends javax.swing.JDialog {
             File rutaSis = new File(main.getPath());
 
             File origen = new File(url);
-            File destino = new File(rutaSis + "/" + origen.getName());
+            File destino = new File(rutaSis.getParent().replace("%20", " ") + "/Imagenes/" + origen.getName());
             nombre = origen.getName();
 
             System.out.println("Ruta origen:" + origen.getAbsolutePath());
             System.out.println("Ruta Destino:" + destino.getAbsolutePath());
 
-            if (origen.exists()) {
-                try {
-                    InputStream in = new FileInputStream(origen);
-                    OutputStream out = new FileOutputStream(destino);
-                    // We use a buffer for the copy (Usamos un buffer para la copia).
-                    byte[] buf = new byte[1024];
-                    int len;
-                    while ((len = in.read(buf)) > 0) {
-                        out.write(buf, 0, len);
-                    }
-                    in.close();
-                    out.close();
-                    nombre = destino.getName();
-                } catch (IOException ioe) {
-                    ioe.printStackTrace();
+            
 
-                }
-            } else {
-
-            }
-
-            /* 
-            System.out.println(destino.getAbsolutePath());
+            ///Files.copy(origen.toPath(), destino.toPath(),)
+             
+            System.out.println(destino.getPath());
           
             if (origen.exists()) {
                 //origen.renameTo(destino);
                 Files.copy(origen.toPath(), destino.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 nombre=destino.getName();
-            }*/
+            }
         } catch (Exception ex) {
             System.out.println("Error:" + ex.getMessage());
         }
@@ -120,7 +104,7 @@ public class frArticulos extends javax.swing.JDialog {
     }
 
     private void cargarImg(String url) {
-        ImageIcon icon = new ImageIcon(url);
+        ImageIcon icon = new ImageIcon(getClass().getResource(url));
         ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(this.lImg.getWidth(), this.lImg.getHeight(), Image.SCALE_DEFAULT));
         this.lImg.setIcon(icono);
     }
@@ -399,12 +383,11 @@ public class frArticulos extends javax.swing.JDialog {
     }//GEN-LAST:event_btFamiliaActionPerformed
 
     private void txtPvpFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPvpFocusLost
-        double aux=0;
-        try{
-            aux=Double.parseDouble(this.txtPvp.getText());
-            
-        }
-        catch(Exception ex){
+        double aux = 0;
+        try {
+            aux = Double.parseDouble(this.txtPvp.getText());
+
+        } catch (Exception ex) {
             this.txtPvp.requestFocus();
         }
     }//GEN-LAST:event_txtPvpFocusLost

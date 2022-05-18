@@ -36,9 +36,8 @@ public class PanelArticulos extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.busqueda=busqueda;
-        if(this.busqueda==true){
-            this.btSele.setVisible(true);
-           // this.setSize(new Dimension(500,500));
+        if(this.busqueda){
+            this.btSele.setVisible(true);            
         }
         else
         {
@@ -356,7 +355,7 @@ public class PanelArticulos extends javax.swing.JDialog {
     private void btModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btModificarActionPerformed
         int fila = this.tArticulos.getSelectedRow();
         System.out.println("Fila seleccionada es" + fila);
-        if (this.tArticulos.getSelectedRow() != -1) {
+        if (this.tArticulos.getSelectedRow() != -1) {            
             String codigo =  String.valueOf(modelo.getValueAt(fila, 0));
             System.out.println("El codigo es:" + codigo);
             Articulo art=new Articulo(codigo);
@@ -372,13 +371,13 @@ public class PanelArticulos extends javax.swing.JDialog {
                     //System.exit(0);
                 }
             });
-            dialog.setVisible(true);
+            dialog.setVisible(true);            
             if (dialog.getResult()==JOptionPane.YES_NO_OPTION) {
                 modelo.setValueAt(art.getDescripcion(), fila, 1);
                 modelo.setValueAt(art.getMarca(), fila, 2);
             } else {
                 System.out.println("Mostar ajsjdj");
-            }
+            }            
         } else {
             JOptionPane.showConfirmDialog(null, "Seleccione un registro");
         }

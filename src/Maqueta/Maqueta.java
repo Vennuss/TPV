@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
  */
 public interface Maqueta{
     
-     public void recuperaDatos();
+    public void recuperaDatos();
     
     public void registrar();
     
