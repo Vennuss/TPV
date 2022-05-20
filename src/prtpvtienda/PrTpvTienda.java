@@ -13,8 +13,8 @@ public class PrTpvTienda {
     
         //Pedido pd1 = new Pedido("Visa", true, "12345678X");
         //pd1.recuperarDatos();
-        //ArticuloPedido ap1 = new ArticuloPedido("Monitor", 5, 5);
-        //ap1.registrar();    
+        ArticuloPedido ap1 = new ArticuloPedido("Monitor", 5, 5);
+        ap1.registrar();
     }
     
 }
