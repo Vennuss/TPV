@@ -1,19 +1,16 @@
 package Pedidos;
 
 import bd.bd;
-import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import javax.swing.JOptionPane;
 
 /**
  * Clase encargada de las opercaiones con los pedidos.
  * @author Hugo de la Torre Pizarro
  * @version 0.1
+ * @see bd
  */
 public class Pedido {
-    
-    //final private String url = "jdbc:mysql://localhost:3306/mysql?zeroDateTimeBehavior=CONVERT_TO_NULL";
     /**
      * Variable encargada de conectarse con la Base de Datos
      * @see bd

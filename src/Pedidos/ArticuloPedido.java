@@ -1,28 +1,58 @@
 package Pedidos;
 
 import bd.bd;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 /**
- *
+ * Clase encargada de los articulos por pedido.
  * @author Hugo de la Torre Pizarro
+ * @version 0.1
+ * @see bd
  */
 public class ArticuloPedido {
+    /**
+     * Variable encargada de conectarse con la Base de Datos
+     * @see bd
+     */
     private static final bd bd = new bd();
+    /**
+     * Variable final, no modificable una vez creada la clase.
+     * Es la referencia a su pedido.
+     */
     final private int pedidoId;
+    /**
+     * Referencia del articulo en la Base de Datos.
+     */
     private String articuloRef;
+    /**
+     * Cantidad a cmprar.
+     */
     private int cantidad;
-    private double precio, articuloPrecio;
+    /**
+     * Precio final:
+     * 
+     *      <ul>
+     *          <li>articuloPrecio * cantidad</li>
+     *          <li>-descuentos</li>
+     *      </ul>
+     * @see cantidad
+     * @see articuloPrecio
+     */
+    private double precio;
+    /**
+     * Precio del articulo en la Base de Datos;
+     */
+    private double articuloPrecio;
     
     /**
-     *
+     * Crea la clase ArticuloPedido especificando la cantidad a comprar.
+     * Crea un nuevo ArticuloPedido.
      * @param _articulo
      * @param _pedido
      * @param _cantidad
      * @throws SQLException
+     * @see setArticuloPrecio()
      */
     public ArticuloPedido(String _articulo, int _pedido, int _cantidad) throws SQLException{
         this.articuloRef = _articulo;
@@ -32,10 +62,12 @@ public class ArticuloPedido {
     }
     
     /**
-     *
+     * Recupera informacion de un articulo que ya estaba en un pedido.
      * @param _articulo
      * @param _pedido
      * @throws SQLException
+     * @see recuperarDatos()
+     * @see setArticuloPrecio()
      */
     public ArticuloPedido(String _articulo, int _pedido) throws SQLException{
         this.articuloRef = _articulo;
@@ -45,8 +77,8 @@ public class ArticuloPedido {
     }
 
     /**
-     *
-     * @return
+     * 
+     * @return local articuloRef
      */
     public String getArticuloRef() {
         return articuloRef;
@@ -54,7 +86,9 @@ public class ArticuloPedido {
 
     /**
      *
-     * @return
+     * Al crear la clase se llamo a setArticuloPrecio()
+     * @return local articuloPrecio
+     * @see setArticuloPrecio()
      */
     public double getArticuloPrecio() {
         return articuloPrecio;
@@ -62,7 +96,7 @@ public class ArticuloPedido {
 
     /**
      *
-     * @return
+     * @return local pedidoId
      */
     public int getPedidoId() {
         return pedidoId;
@@ -70,23 +104,28 @@ public class ArticuloPedido {
 
     /**
      *
-     * @return
+     * @return local cantidad
      */
     public int getCantidad() {
         return cantidad;
     }
 
     /**
-     *
-     * @return
+     * Llama a setPrecio() antes de returnar precio.
+     * @return local precio
+     * @see setPrecio()
      */
     public double getPrecio() {
+        setPrecio();
         return precio;
     }
 
     /**
-     *
+     * Llama a la Base de Datos para recuperar el precio del articulo
+     * y se lo aplica a articuloPrecio.
      * @throws SQLException
+     * @see articuloPrecio
+     * @see bd
      */
     public void setArticuloPrecio() throws SQLException {
         String sql = "select PVP from articulos where ref = '" + this.articuloRef + "';";
@@ -102,22 +141,33 @@ public class ArticuloPedido {
     }
 
     /**
-     *
+     * Modifica la cantidad y llama a setPrecio()
      * @param cantidad
+     * @see setPrecio
      */
     public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
+        setPrecio();
     }
 
     /**
-     *
+     * Iguala precio a cantidad * articuloPrecio
+     * @see articuloPrecio
+     * @see cantidad
+     * @see precio
      */
     public void setPrecio() {
         this.precio = this.cantidad * this.articuloPrecio;
     }
     
     /**
-     *
+     * Recupera cantidad y precio de la Base de Datos utilizando:
+     *      <ul>
+     *          <li>articuloRef</li>
+     *          <li>PedidoId</li>
+     *      </ul>
+     * Tiene que ser un articulo ya añadido a un pedido en la tabla "Contiene"
+     * @see bd
      */
     public void recuperarDatos() {
         String sql = "select * from contiene where articulosRef = " + this.articuloRef + " and pedidosId = " + this.pedidoId;
@@ -133,7 +183,9 @@ public class ArticuloPedido {
     }
     
     /**
-     *
+     * Registra en la Base de Datos el
+     * articuloPedido en la tabla contiene
+     * @see bd
      */
     public void registrar() {
         setPrecio();
@@ -147,7 +199,9 @@ public class ArticuloPedido {
     }
     
     /**
-     *
+     * Actualiza un articuloPedido ya existente en la Base de Datos
+     * con los valores de las variables locales.
+     * @see bd
      */
     public void actualizar() {
         //Actualizar la ficha del Cliente
@@ -160,7 +214,12 @@ public class ArticuloPedido {
     }
     
     /**
-     *
+     * Elimina un articuloPedido ya existente en la base de datos utilizando:
+     *      <ul>
+     *          <li>articuloRef</li>
+     *          <li>PedidoId</li>
+     *      </ul>
+     * @see bd
      */
     public void eliminar() {
         String sql = "delete from contiene where articulosRef = " + this.articuloRef + " and pedidosId = " + this.pedidoId;
