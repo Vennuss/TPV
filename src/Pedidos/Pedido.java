@@ -2,6 +2,7 @@ package Pedidos;
 
 import bd.bd;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 /**
@@ -248,13 +249,35 @@ public class Pedido {
     }
     
     /**
+     * Borra todos los articulos referenciados al pedido (tabla contiene)
+     * @see ArticuloPedido
+     * @throws SQLException 
+     */
+    private void eliminarArticulosPedido() throws SQLException{
+        String sql = "select * from contiene where pedidosId = " + this.id + ";";
+            try {
+                ResultSet rs = bd.Consulta(sql);
+                while (rs.next()) {
+                    String _ref = rs.getString("articulosRef");
+                    System.out.println(_ref);
+                    ArticuloPedido ap = new ArticuloPedido(_ref, this.id);
+                    ap.eliminar();
+                }
+            } catch (Exception ex) {System.out.println(ex.getMessage());}
+    }
+    
+    /**
      * Elimina el pedido de la Base de Datos con el id local.
      * @see id
      */
     public void eliminar() {
-        String sql = "delete from pedidos where id = " + this.id;
+        String sql = "delete from pedidos where id = " + this.id + ";";
+        System.out.println(sql);
         try {
+            eliminarArticulosPedido();
             bd.Sentencia(sql);
-        } catch (Exception ex) {}
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 }

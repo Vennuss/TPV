@@ -222,7 +222,8 @@ public class ArticuloPedido {
      * @see bd
      */
     public void eliminar() {
-        String sql = "delete from contiene where articulosRef = " + this.articuloRef + " and pedidosId = " + this.pedidoId;
+        String sql = "delete from contiene where articulosRef = '" + this.articuloRef + "' and pedidosId = " + this.pedidoId + ";";
+        System.out.println(sql);
         try {
             int nr = bd.Sentencia(sql);
             System.out.println("numero de registros actualizados:" + nr);

@@ -4,6 +4,9 @@
  */
 package Pedidos.Interfaces;
 
+import Articulos.Articulo;
+import Articulos.frArticulos;
+import Pedidos.*;
 import bd.bd;
 import java.awt.Image;
 import java.sql.ResultSet;
@@ -252,10 +255,56 @@ public class PanelPedido extends javax.swing.JFrame {
 
     private void jBDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBDeleteActionPerformed
         // TODO add your handling code here:
+        int fila = this.jTResultados.getSelectedRow();
+        System.out.println("Fila seleccionada es" + fila);
+        
+        if (this.jTResultados.getSelectedRow() != -1) {
+            
+            int id = Integer.parseInt(String.valueOf(jTResultados.getValueAt(fila, 0)));
+            System.out.println("El codigo es:" + id);
+//            Articulo art=new Articulo(codigo);
+            Pedido pd = new Pedido(id);
+            int resp = JOptionPane.showConfirmDialog(null, "¿Esta seguro?", "Alerta!", JOptionPane.YES_NO_OPTION);
+            if (resp == JOptionPane.OK_OPTION) {
+                pd.eliminar();
+                pd = null;
+                recuperarDatos();
+            }
+        }
     }//GEN-LAST:event_jBDeleteActionPerformed
 
     private void jBEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEditActionPerformed
         // TODO add your handling code here:
+        int fila = this.jTResultados.getSelectedRow();
+        System.out.println("Fila seleccionada es" + fila);
+        if (this.jTResultados.getSelectedRow() != -1) {            
+            int id = Integer.parseInt(String.valueOf(jTResultados.getValueAt(fila, 0)));
+            System.out.println("El codigo es:" + id);
+            Pedido pd = new Pedido(id);
+            pd.recuperarDatos();
+//            Articulo art=new Articulo(codigo);
+//            art.recuperaDatos();
+            // this.setVisible(false);
+            /*frFamilia fa=new frFamilia(fami, false);
+            // JDialog dial=(JDialog)fa;
+            fa.setVisible(true);*/
+            PanelCMPedido dialog = new PanelCMPedido(pd);
+            dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent e) {
+                    //System.exit(0);
+                }
+            });
+            dialog.setVisible(true);            
+//            if (dialog.getResult()==JOptionPane.YES_NO_OPTION) {
+//                modelo.setValueAt(art.getDescripcion(), fila, 1);
+//                modelo.setValueAt(art.getMarca(), fila, 2);
+//            } else {
+//                System.out.println("Mostar ajsjdj");
+//            }            
+        } else {
+            JOptionPane.showConfirmDialog(null, "Seleccione un registro");
+        }
     }//GEN-LAST:event_jBEditActionPerformed
 
     private void jBAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAddActionPerformed
