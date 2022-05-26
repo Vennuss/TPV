@@ -1,8 +1,10 @@
 package Pedidos;
 
+import Articulos.Articulo;
 import bd.bd;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Set;
 
 /**
  * Clase encargada de los articulos por pedido.
@@ -45,6 +47,8 @@ public class ArticuloPedido {
      */
     private double articuloPrecio;
     
+    private int descuento = 0;
+    
     /**
      * Crea la clase ArticuloPedido especificando la cantidad a comprar.
      * Crea un nuevo ArticuloPedido.
@@ -61,6 +65,14 @@ public class ArticuloPedido {
         setArticuloPrecio();
     }
     
+    public ArticuloPedido(String _articulo, int _pedido, int _cantidad, int _descuento) throws SQLException{
+        this.articuloRef = _articulo;
+        this.pedidoId = _pedido;
+        this.cantidad = _cantidad;
+        this.descuento = _descuento;
+        setArticuloPrecio();
+    }
+    
     /**
      * Recupera informacion de un articulo que ya estaba en un pedido.
      * @param _articulo
@@ -73,6 +85,15 @@ public class ArticuloPedido {
         this.articuloRef = _articulo;
         this.pedidoId = _pedido;
         recuperarDatos();
+        setArticuloPrecio();
+    }
+    
+    
+    public ArticuloPedido(Articulo _articulo, int _cant, int _dto) throws SQLException{
+        this.articuloRef = _articulo.getReferencia();
+        this.cantidad = _cant;
+        this.descuento = _dto;
+        this.pedidoId = -1;
         setArticuloPrecio();
     }
 
@@ -108,6 +129,10 @@ public class ArticuloPedido {
      */
     public int getCantidad() {
         return cantidad;
+    }
+
+    public int getDescuento() {
+        return descuento;
     }
 
     /**
@@ -157,7 +182,7 @@ public class ArticuloPedido {
      * @see precio
      */
     public void setPrecio() {
-        this.precio = this.cantidad * this.articuloPrecio;
+        this.precio = this.cantidad * this.articuloPrecio * (100 - this.descuento);
     }
     
     /**

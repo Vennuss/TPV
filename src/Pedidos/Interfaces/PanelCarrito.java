@@ -1,43 +1,63 @@
 package Pedidos.Interfaces;
 
-import Pedidos.*;
+import Articulos.Articulo;
+import Clientes.Cliente;
+import Pedidos.ArticuloPedido;
+import Pedidos.Carrito;
 import bd.bd;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.swing.JFrame;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 /**
- * Pede tanto modificar un pedido como crearlo
- * @author Hugo
+ *
+ * @author Vennuss
  */
-public class PanelCMPedido extends javax.swing.JFrame {
+public class PanelCarrito extends javax.swing.JFrame {
+    
+    private final Carrito carro;
 
-    private final Pedido pd;
-    private final boolean admin;
-    
     /**
-     * Crea un nuevo pedido
+     * Creates new form PanelCarrito
+     * @param client
+     * @param admin
      */
-    PanelCMPedido() {
-        this.admin = false;
-        this.pd = new Pedido();
+    public PanelCarrito(Cliente client, boolean admin) {
         initComponents();
+        this.carro = new Carrito(client, admin);
     }
     
-    /**
-     * Modifica un pedido ya existente
-     * @param pd 
-     */
-    PanelCMPedido(Pedido pd, boolean admin) {
-        this.admin = admin;
-        this.pd = pd;
-        initComponents();
-        jLId.setText(String.valueOf(pd.getId()));
-        recuperarDatos();
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    public void añadirArticulo(Articulo _art, int _cant, int _dto){
+        carro.addArticulo(_art, _cant, _dto);
     }
+    
+    private void refrescar(){
+        
+        DefaultTableModel tm = (DefaultTableModel) this.jTAP.getModel();
+        this.jTAP.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
+        tm.setRowCount(0);
+        
+        for (ArticuloPedido a : carro.getArticulos()) {
+            String articulo = a.getArticuloRef();
+            int cantidad = a.getCantidad();
+            double precio = a.getPrecio();
+            int descuento = a.getDescuento();
+            
+            Object nuev[] = {articulo, cantidad, precio, descuento};
+            tm.addRow(nuev);
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -48,23 +68,24 @@ public class PanelCMPedido extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        jLId = new javax.swing.JLabel();
+        jTApellidos = new javax.swing.JLabel();
+        jTNombre1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTAP = new javax.swing.JTable();
 
+        jLabel2.setText("jLabel2");
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(800, 600));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabel1.setText("Pedido");
+        jLabel1.setText("Carrito");
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("ID"));
+        jTApellidos.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
-        jLId.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLId.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLId.setText("99999999999");
+        jTNombre1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -72,11 +93,19 @@ public class PanelCMPedido extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLId, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTNombre1, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
+                    .addComponent(jTApellidos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLId, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jTNombre1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jTApellidos, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jTAP.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
@@ -85,11 +114,11 @@ public class PanelCMPedido extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Articulo", "Pedido", "Cantidad", "Precio"
+                "Articulo", "Cantidad", "Precio", "Descuento"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Double.class
+                java.lang.String.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, false
@@ -113,23 +142,24 @@ public class PanelCMPedido extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 930, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 824, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 452, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(23, 23, 23)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -153,55 +183,31 @@ public class PanelCMPedido extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(PanelCMPedido.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PanelCarrito.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(PanelCMPedido.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PanelCarrito.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(PanelCMPedido.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PanelCarrito.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(PanelCMPedido.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PanelCarrito.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new PanelCMPedido().setVisible(true);
+                new PanelCarrito(new Cliente("12345678X"), true).setVisible(true);
             }
         });
     }
-    
-    private void recuperarDatos() {
-        
-        DefaultTableModel tm = (DefaultTableModel) jTAP.getModel();
-        jTAP.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        
-        tm.setRowCount(0);
-        
-        String sql = "select * from contiene where pedidosId = " + String.valueOf(pd.getId()) + " ;";
-        try {
-            ResultSet rs = bd.Consulta(sql);
-            while (rs.next()) {
-                String articulo = rs.getString("articulosRef");
-                int pedido = rs.getInt("pedidosId");
-                int cantidad = rs.getInt("cantidad");
-                double precio = rs.getDouble("precio");
-                Object nuev[] = {articulo, pedido, cantidad, precio};
-                tm.addRow(nuev);
-            }
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-        }
-        
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLId;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTAP;
+    private javax.swing.JLabel jTApellidos;
+    private javax.swing.JLabel jTNombre1;
     // End of variables declaration//GEN-END:variables
-
 }

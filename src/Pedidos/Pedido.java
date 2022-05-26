@@ -1,5 +1,6 @@
 package Pedidos;
 
+import Clientes.*;
 import bd.bd;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -104,7 +105,7 @@ public class Pedido {
      *
      * @return local estadoPago.
      */
-    public boolean isEstadoPago() {
+    public boolean getEstadoPago() {
         return estadoPago;
     }
 

@@ -6,12 +6,12 @@ package Pedidos.Interfaces;
 
 import Articulos.Articulo;
 import Articulos.frArticulos;
+import Clientes.*;
 import Pedidos.*;
 import bd.bd;
 import java.awt.Image;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Set;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -24,11 +24,21 @@ import javax.swing.table.DefaultTableModel;
  */
 public class PanelPedido extends javax.swing.JFrame {
     
+    private final boolean admin;
+    private Cliente client = null;
+    
     /**
-     * Creates new form PanelPedido
+     * Crea ventana Administrador de Pedidos.
+     * @param admin: es usuario o cliente
+     * @param client: solo si admin es false
      */
-    public PanelPedido() {
+    public PanelPedido(boolean admin, Cliente client) {
         initComponents();
+        this.admin = admin;
+        if(admin != true){
+            this.client = client;
+            jBDelete.setEnabled(false);
+        }
     }
 
     /**
@@ -275,35 +285,21 @@ public class PanelPedido extends javax.swing.JFrame {
 
     private void jBEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEditActionPerformed
         // TODO add your handling code here:
-        int fila = this.jTResultados.getSelectedRow();
-        System.out.println("Fila seleccionada es" + fila);
+        int fila = jTResultados.getSelectedRow();
         if (this.jTResultados.getSelectedRow() != -1) {            
             int id = Integer.parseInt(String.valueOf(jTResultados.getValueAt(fila, 0)));
             System.out.println("El codigo es:" + id);
             Pedido pd = new Pedido(id);
-            pd.recuperarDatos();
 //            Articulo art=new Articulo(codigo);
 //            art.recuperaDatos();
             // this.setVisible(false);
             /*frFamilia fa=new frFamilia(fami, false);
             // JDialog dial=(JDialog)fa;
             fa.setVisible(true);*/
-            PanelCMPedido dialog = new PanelCMPedido(pd);
-            dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                @Override
-                public void windowClosing(java.awt.event.WindowEvent e) {
-                    //System.exit(0);
-                }
-            });
-            dialog.setVisible(true);            
-//            if (dialog.getResult()==JOptionPane.YES_NO_OPTION) {
-//                modelo.setValueAt(art.getDescripcion(), fila, 1);
-//                modelo.setValueAt(art.getMarca(), fila, 2);
-//            } else {
-//                System.out.println("Mostar ajsjdj");
-//            }            
+            PanelCMPedido dialog = new PanelCMPedido(pd, true);
+            dialog.setVisible(true);          
         } else {
-            JOptionPane.showConfirmDialog(null, "Seleccione un registro");
+            JOptionPane.showMessageDialog(null, "Seleccione un registro");
         }
     }//GEN-LAST:event_jBEditActionPerformed
 
@@ -366,7 +362,7 @@ public class PanelPedido extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new PanelPedido().setVisible(true);
+                new PanelPedido(true, null).setVisible(true);
             }
         });
     }
@@ -394,9 +390,17 @@ public class PanelPedido extends javax.swing.JFrame {
      * @return String.
      */
     private final String getFiltro(){
-        if(jTSearch.getText().isEmpty()) return "";
+        if(admin == true){
+            if(jTSearch.getText().isEmpty()) return " ";
+            else{
+                return "where id like '" + jTSearch.getText() + "%' ";
+            }
+        }
         else{
-            return "where id like '" + jTSearch.getText() + "%'";
+            if(jTSearch.getText().isEmpty()) return " where cliente = '" + client.getDni() + "' ";
+            else{
+                return "where id like '" + jTSearch.getText() + "%' and where cliente = '" + client.getDni() + "' ";
+            }
         }
     }
     
