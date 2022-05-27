@@ -22,7 +22,7 @@ public class ArticuloPedido {
      * Variable final, no modificable una vez creada la clase.
      * Es la referencia a su pedido.
      */
-    final private int pedidoId;
+    private int pedidoId;
     /**
      * Referencia del articulo en la Base de Datos.
      */
@@ -143,6 +143,10 @@ public class ArticuloPedido {
     public double getPrecio() {
         setPrecio();
         return precio;
+    }
+
+    public void setPedidoId(int pedidoId) {
+        this.pedidoId = pedidoId;
     }
 
     /**

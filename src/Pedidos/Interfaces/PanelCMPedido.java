@@ -85,14 +85,14 @@ public class PanelCMPedido extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Articulo", "Pedido", "Cantidad", "Precio"
+                "Articulo", "Cantidad", "Precio"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Double.class
+                java.lang.String.class, java.lang.Integer.class, java.lang.Double.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -184,10 +184,9 @@ public class PanelCMPedido extends javax.swing.JFrame {
             ResultSet rs = bd.Consulta(sql);
             while (rs.next()) {
                 String articulo = rs.getString("articulosRef");
-                int pedido = rs.getInt("pedidosId");
                 int cantidad = rs.getInt("cantidad");
                 double precio = rs.getDouble("precio");
-                Object nuev[] = {articulo, pedido, cantidad, precio};
+                Object nuev[] = {articulo, cantidad, precio};
                 tm.addRow(nuev);
             }
         } catch (SQLException ex) {

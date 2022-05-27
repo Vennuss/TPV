@@ -5,6 +5,7 @@ import Clientes.Cliente;
 import bd.bd;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -61,8 +62,8 @@ public class Carrito extends Pedido{
         }
         int pedidoId = bd.Sentencia2(sql);
         for(ArticuloPedido a: articulos){
-            sql = "insert into contiene values('" + a.getArticuloRef() + "', " + String.valueOf(pedidoId) + ", " + a.getCantidad() + ", " + a.getPrecio() + ";";
-            int resultado2 = bd.Sentencia(sql);
+            a.setPedidoId(pedidoId);
+            a.registrar();
         }
     }
     

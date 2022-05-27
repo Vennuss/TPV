@@ -32,12 +32,13 @@ public class PanelCarrito extends javax.swing.JFrame {
         setCliente(client);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         carro.setFormaPago(jCBPago.getItemAt(jCBPago.getSelectedIndex()));
-        jBFin.setEnabled(true);
+        jBFin.setEnabled(false);
         añadirArticulo(new Articulo("Monitor"), 2, 50);
         añadirArticulo(new Articulo("Teclado"), 5, 25);
     }
     
     public void añadirArticulo(Articulo _art, int _cant, int _dto){
+        jBFin.setEnabled(true);
         carro.addArticulo(_art, _cant, _dto);
         jTPrecio.setText(String.valueOf(carro.getprecioFinal()));
         refrescar();
@@ -286,7 +287,7 @@ public class PanelCarrito extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new PanelCarrito(null, false).setVisible(true);
+                new PanelCarrito(new Cliente("12472306G"), false).setVisible(true);
             }
         });
     }
