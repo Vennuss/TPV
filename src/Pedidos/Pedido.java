@@ -1,9 +1,13 @@
 package Pedidos;
 
-import Clientes.*;
+import Articulos.Articulo;
+import Clientes.Cliente;
 import bd.bd;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -23,6 +27,13 @@ public class Pedido {
      * Autoincrement en la base de datos.
      * No setear.
      */
+    
+    private ArrayList<ArticuloPedido> articulos = new ArrayList();
+    
+    public ArrayList<ArticuloPedido> getArticulos() {
+        return articulos;
+    }
+    
     private int id;
     /**
      * true: Ha sido pagado.
@@ -43,7 +54,7 @@ public class Pedido {
      * Dni de un cliente existente.
      * Importante ser 9 caracteres exactamente.
      */
-    private String cliente;
+    private Cliente cliente;
     
     /**
      * Crea un pedido localmente con todos los datos.
@@ -56,7 +67,7 @@ public class Pedido {
         this.fecha = _fecha;
         this.formaPago = _formaPago;
         this.estadoPago = _estadoPago;
-        this.cliente = _cliente;
+        this.cliente = new Cliente(_cliente);
     }
     
     /**
@@ -69,7 +80,7 @@ public class Pedido {
     public Pedido(String _formaPago, boolean _estadoPago, String _cliente){
         this.formaPago = _formaPago;
         this.estadoPago = _estadoPago;
-        this.cliente = _cliente;
+        this.cliente = new Cliente(_cliente);;
     }
     
     /**
@@ -82,6 +93,34 @@ public class Pedido {
     public Pedido(int _id){
         this.id = _id;
         recuperarDatos();
+    }
+    
+    public Pedido(Cliente _cliente){
+        
+    }
+    
+    public final ArticuloPedido addArticulo(Articulo _art, int _cant, int _dto){
+        try {
+            ArticuloPedido ap = new ArticuloPedido(_art.getReferencia(), this.getId() , _cant, _dto);
+            articulos.add(ap);
+            getprecioFinal();
+            return ap;
+        } catch (SQLException ex) {
+            Logger.getLogger(Carrito.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+    
+    public double getprecioFinal(){
+        double pf = 0;
+        for(ArticuloPedido a: articulos){
+            pf += a.getPrecio();
+        }
+        return pf;
+    }
+    
+    public final void añadirArticulo(Articulo _articulo, int _cant, int _dto) throws SQLException{
+        ArticuloPedido ap = new ArticuloPedido(_articulo.getReferencia(), this.id, _cant, _dto);
     }
 
     /**
@@ -130,7 +169,7 @@ public class Pedido {
      * @return local cliente.
      * @see cliente
      */
-    public String getCliente() {
+    public Cliente getCliente() {
         return cliente;
     }
 
@@ -164,6 +203,10 @@ public class Pedido {
      * @see cliente
      */
     public void setCliente(String cliente) {
+        this.cliente = new Cliente(cliente);
+    }
+    
+     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
     
@@ -185,7 +228,7 @@ public class Pedido {
                     this.fecha = rs.getString("fecha");
                     this.formaPago = rs.getString("formaPago");
                     this.estadoPago = Boolean.getBoolean("estadoPago");
-                    this.cliente = rs.getString("cliete");
+                    this.cliente = new Cliente(rs.getString("cliete"));
                 }
             } catch (Exception ex) {}
         
@@ -214,17 +257,19 @@ public class Pedido {
      */
     public void registrar() {
         String sql;
-        if (fecha == null){
+        if (getFecha() == null){
             sql = "insert into pedidos (formaPago, estadoPago, cliente) "
-                    + "VALUES('" + formaPago +"'," + estadoPago +",'" + cliente + "');";
+                    + "VALUES('" + getFormaPago() +"'," + getEstadoPago() +",'" + cliente.getDni() + "');";
         }
         else{
             sql = "insert into pedidos (fecha, formaPago, estadoPago, cliente) "
-                    + "VALUES('" + fecha + "','"+ formaPago +"'," + estadoPago +",'" + cliente + "');";
+                    + "VALUES('" + getFecha() + "','"+ getFormaPago() +"'," + getEstadoPago() +",'" + cliente.getDni() + "');";
         }
-        int resultado = bd.Sentencia(sql);
-        if (resultado > 0) JOptionPane.showMessageDialog(null, "Registro Exitoso");
-        else JOptionPane.showMessageDialog(null, "Error al Registrar");
+        int pedidoId = bd.Sentencia2(sql);
+        for(ArticuloPedido a: getArticulos()){
+            a.setPedidoId(pedidoId);
+            a.registrar();
+        }
     }
     
     /**

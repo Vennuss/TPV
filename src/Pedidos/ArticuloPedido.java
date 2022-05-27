@@ -47,7 +47,9 @@ public class ArticuloPedido {
      */
     private double articuloPrecio;
     
+
     private int descuento = 0;
+
     
     /**
      * Crea la clase ArticuloPedido especificando la cantidad a comprar.
