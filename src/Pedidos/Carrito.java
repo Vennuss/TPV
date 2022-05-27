@@ -3,6 +3,7 @@ package Pedidos;
 import Articulos.Articulo;
 import Clientes.Cliente;
 import bd.bd;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -18,60 +19,35 @@ public class Carrito extends Pedido{
     
     private static final bd bd = new bd();
     
-    private ArrayList<ArticuloPedido> articulos = new ArrayList();
     private final Cliente client;
-    private final boolean admin;
     
-    public Carrito(Cliente client, boolean admin){
+    public Carrito(Cliente client){
         this.client = client;
-        this.admin = admin;
         setEstadoPago(false);
-    }
-    
-
-    public ArrayList<ArticuloPedido> getArticulos() {
-        return articulos;
+        recuperarArticulos();
     }
 
     public Cliente getClient() {
         return client;
     }
     
-    public final ArticuloPedido addArticulo(Articulo _art, int _cant, int _dto){
+    public ArrayList<ArticuloPedido> recuperarArticulos(){
+        String sql = "select * from cestas where dniCliente = '" + client.getDni() + "';";
+        ResultSet rs = bd.Consulta(sql);
         try {
-            ArticuloPedido ap = new ArticuloPedido(_art.getReferencia(), this.getId() , _cant, _dto);
-            articulos.add(ap);
-            getprecioFinal();
-            return ap;
+            while(rs.next()){
+                addArticulo(new Articulo(rs.getString("articuloRef")), rs.getInt("cantidad"), rs.getInt("dto"));
+            }
         } catch (SQLException ex) {
             Logger.getLogger(Carrito.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
         }
+        return getArticulos();
     }
     
     @Override
     public void registrar() {
-        String sql;
-        if (getFecha() == null){
-            sql = "insert into pedidos (formaPago, estadoPago, cliente) "
-                    + "VALUES('" + getFormaPago() +"'," + getEstadoPago() +",'" + client.getDni() + "');";
-        }
-        else{
-            sql = "insert into pedidos (fecha, formaPago, estadoPago, cliente) "
-                    + "VALUES('" + getFecha() + "','"+ getFormaPago() +"'," + getEstadoPago() +",'" + client.getDni() + "');";
-        }
-        int pedidoId = bd.Sentencia2(sql);
-        for(ArticuloPedido a: articulos){
-            a.setPedidoId(pedidoId);
-            a.registrar();
-        }
-    }
-    
-    public double getprecioFinal(){
-        double pf = 0;
-        for(ArticuloPedido a: articulos){
-            pf += a.getPrecio();
-        }
-        return pf;
+        super.registrar();
+        String sql = "delete from cestas where dnicliente = '" + client.getDni() + "';";
+        bd.Sentencia(sql);
     }
 }
