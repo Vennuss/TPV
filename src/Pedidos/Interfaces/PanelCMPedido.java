@@ -4,6 +4,7 @@ import Pedidos.*;
 import bd.bd;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.JFrame;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
@@ -14,21 +15,28 @@ import javax.swing.table.DefaultTableModel;
 public class PanelCMPedido extends javax.swing.JFrame {
 
     private final Pedido pd;
+    private final boolean admin;
     
     /**
      * Crea un nuevo pedido
      */
     PanelCMPedido() {
+        this.admin = false;
         this.pd = new Pedido();
+        initComponents();
     }
     
     /**
      * Modifica un pedido ya existente
      * @param pd 
      */
-    PanelCMPedido(Pedido pd) {
+    PanelCMPedido(Pedido pd, boolean admin) {
+        this.admin = admin;
         this.pd = pd;
+        initComponents();
+        jLId.setText(String.valueOf(pd.getId()));
         recuperarDatos();
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
     /**
@@ -44,9 +52,10 @@ public class PanelCMPedido extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLId = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTAP = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(800, 600));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel1.setText("Pedido");
@@ -70,19 +79,20 @@ public class PanelCMPedido extends javax.swing.JFrame {
             .addComponent(jLId, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE)
         );
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTAP.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        jTAP.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Articulo", "Pedido", "Cantidad", "Precio"
+                "Articulo", "Cantidad", "Precio"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.String.class, java.lang.Integer.class, java.lang.Double.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, true, false
+                false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -93,7 +103,8 @@ public class PanelCMPedido extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jTAP.setRowHeight(40);
+        jScrollPane1.setViewportView(jTAP);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -162,28 +173,26 @@ public class PanelCMPedido extends javax.swing.JFrame {
     }
     
     private void recuperarDatos() {
-        String filtro = getFiltro();
-        DefaultTableModel tm = (DefaultTableModel) this.jTResultados.getModel();
-        this.jTResultados.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
+        DefaultTableModel tm = (DefaultTableModel) jTAP.getModel();
+        jTAP.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         
         tm.setRowCount(0);
         
-        
-        String sql = "select * from pedidos " + filtro + " order by id;";
+        String sql = "select * from contiene where pedidosId = " + String.valueOf(pd.getId()) + " ;";
         try {
             ResultSet rs = bd.Consulta(sql);
             while (rs.next()) {
-                int id = rs.getInt("id");
-                String fecha = rs.getString("fecha");
-                String formaPago = rs.getString("formaPago");
-                boolean estadoPago = rs.getBoolean("estadoPago");
-                String cliente = rs.getString("cliente");
-                Object nuev[] = {id, fecha, formaPago, estadoPago, cliente};
+                String articulo = rs.getString("articulosRef");
+                int cantidad = rs.getInt("cantidad");
+                double precio = rs.getDouble("precio");
+                Object nuev[] = {articulo, cantidad, precio};
                 tm.addRow(nuev);
             }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -191,7 +200,7 @@ public class PanelCMPedido extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTAP;
     // End of variables declaration//GEN-END:variables
 
 }

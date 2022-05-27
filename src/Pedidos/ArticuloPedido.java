@@ -1,8 +1,10 @@
 package Pedidos;
 
+import Articulos.Articulo;
 import bd.bd;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Set;
 
 /**
  * Clase encargada de los articulos por pedido.
@@ -20,7 +22,7 @@ public class ArticuloPedido {
      * Variable final, no modificable una vez creada la clase.
      * Es la referencia a su pedido.
      */
-    final private int pedidoId;
+    private int pedidoId;
     /**
      * Referencia del articulo en la Base de Datos.
      */
@@ -45,12 +47,9 @@ public class ArticuloPedido {
      */
     private double articuloPrecio;
     
-    public ArticuloPedido(String _articulo, int _pedido, int _cantidad, int _dto) throws SQLException{
-        this.articuloRef = _articulo;
-        this.pedidoId = _pedido;
-        this.cantidad = _cantidad;
-        setArticuloPrecio();
-    }
+
+    private int descuento = 0;
+
     
     /**
      * Crea la clase ArticuloPedido especificando la cantidad a comprar.
@@ -68,6 +67,14 @@ public class ArticuloPedido {
         setArticuloPrecio();
     }
     
+    public ArticuloPedido(String _articulo, int _pedido, int _cantidad, int _descuento) throws SQLException{
+        this.articuloRef = _articulo;
+        this.pedidoId = _pedido;
+        this.cantidad = _cantidad;
+        this.descuento = _descuento;
+        setArticuloPrecio();
+    }
+    
     /**
      * Recupera informacion de un articulo que ya estaba en un pedido.
      * @param _articulo
@@ -80,6 +87,15 @@ public class ArticuloPedido {
         this.articuloRef = _articulo;
         this.pedidoId = _pedido;
         recuperarDatos();
+        setArticuloPrecio();
+    }
+    
+    
+    public ArticuloPedido(Articulo _articulo, int _cant, int _dto) throws SQLException{
+        this.articuloRef = _articulo.getReferencia();
+        this.cantidad = _cant;
+        this.descuento = _dto;
+        this.pedidoId = -1;
         setArticuloPrecio();
     }
 
@@ -117,6 +133,10 @@ public class ArticuloPedido {
         return cantidad;
     }
 
+    public int getDescuento() {
+        return descuento;
+    }
+
     /**
      * Llama a setPrecio() antes de returnar precio.
      * @return local precio
@@ -125,6 +145,10 @@ public class ArticuloPedido {
     public double getPrecio() {
         setPrecio();
         return precio;
+    }
+
+    public void setPedidoId(int pedidoId) {
+        this.pedidoId = pedidoId;
     }
 
     /**
@@ -165,6 +189,7 @@ public class ArticuloPedido {
      */
     public void setPrecio() {
         this.precio = this.cantidad * this.articuloPrecio;
+        this.precio *= (100.00 - this.descuento) / 100.00;
     }
     
     /**

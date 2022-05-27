@@ -3,7 +3,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/C:/Users/admin/Documents/TPV/src/Pedidos/Interfaces/PanelPedido.java</file>
+=======
+            <file>file:/C:/Users/Vennuss/Documents/Clases/TPV/origin/src/Pedidos/Interfaces/PanelCarrito.java</file>
+            <file>file:/C:/Users/Vennuss/Documents/Clases/TPV/origin/src/Pedidos/Pedido.java</file>
+            <file>file:/C:/Users/Vennuss/Documents/Clases/TPV/origin/src/Pedidos/Interfaces/PanelCMPedido.java</file>
+            <file>file:/C:/Users/Vennuss/Documents/Clases/TPV/origin/src/Pedidos/Carrito.java</file>
+            <file>file:/C:/Users/Vennuss/Documents/Clases/TPV/origin/src/Pedidos/Interfaces/PanelPedido.java</file>
+            <file>file:/C:/Users/Vennuss/Documents/Clases/TPV/origin/src/Pedidos/ArticuloPedido.java</file>
+>>>>>>> e80b29fbecf8991827712804ace3172361b625e6
         </group>
     </open-files>
 </project-private>

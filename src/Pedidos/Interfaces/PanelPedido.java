@@ -6,12 +6,12 @@ package Pedidos.Interfaces;
 
 import Articulos.Articulo;
 import Articulos.frArticulos;
+import Clientes.*;
 import Pedidos.*;
 import bd.bd;
 import java.awt.Image;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Set;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -24,11 +24,22 @@ import javax.swing.table.DefaultTableModel;
  */
 public class PanelPedido extends javax.swing.JFrame {
     
+    private final boolean admin;
+    private Cliente client = null;
+    
     /**
-     * Creates new form PanelPedido
+     * Crea ventana Administrador de Pedidos.
+     * @param admin: es usuario o cliente
+     * @param client: solo si admin es false
      */
-    public PanelPedido() {
+    public PanelPedido(boolean admin, Cliente client) {
         initComponents();
+        this.admin = admin;
+        if(admin != true){
+            this.client = client;
+            jBDelete.setEnabled(false);
+            jBAdd.setEnabled(false);
+        }
     }
 
     /**
@@ -42,7 +53,6 @@ public class PanelPedido extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        jBSelect = new javax.swing.JButton();
         jBAdd = new javax.swing.JButton();
         jBEdit = new javax.swing.JButton();
         jBDelete = new javax.swing.JButton();
@@ -68,10 +78,6 @@ public class PanelPedido extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("ADMINISTRACION DE PEDIDOS");
-
-        jBSelect.setMaximumSize(new java.awt.Dimension(40, 40));
-        jBSelect.setMinimumSize(new java.awt.Dimension(40, 40));
-        jBSelect.setPreferredSize(new java.awt.Dimension(40, 40));
 
         jBAdd.setMaximumSize(new java.awt.Dimension(40, 40));
         jBAdd.setMinimumSize(new java.awt.Dimension(40, 40));
@@ -131,19 +137,17 @@ public class PanelPedido extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jBSelect, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jBAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jBEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jBDelete, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTSearch)
+                .addComponent(jTSearch, javax.swing.GroupLayout.DEFAULT_SIZE, 429, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -154,7 +158,6 @@ public class PanelPedido extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jBSelect, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jBAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jBEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jBDelete, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
@@ -275,40 +278,27 @@ public class PanelPedido extends javax.swing.JFrame {
 
     private void jBEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEditActionPerformed
         // TODO add your handling code here:
-        int fila = this.jTResultados.getSelectedRow();
-        System.out.println("Fila seleccionada es" + fila);
+        int fila = jTResultados.getSelectedRow();
         if (this.jTResultados.getSelectedRow() != -1) {            
             int id = Integer.parseInt(String.valueOf(jTResultados.getValueAt(fila, 0)));
             System.out.println("El codigo es:" + id);
             Pedido pd = new Pedido(id);
-            pd.recuperarDatos();
 //            Articulo art=new Articulo(codigo);
 //            art.recuperaDatos();
             // this.setVisible(false);
             /*frFamilia fa=new frFamilia(fami, false);
             // JDialog dial=(JDialog)fa;
             fa.setVisible(true);*/
-            PanelCMPedido dialog = new PanelCMPedido(pd);
-            dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                @Override
-                public void windowClosing(java.awt.event.WindowEvent e) {
-                    //System.exit(0);
-                }
-            });
-            dialog.setVisible(true);            
-//            if (dialog.getResult()==JOptionPane.YES_NO_OPTION) {
-//                modelo.setValueAt(art.getDescripcion(), fila, 1);
-//                modelo.setValueAt(art.getMarca(), fila, 2);
-//            } else {
-//                System.out.println("Mostar ajsjdj");
-//            }            
+            PanelCMPedido dialog = new PanelCMPedido(pd, true);
+            dialog.setVisible(true);          
         } else {
-            JOptionPane.showConfirmDialog(null, "Seleccione un registro");
+            JOptionPane.showMessageDialog(null, "Seleccione un registro");
         }
     }//GEN-LAST:event_jBEditActionPerformed
 
     private void jBAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAddActionPerformed
-        // TODO add your handling code here:
+        PanelCarrito dialog = new PanelCarrito(null, true);
+        dialog.setVisible(true);
     }//GEN-LAST:event_jBAddActionPerformed
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
@@ -366,14 +356,13 @@ public class PanelPedido extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new PanelPedido().setVisible(true);
+                new PanelPedido(true, new Cliente("12472306G")).setVisible(true);
             }
         });
     }
     
     public final void _main(){
         recuperarDatos();
-        cargarIMG("/Imagenes/sele.png", jBSelect);
         cargarIMG("/Imagenes/add.png", jBAdd);
         cargarIMG("/Imagenes/edit.png", jBEdit);
         cargarIMG("/Imagenes/delete.png", jBDelete);
@@ -394,9 +383,17 @@ public class PanelPedido extends javax.swing.JFrame {
      * @return String.
      */
     private final String getFiltro(){
-        if(jTSearch.getText().isEmpty()) return "";
+        if(admin == true){
+            if(jTSearch.getText().isEmpty()) return " ";
+            else{
+                return "where id like '" + jTSearch.getText() + "%' ";
+            }
+        }
         else{
-            return "where id like '" + jTSearch.getText() + "%'";
+            if(jTSearch.getText().isEmpty()) return " where cliente = '" + client.getDni() + "' ";
+            else{
+                return "where id like '" + jTSearch.getText() + "%' and where cliente = '" + client.getDni() + "' ";
+            }
         }
     }
     
@@ -439,7 +436,6 @@ public class PanelPedido extends javax.swing.JFrame {
     private javax.swing.JButton jBDelete;
     private javax.swing.JButton jBEdit;
     private javax.swing.JButton jBExit;
-    private javax.swing.JButton jBSelect;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
