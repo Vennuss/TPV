@@ -24,7 +24,9 @@ public class Carrito extends Pedido{
     public Carrito(Cliente client, boolean admin){
         this.client = client;
         this.admin = admin;
+        setEstadoPago(false);
     }
+    
 
     public ArrayList<ArticuloPedido> getArticulos() {
         return articulos;
@@ -38,6 +40,7 @@ public class Carrito extends Pedido{
         try {
             ArticuloPedido ap = new ArticuloPedido(_art.getReferencia(), this.getId() , _cant, _dto);
             articulos.add(ap);
+            getprecioFinal();
             return ap;
         } catch (SQLException ex) {
             Logger.getLogger(Carrito.class.getName()).log(Level.SEVERE, null, ex);
@@ -50,19 +53,24 @@ public class Carrito extends Pedido{
         String sql;
         if (getFecha() == null){
             sql = "insert into pedidos (formaPago, estadoPago, cliente) "
-                    + "VALUES('" + getFormaPago() +"'," + getEstadoPago() +",'" + getCliente() + "');";
+                    + "VALUES('" + getFormaPago() +"'," + getEstadoPago() +",'" + client.getDni() + "');";
         }
         else{
             sql = "insert into pedidos (fecha, formaPago, estadoPago, cliente) "
-                    + "VALUES('" + getFecha() + "','"+ getFormaPago() +"'," + getEstadoPago() +",'" + getCliente() + "');";
+                    + "VALUES('" + getFecha() + "','"+ getFormaPago() +"'," + getEstadoPago() +",'" + client.getDni() + "');";
         }
-        int resultado = bd.Sentencia(sql);
-        if (resultado > 0) JOptionPane.showMessageDialog(null, "Registro Exitoso");
-        else JOptionPane.showMessageDialog(null, "Error al Registrar");
+        int pedidoId = bd.Sentencia2(sql);
+        for(ArticuloPedido a: articulos){
+            sql = "insert into contiene values('" + a.getArticuloRef() + "', " + String.valueOf(pedidoId) + ", " + a.getCantidad() + ", " + a.getPrecio() + ";";
+            int resultado2 = bd.Sentencia(sql);
+        }
     }
     
-    private void registrarArticulos(){
-        for (ArticuloPedido articulo : articulos) {
+    public double getprecioFinal(){
+        double pf = 0;
+        for(ArticuloPedido a: articulos){
+            pf += a.getPrecio();
         }
+        return pf;
     }
 }

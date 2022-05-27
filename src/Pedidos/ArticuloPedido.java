@@ -182,7 +182,8 @@ public class ArticuloPedido {
      * @see precio
      */
     public void setPrecio() {
-        this.precio = this.cantidad * this.articuloPrecio * (100 - this.descuento);
+        this.precio = this.cantidad * this.articuloPrecio;
+        this.precio *= (100.00 - this.descuento) / 100.00;
     }
     
     /**
