@@ -277,8 +277,7 @@ public class PanelCrearPedido extends javax.swing.JFrame {
                 });
                 dialog.setVisible(true);
                 if(dialog.getResult() == JOptionPane.OK_OPTION){
-                    Articulo a = dialog.getArticulo();
-                    pd.addArticulo(a, 1, 0);
+                pd.addArticulo(dialog.getArticulo(), 1, 0);
                 }
     }//GEN-LAST:event_jBArticuloActionPerformed
 

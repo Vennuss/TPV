@@ -179,14 +179,14 @@ public class PanelPedido extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Fecha", "Forma de pago", "Estado del pago", "Cliente"
+                "ID", "Fecha", "Forma de pago", "Cliente"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Boolean.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -357,7 +357,7 @@ public class PanelPedido extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new PanelPedido(true, new Cliente("12345678X")).setVisible(true);
+                new PanelPedido(false, new Cliente("12345678X")).setVisible(true);
             }
         });
     }
@@ -420,9 +420,8 @@ public class PanelPedido extends javax.swing.JFrame {
                 int id = rs.getInt("id");
                 String fecha = rs.getString("fecha");
                 String formaPago = rs.getString("formaPago");
-                boolean estadoPago = rs.getBoolean("estadoPago");
                 String cliente = rs.getString("cliente");
-                Object nuev[] = {id, fecha, formaPago, estadoPago, cliente};
+                Object nuev[] = {id, fecha, formaPago, cliente};
                 tm.addRow(nuev);
             }
         } catch (SQLException ex) {
