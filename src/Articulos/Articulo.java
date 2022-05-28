@@ -13,10 +13,23 @@ import javax.swing.JOptionPane;
  * @author admin
  */
 public class Articulo {
+    
 
+    /**
+     * Representa la referencia del Articulo
+     */
     private String referencia;
+    /**
+     * Descripcion del articulo
+     */
     private String descripcion;
+    /**
+     * Notas realacionadas al articulo
+     */
     private String notas;
+    /**
+     * Marca del articulo
+     */
     private String marca;
     private double pvp;
     private int stock;
@@ -42,7 +55,9 @@ public class Articulo {
         this.rutaImg = "";
         this.fa = new Familia();
     }
-
+    /**
+     * <h1>Contructor sin parametros
+     */
     public Articulo() {
         this.referencia = "";
         this.descripcion = "";
