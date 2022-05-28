@@ -5,6 +5,7 @@
 package Ofertas;
 
 import bd.bd;
+import bd.validaciones;
 import java.awt.Image;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -31,6 +32,22 @@ public class frOferta extends javax.swing.JDialog {
     SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
     private boolean operacion = false;
     private int result = JOptionPane.OK_OPTION;
+
+    public int getResult() {
+        return result;
+    }
+
+    public void setResult(int result) {
+        this.result = result;
+    }
+
+    public Oferta getOfer() {
+        return ofer;
+    }
+
+    public void setOfer(Oferta ofer) {
+        this.ofer = ofer;
+    }
     Oferta ofer;
     DefaultTableModel modelo;
 
@@ -45,8 +62,11 @@ public class frOferta extends javax.swing.JDialog {
             this.txtDescripcion.setText(ofer.getDescripcion());
             this.txtNombre.setText(ofer.getNombre());
             this.chVip.setSelected(ofer.isVip());
-            this.txtFechaIni.setText(String.valueOf(ofer.getFechaIni()));
-            this.txtFechaFin.setText(String.valueOf(ofer.getFechaFin()));
+            Date fechaIni = ofer.getFechaIni();
+            Date fechaFin = ofer.getFechaFin();
+            this.txtFechaIni.setText(formato.format(fechaIni));
+            this.txtFechaFin.setText(formato.format(fechaFin));
+            recuperarLineas();
         }
         cargarIMG("/Imagenes/add.png", this.btAñadir);
         cargarIMG("/Imagenes/edit.png", this.btModificar);
@@ -58,8 +78,11 @@ public class frOferta extends javax.swing.JDialog {
         for (int i = 0; i < modelo.getRowCount(); i++) {
             Aplican apli = new Aplican();
             String referencia = String.valueOf(modelo.getValueAt(i, 0));
-            double cantidad = (double) modelo.getValueAt(i, 2);
-            double dto = (double) modelo.getValueAt(i, 1);
+            System.out.println("asdasdasd"+modelo.getValueAt(i, 1));
+            System.out.println("sssss"+modelo.getValueAt(i, 2));
+            double dto = (double)modelo.getValueAt(i, 1);
+            double cantidad = (double)modelo.getValueAt(i, 2);
+            
             apli.setCantidad(cantidad);
             apli.setDescuento(dto);
             apli.setReferencia(referencia);
@@ -68,28 +91,23 @@ public class frOferta extends javax.swing.JDialog {
         }
     }
 
-    public final void recuperarDatos() {
+    public final void recuperarLineas() {
 
         DefaultTableModel tm = (DefaultTableModel) this.tLineas.getModel();
         this.tLineas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        String sql = "select * from ofertas ";
+        String sql = "select * from aplican where ofertasid="+ofer.getId();
         try {
 
             ResultSet rs = bd.Consulta(sql);
             while (rs.next()) {
-                ofer.setDescripcion(rs.getString("descripcion"));
-                ofer.setId(rs.getInt("id"));
-                ofer.setNombre(rs.getString("nombre"));
-                ofer.setFechaIni(rs.getDate("fechaini"));
-                ofer.setFechaFin(rs.getDate("fechafin"));
-                ofer.setVip(rs.getBoolean("vip"));
-
-                this.lId.setText(String.valueOf(ofer.getId()));
-                this.txtDescripcion.setText(ofer.getDescripcion());
-                this.txtNombre.setText(ofer.getNombre());
-                this.txtFechaIni.setText(String.valueOf(ofer.getFechaIni()));
-                this.txtFechaFin.setText(String.valueOf(ofer.getFechaFin()));
+                
+                String referencia=rs.getString("articulosref");
+                double cantidad = rs.getInt("cantidad");
+                double descuento= rs.getInt("descuento"); 
+                
+                Object nuev[] = {referencia, descuento,cantidad };
+                tm.addRow(nuev);
 
             }
         } catch (SQLException ex) {
@@ -160,7 +178,6 @@ public class frOferta extends javax.swing.JDialog {
         tLineas = new javax.swing.JTable();
         btAceptar = new javax.swing.JButton();
         btCancelar = new javax.swing.JButton();
-        btAyuda = new javax.swing.JButton();
         jToolBar1 = new javax.swing.JToolBar();
         btAñadir = new javax.swing.JButton();
         btModificar = new javax.swing.JButton();
@@ -171,6 +188,7 @@ public class frOferta extends javax.swing.JDialog {
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("ID Oferta"));
 
         lId.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lId.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lId.setText("ID");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -188,6 +206,12 @@ public class frOferta extends javax.swing.JDialog {
         );
 
         jLabel1.setText("Nombre:");
+
+        txtFechaFin.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtFechaFinFocusLost(evt);
+            }
+        });
 
         jLabel2.setText("Descripción:");
 
@@ -227,13 +251,6 @@ public class frOferta extends javax.swing.JDialog {
         btCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btCancelarActionPerformed(evt);
-            }
-        });
-
-        btAyuda.setText("Ayuda");
-        btAyuda.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btAyudaActionPerformed(evt);
             }
         });
 
@@ -308,25 +325,23 @@ public class frOferta extends javax.swing.JDialog {
                             .addComponent(txtDescripcion)
                             .addComponent(txtNombre, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addContainerGap())))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(btAceptar)
-                        .addGap(18, 18, 18)
-                        .addComponent(btCancelar)
-                        .addGap(18, 18, 18)
-                        .addComponent(btAyuda)
-                        .addGap(109, 109, 109))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(chVip)
-                        .addGap(189, 189, 189))))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
                     .addComponent(jToolBar1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(chVip)
+                        .addGap(189, 189, 189))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btAceptar)
+                        .addGap(18, 18, 18)
+                        .addComponent(btCancelar)
+                        .addGap(150, 150, 150))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -356,29 +371,25 @@ public class frOferta extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btAceptar)
-                    .addComponent(btCancelar)
-                    .addComponent(btAyuda))
+                    .addComponent(btCancelar))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtFechaIniFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtFechaIniFocusLost
-        /*double aux=0;
-        try{
-            aux=Double.parseDouble(this.txtFechaIni.getText());
-
-        }
-        catch(Exception ex){
-            this.txtFechaIni.requestFocus();
-        }*/
+       if(!validaciones.vFecha(this.txtFechaIni.getText())){
+           this.txtFechaIni.requestFocus();
+       }
     }//GEN-LAST:event_txtFechaIniFocusLost
 
     private void btAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAceptarActionPerformed
         ofer.setNombre(this.txtNombre.getText());
         ofer.setDescripcion(this.txtDescripcion.getText());
         ofer.setVip(this.chVip.isSelected());
+        
         try {
             ofer.setFechaIni(formato.parse(this.txtFechaIni.getText()));
             ofer.setFechaFin(formato.parse(this.txtFechaFin.getText()));
@@ -389,14 +400,14 @@ public class frOferta extends javax.swing.JDialog {
             ofer.registrar();
             this.registrarLineas();
             this.result = JOptionPane.OK_OPTION;
-            /*  this.setVisible(false);
-            this.dispose();*/
+              this.setVisible(false);
+            this.dispose();
         } else {
             ofer.actualizar();
-            ofer.actualizarLineas();
+            this.registrarLineas();
             this.result = JOptionPane.OK_OPTION;
-            /* this.setVisible(false);
-            this.dispose();*/
+             this.setVisible(false);
+            this.dispose();
         }
     }//GEN-LAST:event_btAceptarActionPerformed
 
@@ -405,10 +416,6 @@ public class frOferta extends javax.swing.JDialog {
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btCancelarActionPerformed
-
-    private void btAyudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAyudaActionPerformed
-
-    }//GEN-LAST:event_btAyudaActionPerformed
 
     private void btAñadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAñadirActionPerformed
         frLineas dialog = new frLineas(new Aplican(), true, new javax.swing.JFrame(), true);
@@ -468,6 +475,12 @@ public class frOferta extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_btEliminarActionPerformed
 
+    private void txtFechaFinFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtFechaFinFocusLost
+        if(!validaciones.vFecha(this.txtFechaFin.getText())){
+            this.txtFechaFin.requestFocus();
+        }
+    }//GEN-LAST:event_txtFechaFinFocusLost
+
     /**
      * @param args the command line arguments
      */
@@ -498,7 +511,7 @@ public class frOferta extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                frOferta dialog = new frOferta(new Oferta(), true, new javax.swing.JFrame(), true);
+                frOferta dialog = new frOferta(new Oferta(9), false, new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -512,7 +525,6 @@ public class frOferta extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btAceptar;
-    private javax.swing.JButton btAyuda;
     private javax.swing.JButton btAñadir;
     private javax.swing.JButton btCancelar;
     private javax.swing.JButton btEliminar;
@@ -532,4 +544,5 @@ public class frOferta extends javax.swing.JDialog {
     private javax.swing.JTextField txtFechaIni;
     private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables
+
 }

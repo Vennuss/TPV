@@ -6,8 +6,8 @@ package Pedidos.Interfaces;
 
 import Articulos.Articulo;
 import Articulos.frArticulos;
-import Clientes.*;
 import Pedidos.*;
+import Persona.Cliente;
 import bd.bd;
 import java.awt.Image;
 import java.sql.ResultSet;
@@ -17,7 +17,6 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
 /**
  *
@@ -414,8 +413,6 @@ public class PanelPedido extends javax.swing.JFrame {
         tm.setRowCount(0);
         
         
-        
-        
         String sql = "select * from pedidos " + filtro + " order by id;";
         try {
             ResultSet rs = bd.Consulta(sql);
@@ -424,13 +421,7 @@ public class PanelPedido extends javax.swing.JFrame {
                 String fecha = rs.getString("fecha");
                 String formaPago = rs.getString("formaPago");
                 String cliente = rs.getString("cliente");
-                Object nuev[] = new Object[4];
-                nuev[0] = id;
-                nuev[1] = fecha;
-                nuev[2] = formaPago;
-                if(admin == true){
-                    nuev[3] = cliente;
-                }
+                Object nuev[] = {id, fecha, formaPago, cliente};
                 tm.addRow(nuev);
             }
         } catch (SQLException ex) {

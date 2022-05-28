@@ -7,7 +7,6 @@ package Ofertas;
 import Maqueta.Maqueta;
 import bd.bd;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,7 +27,7 @@ public class Oferta implements Maqueta {
     private Date fechaIni;
     private Date fechaFin;
     private boolean vip;
-    private ArrayList<Aplican> lineas = new ArrayList();
+    //private ArrayList<Aplican> lineas = new ArrayList();
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     public Oferta(int id, String nombre) {
@@ -39,10 +38,10 @@ public class Oferta implements Maqueta {
         this.fechaFin = new Date();
         this.vip = false;
     }
-
-    public ArrayList<Aplican> getLineas() {
-        return lineas;
+    public Oferta(int id) {
+        this.id = id;
     }
+    
 
     public Oferta() {
         this.id = -1;
@@ -101,13 +100,13 @@ public class Oferta implements Maqueta {
         this.vip = vip;
     }
     
-    public void registrarLineas(){
+   /* public void registrarLineas(){
         Iterator itera=this.lineas.iterator();
         while(itera.hasNext()){
             Aplican li=(Aplican)itera.next();
             li.registrar();
         }
-    }
+    }*/
     public void actualizarLineas(){
        /* Iterator itera=this.lineas.iterator();
         while(itera.hasNext()){
@@ -115,24 +114,7 @@ public class Oferta implements Maqueta {
             li.actualizar();
         }*/
     }
-    
-    public void recuperarLineas(){
-       String sql="select * from aplican where id="+this.getId();
-       try {
-               
-                ResultSet rs = bd.Consulta(sql);
-                while (rs.next()) {
-                    String referencia=rs.getString("articulosRef");
-                    double dto=rs.getDouble("descuento");
-                    double cantidad=rs.getDouble("cantidad");
-                    Aplican lin=new Aplican(this.getId(),referencia,dto,cantidad);
-                    lineas.add(lin);
-                }
-            } catch (Exception ex) {
-                System.out.println(ex.getMessage());
-            }
-    }
-
+   
     @Override
     public void recuperaDatos() {
         String sql="select * from ofertas where id="+this.getId();
@@ -141,8 +123,9 @@ public class Oferta implements Maqueta {
                 ResultSet rs = bd.Consulta(sql);
                 while (rs.next()) {
                     this.setId(rs.getInt("id"));
+                    this.setDescripcion(rs.getString("descripcion"));
                     this.setNombre(rs.getString("nombre"));
-                    this.setFechaFin(rs.getDate("fechaini"));
+                    this.setFechaIni(rs.getDate("fechaini"));
                     this.setFechaFin(rs.getDate("fechafin"));
                     this.setVip(rs.getBoolean("vip"));
                 }
@@ -158,8 +141,8 @@ public class Oferta implements Maqueta {
                     "','"+this.getDescripcion()+"','"+simpleDateFormat.format(this.getFechaIni())+"','"+simpleDateFormat.format(this.getFechaIni())+"',"+this.isVip()+")";
         int resultado = bd.Sentencia2(sql);
         if (resultado > 0) {
-            JOptionPane.showMessageDialog(null, "Registro Exitoso");
-
+            //JOptionPane.showMessageDialog(null, "Registro Exitoso");
+          this.setId(resultado);
         }
     }
 
@@ -181,8 +164,6 @@ public class Oferta implements Maqueta {
                simpleDateFormat.format(this.getFechaIni())+"', fechafin='"+simpleDateFormat.format(this.getFechaFin())+"', vip="+this.isVip()+" where id="+this.getId();
         int resultado=bd.Sentencia(sql);
         if(resultado>0){
-            JOptionPane.showMessageDialog(null, "Registro Exitoso");
-            
         } 
     }
 

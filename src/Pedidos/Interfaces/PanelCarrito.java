@@ -1,9 +1,9 @@
 package Pedidos.Interfaces;
 
 import Articulos.Articulo;
-import Clientes.Cliente;
 import Pedidos.ArticuloPedido;
 import Pedidos.Carrito;
+import Persona.Cliente;
 import bd.bd;
 import java.sql.ResultSet;
 import java.sql.SQLException;

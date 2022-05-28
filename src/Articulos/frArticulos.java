@@ -4,17 +4,15 @@
  */
 package Articulos;
 
+import bd.bd;
+import bd.validaciones;
 import java.awt.Image;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -33,11 +31,15 @@ public class frArticulos extends javax.swing.JDialog {
     final Articulo art;
     private boolean operacion = false;
     private int result = JOptionPane.CANCEL_OPTION;
-    private String rutaorigen = "";
+    private String rutaorigen = "";    
 
     public frArticulos(Articulo art, boolean operacion, java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        this.lvFamilia.setVisible(false);
+        this.lvPvp.setVisible(false);
+        this.lvRefe.setVisible(false);
+        this.lvStocks.setVisible(false);
         this.cargarIcono("/Imagenes/lupa.png", this.btFamilia);
         this.operacion = operacion;
         this.art = art;
@@ -48,45 +50,58 @@ public class frArticulos extends javax.swing.JDialog {
             this.txtStock.setText(String.valueOf(art.getStock()));
             this.txtPvp.setText(String.valueOf(art.getPvp()));
             this.txtDescripcion.setText(art.getDescripcion());
-            this.txtMarca.setText(art.getMarca());
+            this.txtMarca.setText(art.getMarca());            
             this.txtFamilia.setText(String.valueOf(art.getFa().getId()));
             this.lFamilia.setText(art.getFa().getNombre());
-            this.cargarImg("/Imagenes/" + art.getRutaImg());
+            this.cargarImg("/Imagenes/" + art.getRutaImg(), true);
         }
     }
 
-    private String validarRuta(String url) {
-        String nombre = "";
-        try {
-            URL main = getClass().getResource("/Imagenes/");
+    private void validarRuta(String url) {
+        if (url.length() > 0) {
+            String nombre = "";
+            try {
+                URL main = getClass().getResource("/Imagenes/");
 
-            if (!"file".equalsIgnoreCase(main.getProtocol())) {
-                throw new IllegalStateException("Main class is not stored in a file.");
+                if (!"file".equalsIgnoreCase(main.getProtocol())) {
+                    throw new IllegalStateException("Main class is not stored in a file.");
+                }
+                File rutaSis = new File(main.getPath());
+
+                File origen = new File(url);
+                File destino = new File(rutaSis.getParent().replace("%20", " ") + "/Imagenes/" + origen.getName());
+                nombre = origen.getName();
+
+                System.out.println("Ruta origen:" + origen.getAbsolutePath());
+                System.out.println("Ruta Destino:" + destino.getAbsolutePath());
+
+                ///Files.copy(origen.toPath(), destino.toPath(),)
+                System.out.println(destino.getPath());
+
+                if (origen.exists()) {
+                    //origen.renameTo(destino);
+                    Files.copy(origen.toPath(), destino.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    nombre = destino.getName();
+                }
+            } catch (Exception ex) {
+                System.out.println("Error:" + ex.getMessage());
             }
-            File rutaSis = new File(main.getPath());
+            if (nombre.equals("")) {
 
-            File origen = new File(url);
-            File destino = new File(rutaSis.getParent().replace("%20", " ") + "/Imagenes/" + origen.getName());
-            nombre = origen.getName();
-
-            System.out.println("Ruta origen:" + origen.getAbsolutePath());
-            System.out.println("Ruta Destino:" + destino.getAbsolutePath());
-
-            
-
-            ///Files.copy(origen.toPath(), destino.toPath(),)
-             
-            System.out.println(destino.getPath());
-          
-            if (origen.exists()) {
-                //origen.renameTo(destino);
-                Files.copy(origen.toPath(), destino.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                nombre=destino.getName();
+            } else {
+                this.art.setRutaImg(nombre);
             }
-        } catch (Exception ex) {
-            System.out.println("Error:" + ex.getMessage());
         }
-        return nombre;
+    }
+
+    public boolean validarCampos() {
+        boolean retorno = true;
+        if (this.txtReferencia.getText().isEmpty()) {
+            retorno = false;
+        } else {
+
+        }
+        return retorno;
     }
 
     public int getResult() {
@@ -103,10 +118,66 @@ public class frArticulos extends javax.swing.JDialog {
         boton.setIcon(icono);
     }
 
-    private void cargarImg(String url) {
-        ImageIcon icon = new ImageIcon(getClass().getResource(url));
+    private void cargarImg(String url, boolean almacen) {
+        ImageIcon icon;
+        if (almacen) {
+            icon = new ImageIcon(getClass().getResource(url));
+        } else {
+            icon = new ImageIcon(url);
+        }
+
         ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(this.lImg.getWidth(), this.lImg.getHeight(), Image.SCALE_DEFAULT));
         this.lImg.setIcon(icono);
+    }
+
+    public boolean validarReferencia() {
+        boolean retorno = true;
+        if (this.operacion) {
+            String sql = "select * from articulos where ref='" + this.txtReferencia.getText() + "'";
+            try {
+                int cantFilas = 0;
+                ResultSet rs = bd.Consulta(sql);
+                while (rs.next()) {
+                    cantFilas++;
+                }
+                retorno = cantFilas <= 0;
+            } catch (SQLException ex) {
+                retorno = false;
+            }
+        }
+        return retorno;
+    }
+    
+    public boolean validarFamilia(){
+        boolean retorno = false;
+        if (this.operacion) {
+            String sql = "select * from familia where id=" + this.txtReferencia.getText();
+            try {
+                int cantFilas = 0;
+                ResultSet rs = bd.Consulta(sql);
+                while (rs.next()) {
+                    cantFilas++;
+                }
+                if(cantFilas==1){                    
+                    retorno =true;
+                    //volver a la fila primera;
+                    rs.first();
+                     while (rs.next()) {
+                         int id=rs.getInt("id");
+                         Familia fami=new Familia(id);
+                         fami.recuperaDatos();
+                         this.art.setFa(fami);
+                }
+                }
+                else{
+                    
+                }
+                retorno = cantFilas == 1;                
+            } catch (SQLException ex) {
+                retorno = false;
+            }
+        }
+        return retorno;
     }
 
     /**
@@ -131,7 +202,6 @@ public class frArticulos extends javax.swing.JDialog {
         btCancelar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         txtDescripcion = new javax.swing.JTextField();
-        btAyuda = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         txtMarca = new javax.swing.JTextField();
@@ -140,6 +210,10 @@ public class frArticulos extends javax.swing.JDialog {
         btFamilia = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         txtStock = new javax.swing.JTextField();
+        lvRefe = new javax.swing.JLabel();
+        lvPvp = new javax.swing.JLabel();
+        lvStocks = new javax.swing.JLabel();
+        lvFamilia = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -148,13 +222,25 @@ public class frArticulos extends javax.swing.JDialog {
         lFamilia.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lFamilia.setText("Familia");
 
+        txtReferencia.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtReferenciaFocusLost(evt);
+            }
+        });
+
         txtANotas.setColumns(20);
         txtANotas.setRows(5);
         jScrollPane1.setViewportView(txtANotas);
 
+        txtPvp.setText("0");
         txtPvp.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtPvpFocusLost(evt);
+            }
+        });
+        txtPvp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPvpActionPerformed(evt);
             }
         });
 
@@ -183,16 +269,20 @@ public class frArticulos extends javax.swing.JDialog {
 
         jLabel1.setText("Descripción");
 
-        btAyuda.setText("Ayuda");
-        btAyuda.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btAyudaActionPerformed(evt);
-            }
-        });
-
         jLabel2.setText("Marca:");
 
         jLabel5.setText("Familia:");
+
+        txtFamilia.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtFamiliaFocusLost(evt);
+            }
+        });
+        txtFamilia.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtFamiliaKeyPressed(evt);
+            }
+        });
 
         jLabel6.setText("Referencia:");
 
@@ -207,6 +297,29 @@ public class frArticulos extends javax.swing.JDialog {
         });
 
         jLabel7.setText("Notas:");
+
+        txtStock.setText("0");
+        txtStock.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtStockFocusLost(evt);
+            }
+        });
+
+        lvRefe.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lvRefe.setForeground(new java.awt.Color(255, 0, 0));
+        lvRefe.setText("*");
+
+        lvPvp.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lvPvp.setForeground(new java.awt.Color(255, 0, 0));
+        lvPvp.setText("*");
+
+        lvStocks.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lvStocks.setForeground(new java.awt.Color(255, 0, 0));
+        lvStocks.setText("*");
+
+        lvFamilia.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lvFamilia.setForeground(new java.awt.Color(255, 0, 0));
+        lvFamilia.setText("*");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -242,17 +355,23 @@ public class frArticulos extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btFamilia, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
                     .addComponent(txtStock, javax.swing.GroupLayout.Alignment.LEADING))
-                .addGap(14, 14, 14))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lvFamilia, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lvRefe, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(lvStocks, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lvPvp, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(12, 12, 12))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btAceptar)
                 .addGap(18, 18, 18)
                 .addComponent(btCancelar)
-                .addGap(18, 18, 18)
-                .addComponent(btAyuda)
-                .addGap(117, 117, 117))
+                .addGap(169, 169, 169))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -265,44 +384,53 @@ public class frArticulos extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btImg))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtReferencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(txtReferencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel6))
+                            .addComponent(lvRefe, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
                             .addComponent(txtFamilia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btFamilia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lFamilia))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtMarca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtPvp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(lFamilia)
+                            .addComponent(lvFamilia))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel7)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(18, 18, 18)
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(txtDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel1))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(txtMarca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel2))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(txtPvp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel3))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(txtStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel4)
+                                    .addComponent(lvStocks))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel7)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(67, 67, 67)
+                                .addComponent(lvPvp)))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btAceptar)
-                    .addComponent(btCancelar)
-                    .addComponent(btAyuda))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btCancelar))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btImgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btImgActionPerformed
@@ -326,15 +454,14 @@ public class frArticulos extends javax.swing.JDialog {
 
                 System.out.println(origen.getAbsolutePath());
                 rutaorigen = origen.getAbsolutePath();
-                cargarImg(rutaorigen);
+                cargarImg(rutaorigen, false);
                 // String hola=validarRuta(rutaorigen);
-
             }
-
         }
     }//GEN-LAST:event_btImgActionPerformed
 
     private void btAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAceptarActionPerformed
+
         if (operacion) {
             art.setReferencia(this.txtReferencia.getText());
             art.setDescripcion(this.txtDescripcion.getText());
@@ -342,7 +469,7 @@ public class frArticulos extends javax.swing.JDialog {
             art.setMarca(this.txtMarca.getText());
             art.setPvp(Double.parseDouble(this.txtPvp.getText()));
             art.setStock(Integer.parseInt(this.txtStock.getText()));
-            art.setRutaImg(this.validarRuta(rutaorigen));
+            validarRuta(rutaorigen);
             art.registrar();
             this.result = JOptionPane.OK_OPTION;
             this.setVisible(false);
@@ -353,7 +480,7 @@ public class frArticulos extends javax.swing.JDialog {
             art.setMarca(this.txtMarca.getText());
             art.setPvp(Double.parseDouble(this.txtPvp.getText()));
             art.setStock(Integer.parseInt(this.txtStock.getText()));
-            art.setRutaImg(this.validarRuta(rutaorigen));
+            validarRuta(rutaorigen);
             art.actualizar();
             this.result = JOptionPane.OK_OPTION;
             this.setVisible(false);
@@ -367,12 +494,8 @@ public class frArticulos extends javax.swing.JDialog {
         this.dispose();
     }//GEN-LAST:event_btCancelarActionPerformed
 
-    private void btAyudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAyudaActionPerformed
-
-    }//GEN-LAST:event_btAyudaActionPerformed
-
     private void btFamiliaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btFamiliaActionPerformed
-        BFamilias dialog = new BFamilias(new javax.swing.JFrame(), true);
+        PanelFamilias dialog = new PanelFamilias(true, new javax.swing.JFrame(), true);
         dialog.setVisible(true);
 
         if (dialog.getResult() == JOptionPane.OK_OPTION) {
@@ -383,14 +506,64 @@ public class frArticulos extends javax.swing.JDialog {
     }//GEN-LAST:event_btFamiliaActionPerformed
 
     private void txtPvpFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPvpFocusLost
-        double aux = 0;
-        try {
-            aux = Double.parseDouble(this.txtPvp.getText());
-
-        } catch (Exception ex) {
-            this.txtPvp.requestFocus();
+        if(this.txtPvp.getText().isEmpty()){
+            this.lvPvp.setVisible(true);
+        }
+        else{
+            if(validaciones.vDouble(this.txtPvp.getText())){
+                this.lvPvp.setVisible(false);
+            }
+            else{
+                this.lvPvp.setVisible(true);
+            }
         }
     }//GEN-LAST:event_txtPvpFocusLost
+
+    private void txtFamiliaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFamiliaKeyPressed
+        String sql="select * from familias where id="+this.txtFamilia.getText();
+        
+        
+    }//GEN-LAST:event_txtFamiliaKeyPressed
+
+    private void txtStockFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtStockFocusLost
+       if(this.txtStock.getText().isEmpty()){
+            this.txtStock.setVisible(true);
+        }
+        else{
+            if(validaciones.vDouble(this.txtStock.getText())){
+                this.txtStock.setVisible(false);
+            }
+            else{
+                this.txtStock.setVisible(true);
+            }
+        }
+    }//GEN-LAST:event_txtStockFocusLost
+
+    private void txtReferenciaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtReferenciaFocusLost
+        if (this.txtReferencia.getText().isEmpty()) {
+            this.lvRefe.setVisible(true);
+        } else {
+            if (!this.validarReferencia()) {
+                JOptionPane.showMessageDialog(null, "Valor de Referencia no valido.\nValor Duplicado");
+                this.lvRefe.setVisible(true);
+            }
+            else{
+             this.lvRefe.setVisible(false);   
+            }            
+        }
+    }//GEN-LAST:event_txtReferenciaFocusLost
+
+    private void txtPvpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPvpActionPerformed
+        
+    }//GEN-LAST:event_txtPvpActionPerformed
+
+    private void txtFamiliaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtFamiliaFocusLost
+       if (this.txtFamilia.getText().isEmpty()) {
+            this.txtFamilia.setVisible(true);
+        } else {
+            
+        }
+    }//GEN-LAST:event_txtFamiliaFocusLost
 
     /**
      * @param args the command line arguments
@@ -437,7 +610,6 @@ public class frArticulos extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btAceptar;
-    private javax.swing.JButton btAyuda;
     private javax.swing.JButton btCancelar;
     private javax.swing.JButton btFamilia;
     private javax.swing.JButton btImg;
@@ -451,6 +623,10 @@ public class frArticulos extends javax.swing.JDialog {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lFamilia;
     private javax.swing.JLabel lImg;
+    private javax.swing.JLabel lvFamilia;
+    private javax.swing.JLabel lvPvp;
+    private javax.swing.JLabel lvRefe;
+    private javax.swing.JLabel lvStocks;
     private javax.swing.JTextArea txtANotas;
     private javax.swing.JTextField txtDescripcion;
     private javax.swing.JTextField txtFamilia;

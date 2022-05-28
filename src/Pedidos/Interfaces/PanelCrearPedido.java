@@ -2,9 +2,9 @@ package Pedidos.Interfaces;
 
 import Articulos.Articulo;
 import Articulos.PanelArticulos;
-import Clientes.Cliente;
 import Pedidos.ArticuloPedido;
 import Pedidos.Pedido;
+import Persona.Cliente;
 import bd.bd;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -277,7 +277,7 @@ public class PanelCrearPedido extends javax.swing.JFrame {
                 });
                 dialog.setVisible(true);
                 if(dialog.getResult() == JOptionPane.OK_OPTION){
-                    pd.addArticulo(dialog.getArticulo(), 1, 0);
+                pd.addArticulo(dialog.getArticulo(), 1, 0);
                 }
     }//GEN-LAST:event_jBArticuloActionPerformed
 

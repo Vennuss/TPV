@@ -20,30 +20,41 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author Familia
  */
-public class BFamilias extends javax.swing.JDialog {
+public class PanelFamilias extends javax.swing.JDialog {
 
     /**
      * Creates new form BFamilias
      */
+    
     DefaultTableModel modelo;
     private String filtro = "";
-    private int result = JOptionPane.CANCEL_OPTION;
-    private Familia familia = new Familia();
+    private boolean busqueda = false;
+    Familia fami = null;
+    private int result = JOptionPane.CANCEL_OPTION;    
+    
 
     public Familia getFamilia() {
-        return familia;
+        return fami;
     }
 
     public void setFamilia(Familia familia) {
-        this.familia = familia;
+        this.fami = familia;
     }
 
-    public BFamilias(java.awt.Frame parent, boolean modal) {
+    public PanelFamilias(boolean busqueda, java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        recuperarDatos();
+          this.busqueda = busqueda;
+        if (this.busqueda) {
+            this.btSele.setVisible(true);
+        } else {
+            this.btSele.setVisible(false);
+        }
+         recuperarDatos();
+        cargarIMG("/Imagenes/add.png", this.btAñadir);
+        cargarIMG("/Imagenes/edit.png", this.btModificar);
+        cargarIMG("/Imagenes/delete.png", this.btEliminar);
         cargarIMG("/Imagenes/sele.png", this.btSele);
-        cargarIMG("/Imagenes/clean.png", this.btLimpiar);
         cargarIMG("/Imagenes/exit.png", this.btSalir);
         this.txtBusqueda.getDocument().addDocumentListener(new DocumentListener() {
 
@@ -152,10 +163,12 @@ public class BFamilias extends javax.swing.JDialog {
 
         jToolBar1 = new javax.swing.JToolBar();
         btSele = new javax.swing.JButton();
+        btAñadir = new javax.swing.JButton();
+        btModificar = new javax.swing.JButton();
+        btEliminar = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JToolBar.Separator();
         jLabel2 = new javax.swing.JLabel();
         txtBusqueda = new javax.swing.JTextField();
-        btLimpiar = new javax.swing.JButton();
         btSalir = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tFamilias = new javax.swing.JTable();
@@ -168,7 +181,6 @@ public class BFamilias extends javax.swing.JDialog {
 
         btSele.setFocusable(false);
         btSele.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btSele.setMargin(new java.awt.Insets(2, 2, 2, 2));
         btSele.setMaximumSize(new java.awt.Dimension(40, 40));
         btSele.setMinimumSize(new java.awt.Dimension(40, 40));
         btSele.setPreferredSize(new java.awt.Dimension(40, 40));
@@ -179,6 +191,48 @@ public class BFamilias extends javax.swing.JDialog {
             }
         });
         jToolBar1.add(btSele);
+
+        btAñadir.setFocusable(false);
+        btAñadir.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btAñadir.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        btAñadir.setMaximumSize(new java.awt.Dimension(40, 40));
+        btAñadir.setMinimumSize(new java.awt.Dimension(40, 40));
+        btAñadir.setPreferredSize(new java.awt.Dimension(40, 40));
+        btAñadir.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btAñadir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btAñadirActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btAñadir);
+
+        btModificar.setFocusable(false);
+        btModificar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btModificar.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        btModificar.setMaximumSize(new java.awt.Dimension(40, 40));
+        btModificar.setMinimumSize(new java.awt.Dimension(40, 40));
+        btModificar.setPreferredSize(new java.awt.Dimension(40, 40));
+        btModificar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btModificarActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btModificar);
+
+        btEliminar.setFocusable(false);
+        btEliminar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btEliminar.setMargin(new java.awt.Insets(2, 2, 2, 2));
+        btEliminar.setMaximumSize(new java.awt.Dimension(40, 40));
+        btEliminar.setMinimumSize(new java.awt.Dimension(40, 40));
+        btEliminar.setPreferredSize(new java.awt.Dimension(40, 40));
+        btEliminar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btEliminarActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(btEliminar);
         jToolBar1.add(jSeparator1);
 
         jLabel2.setText("Busquedas:");
@@ -195,19 +249,6 @@ public class BFamilias extends javax.swing.JDialog {
             }
         });
         jToolBar1.add(txtBusqueda);
-
-        btLimpiar.setFocusable(false);
-        btLimpiar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btLimpiar.setMaximumSize(new java.awt.Dimension(40, 40));
-        btLimpiar.setMinimumSize(new java.awt.Dimension(40, 40));
-        btLimpiar.setPreferredSize(new java.awt.Dimension(40, 40));
-        btLimpiar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btLimpiar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btLimpiarActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(btLimpiar);
 
         btSalir.setFocusable(false);
         btSalir.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -233,11 +274,6 @@ public class BFamilias extends javax.swing.JDialog {
         ));
         tFamilias.setRowHeight(30);
         tFamilias.setRowMargin(1);
-        tFamilias.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tFamiliasMouseClicked(evt);
-            }
-        });
         jScrollPane1.setViewportView(tFamilias);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -253,7 +289,7 @@ public class BFamilias extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 367, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 586, Short.MAX_VALUE)
+                    .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 865, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addComponent(jScrollPane1)))
@@ -267,54 +303,99 @@ public class BFamilias extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 414, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btSeleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSeleActionPerformed
         int fila = this.tFamilias.getSelectedRow();
         System.out.println("Fila seleccionada es" + fila);
         if (this.tFamilias.getSelectedRow() != -1) {
-            int codigo = (Integer) modelo.getValueAt(fila, 0);
-            this.familia = new Familia(codigo);
-            familia.recuperaDatos();
+            int codigo = (int)modelo.getValueAt(fila, 0);
+            this.fami = new Familia(codigo);
+            fami.recuperaDatos();
             this.result = JOptionPane.OK_OPTION;
             this.setVisible(false);
             this.dispose();
         }
     }//GEN-LAST:event_btSeleActionPerformed
 
+    private void btAñadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAñadirActionPerformed
+        Familia fami = new Familia();
+        frFamilias dialog = new frFamilias(fami, true, new javax.swing.JFrame(), true);
+        dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                // System.exit(0);
+            }
+        });
+        dialog.setVisible(true);
+        if (dialog.getResult()==JOptionPane.YES_NO_OPTION) {
+            this.recuperarDatos();
+        } else {
+
+        }
+    }//GEN-LAST:event_btAñadirActionPerformed
+
+    private void btModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btModificarActionPerformed
+        int fila = this.tFamilias.getSelectedRow();
+        System.out.println("Fila seleccionada es" + fila);
+        if (this.tFamilias.getSelectedRow() != -1) {
+            int codigo = (Integer) modelo.getValueAt(fila, 0);
+            System.out.println("El codigo es:" + codigo);
+            Familia fami = new Familia(codigo);
+            fami.recuperaDatos();
+            // this.setVisible(false);
+            /*frFamilia fa=new frFamilia(fami, false);
+            // JDialog dial=(JDialog)fa;
+            fa.setVisible(true);*/
+            frFamilias dialog = new frFamilias(fami, false, new javax.swing.JFrame(), true);
+            dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent e) {
+                    //System.exit(0);
+                }
+            });
+            dialog.setVisible(true);
+            if (dialog.getResult()==JOptionPane.YES_NO_OPTION) {
+                modelo.setValueAt(fami.getNombre(), fila, 1);
+                modelo.setValueAt(fami.getNotas(), fila, 2);
+            } else {
+                System.out.println("Mostar ajsjdj");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Seleccione un registro");
+        }
+    }//GEN-LAST:event_btModificarActionPerformed
+
+    private void btEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEliminarActionPerformed
+        int fila = this.tFamilias.getSelectedRow();
+        System.out.println("Fila seleccionada es" + fila);
+        if (this.tFamilias.getSelectedRow() != -1) {
+            int codigo = (Integer) modelo.getValueAt(fila, 0);
+            System.out.println("El codigo es:" + codigo);
+            Familia fami = new Familia(codigo);
+            int resp = JOptionPane.showConfirmDialog(null, "¿Esta seguro?", "Alerta!", JOptionPane.YES_NO_OPTION);
+            if (resp == JOptionPane.OK_OPTION) {
+                fami.eliminar();
+                fami = null;
+                this.modelo.removeRow(fila);
+            }
+        }
+    }//GEN-LAST:event_btEliminarActionPerformed
+
     private void txtBusquedaInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_txtBusquedaInputMethodTextChanged
         System.out.println("El texto es:" + this.txtBusqueda.getText());
     }//GEN-LAST:event_txtBusquedaInputMethodTextChanged
-
-    private void btLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btLimpiarActionPerformed
-        this.txtBusqueda.setText("");
-    }//GEN-LAST:event_btLimpiarActionPerformed
 
     private void btSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalirActionPerformed
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btSalirActionPerformed
-
-    private void tFamiliasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tFamiliasMouseClicked
-        if (evt.getClickCount() == 2 && !evt.isConsumed()) {
-            evt.consume();
-            int fila = this.tFamilias.getSelectedRow();
-            System.out.println("Fila seleccionada es" + fila);
-            if (this.tFamilias.getSelectedRow() != -1) {
-                int codigo = (Integer) modelo.getValueAt(fila, 0);
-                this.familia = new Familia(codigo);
-                familia.recuperaDatos();
-                this.result = JOptionPane.OK_OPTION;
-                this.setVisible(false);
-                this.dispose();
-            }
-        }
-    }//GEN-LAST:event_tFamiliasMouseClicked
 
     /**
      * @param args the command line arguments
@@ -333,20 +414,21 @@ public class BFamilias extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(BFamilias.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PanelFamilias.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(BFamilias.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PanelFamilias.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(BFamilias.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PanelFamilias.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(BFamilias.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PanelFamilias.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                BFamilias dialog = new BFamilias(new javax.swing.JFrame(), true);
+                PanelFamilias dialog = new PanelFamilias(false, new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -359,7 +441,9 @@ public class BFamilias extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btLimpiar;
+    private javax.swing.JButton btAñadir;
+    private javax.swing.JButton btEliminar;
+    private javax.swing.JButton btModificar;
     private javax.swing.JButton btSalir;
     private javax.swing.JButton btSele;
     private javax.swing.JLabel jLabel1;

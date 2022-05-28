@@ -1,7 +1,7 @@
 package Pedidos;
 
 import Articulos.Articulo;
-import Clientes.Cliente;
+import Persona.Cliente;
 import bd.bd;
 import java.sql.ResultSet;
 import java.sql.SQLException;
