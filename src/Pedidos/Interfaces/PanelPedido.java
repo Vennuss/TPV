@@ -4,8 +4,6 @@
  */
 package Pedidos.Interfaces;
 
-import Articulos.Articulo;
-import Articulos.frArticulos;
 import Pedidos.*;
 import Persona.Cliente;
 import bd.bd;
@@ -179,14 +177,14 @@ public class PanelPedido extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID", "Fecha", "Forma de pago", "Cliente"
+                "ID", "Fecha", "Forma de pago"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -270,7 +268,6 @@ public class PanelPedido extends javax.swing.JFrame {
             int resp = JOptionPane.showConfirmDialog(null, "¿Esta seguro?", "Alerta!", JOptionPane.YES_NO_OPTION);
             if (resp == JOptionPane.OK_OPTION) {
                 pd.eliminar();
-                pd = null;
                 recuperarDatos();
             }
         }
@@ -357,7 +354,7 @@ public class PanelPedido extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new PanelPedido(false, new Cliente("12345678X")).setVisible(true);
+                new PanelPedido(true, new Cliente("12345678X")).setVisible(true);
             }
         });
     }
@@ -420,8 +417,7 @@ public class PanelPedido extends javax.swing.JFrame {
                 int id = rs.getInt("id");
                 String fecha = rs.getString("fecha");
                 String formaPago = rs.getString("formaPago");
-                String cliente = rs.getString("cliente");
-                Object nuev[] = {id, fecha, formaPago, cliente};
+                Object nuev[] = {id, fecha, formaPago};
                 tm.addRow(nuev);
             }
         } catch (SQLException ex) {

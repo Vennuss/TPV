@@ -1,14 +1,8 @@
 package Pedidos.Interfaces;
 
-import Articulos.Articulo;
 import Pedidos.ArticuloPedido;
 import Pedidos.Carrito;
 import Persona.Cliente;
-import bd.bd;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.Set;
 import javax.swing.JFrame;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
@@ -23,30 +17,24 @@ public class PanelCarrito extends javax.swing.JFrame {
 
     /**
      * Creates new form PanelCarrito
-     * @param client
-     * @param admin
+     * @param cliente
      */
-    public PanelCarrito(Cliente client) {
+    public PanelCarrito(Cliente cliente) {
         initComponents();
-        this.carro = new Carrito(client);
-        setCliente(client);
+        cliente.recuperaDatos();
+        System.out.println(cliente.getDni());
+        carro = new Carrito(cliente);
+        setCliente(cliente);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         carro.setFormaPago(jCBPago.getItemAt(jCBPago.getSelectedIndex()));
         jBFin.setEnabled(false);
         refrescar();
     }
     
-    private void añadirArticulo(Articulo _art, int _cant, int _dto){
-        jBFin.setEnabled(true);
-        carro.addArticulo(_art, _cant, _dto);
-        jTPrecio.setText(String.valueOf(carro.getprecioFinal()));
-        refrescar();
-    }
-    
-    private void setCliente(Cliente client){
-        if(client != null){
-            jTNombre.setText(client.getNombres());
-            jTApellidos.setText(client.getApellidos());
+    private void setCliente(Cliente cliente){
+        if(cliente != null){
+            jTNombre.setText(cliente.getNombres());
+            jTApellidos.setText(cliente.getApellidos());
         }
         else{
             jTNombre.setText("null");
