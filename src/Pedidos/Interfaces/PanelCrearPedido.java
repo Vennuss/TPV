@@ -5,11 +5,15 @@ import Articulos.PanelArticulos;
 import Pedidos.ArticuloPedido;
 import Pedidos.Pedido;
 import Persona.Cliente;
-import bd.bd;
-import java.sql.ResultSet;
+import Persona.PanelClientes;
+import java.awt.Image;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
@@ -25,27 +29,32 @@ public class PanelCrearPedido extends javax.swing.JFrame {
 
     /**
      * Creates new form PanelCarrito
-     * @param client
-     * @param admin
      */
     public PanelCrearPedido() {
         initComponents();
+        _main();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pd.setFormaPago(jCBPago.getItemAt(jCBPago.getSelectedIndex()));
         jBFin.setEnabled(false);
     }
     
-    private void añadirArticulo(Articulo _art, int _cant, int _dto){
-        jBFin.setEnabled(true);
-        pd.addArticulo(_art, _cant, _dto);
-        jTPrecio.setText(String.valueOf(pd.getprecioFinal()));
-        refrescar();
+    private void setCliente(){
+        if(pd.getCliente() != null){
+            jTNA.setText(pd.getCliente().getNombres() + " " + pd.getCliente().getApellidos());
+            jTDni.setText(pd.getCliente().getDni());
+        }
+        else{
+            jTNA.setText("null");
+            jTDni.setText("null");
+        }
     }
     
-    private void refrescar(){
+    private void refrescar(final boolean _val){
         
         DefaultTableModel tm = (DefaultTableModel) this.jTAP.getModel();
         this.jTAP.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
+        if(_val) setValues(tm);
         
         tm.setRowCount(0);
         double PFinal = 0;
@@ -63,13 +72,38 @@ public class PanelCrearPedido extends javax.swing.JFrame {
             PFinal += precioFinal;
         }
         jTPrecio.setText(Double.toString(PFinal));
-        if(pd.getArticulos().size() <= 0) jBFin.setEnabled(false);
+        if(pd.getArticulos().size() <= 0 | pd.getCliente() == null) jBFin.setEnabled(false);
         else jBFin.setEnabled(true);
     }
     
-    private void setCliente(Cliente _client){
-        jTDni.setText(_client.getDni());
-        jTDni.setText(_client.getNombres() + " " + _client.getApellidos());
+    private void setValues(DefaultTableModel tm){
+            ArrayList<ArticuloPedido> articulosNuevo = new ArrayList();
+            for(int i = 0; i < tm.getRowCount(); i++){
+                try {
+                    Articulo r = new Articulo(String.valueOf(tm.getValueAt(i, 0)));
+                    int c = Integer.parseInt(String.valueOf(tm.getValueAt(i, 1)));
+                    int d = Integer.parseInt(String.valueOf(tm.getValueAt(i, 4)));
+                    ArticuloPedido _artP = new ArticuloPedido(r,c,d);
+                    articulosNuevo.add(_artP);
+                } catch (SQLException ex) {
+                    Logger.getLogger(PanelCrearPedido.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            pd.redoArticulos(articulosNuevo);
+    }
+    
+    
+    public final void _main(){
+        cargarIMG("/Imagenes/add.png", jBArticulo);
+        cargarIMG("/Imagenes/delete.png", jBDelete);
+        cargarIMG("/Imagenes/lupa.png", jBCliente);
+    }
+    
+    private void cargarIMG(String url, JButton boton) {
+        
+        ImageIcon icon = new ImageIcon(getClass().getResource(url));
+        ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT));
+        boton.setIcon(icono);
     }
     
 
@@ -91,9 +125,9 @@ public class PanelCrearPedido extends javax.swing.JFrame {
         jBFin = new javax.swing.JButton();
         jBArticulo = new javax.swing.JButton();
         jBCliente = new javax.swing.JButton();
-        jBBorrar = new javax.swing.JButton();
         jTDni = new javax.swing.JLabel();
-        jTApellidos = new javax.swing.JLabel();
+        jTNA = new javax.swing.JLabel();
+        jBDelete = new javax.swing.JButton();
 
         jLabel2.setText("jLabel2");
 
@@ -112,7 +146,7 @@ public class PanelCrearPedido extends javax.swing.JFrame {
                 java.lang.String.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class, java.lang.Integer.class, java.lang.Double.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, true, false, true
+                false, true, false, false, true, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -127,6 +161,19 @@ public class PanelCrearPedido extends javax.swing.JFrame {
         jTAP.setName(""); // NOI18N
         jTAP.setPreferredSize(new java.awt.Dimension(1100, 800));
         jTAP.setRowHeight(40);
+        jTAP.addHierarchyListener(new java.awt.event.HierarchyListener() {
+            public void hierarchyChanged(java.awt.event.HierarchyEvent evt) {
+                jTAPHierarchyChanged(evt);
+            }
+        });
+        jTAP.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTAPFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTAPFocusLost(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTAP);
 
         jCBPago.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
@@ -180,16 +227,20 @@ public class PanelCrearPedido extends javax.swing.JFrame {
             }
         });
 
-        jBBorrar.setMaximumSize(new java.awt.Dimension(40, 40));
-        jBBorrar.setMinimumSize(new java.awt.Dimension(40, 40));
-        jBBorrar.setPreferredSize(new java.awt.Dimension(40, 40));
-
         jTDni.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jTDni.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jTDni.setText("12345678X");
 
-        jTApellidos.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jTApellidos.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jTNA.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jTNA.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        jBDelete.setMaximumSize(new java.awt.Dimension(40, 40));
+        jBDelete.setMinimumSize(new java.awt.Dimension(40, 40));
+        jBDelete.setPreferredSize(new java.awt.Dimension(40, 40));
+        jBDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBDeleteActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -212,13 +263,13 @@ public class PanelCrearPedido extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jBArticulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jBBorrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jBDelete, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(jBCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jTDni)
+                        .addComponent(jTDni, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
-                        .addComponent(jTApellidos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(jTNA, javax.swing.GroupLayout.PREFERRED_SIZE, 560, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -227,11 +278,11 @@ public class PanelCrearPedido extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jBArticulo, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBBorrar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jCBPago, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jBCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTDni, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTApellidos, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTNA, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jBDelete, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 478, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -258,28 +309,55 @@ public class PanelCrearPedido extends javax.swing.JFrame {
     }//GEN-LAST:event_jTPrecioActionPerformed
 
     private void jBFinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBFinActionPerformed
+        refrescar(true);
         pd.registrar();
         this.dispose();
     }//GEN-LAST:event_jBFinActionPerformed
 
     private void jBClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBClienteActionPerformed
-       
+        PanelClientes dialog = new PanelClientes(true, new javax.swing.JFrame(), true);
+        dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {}
+            });
+        dialog.setVisible(true);
+        if(dialog.getResult() == JOptionPane.OK_OPTION){
+            pd.setCliente(dialog.getCliente());
+            setCliente();
+            refrescar(true);
+        }
     }//GEN-LAST:event_jBClienteActionPerformed
 
     private void jBArticuloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBArticuloActionPerformed
-        
         PanelArticulos dialog = new PanelArticulos(true, new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        //System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-                if(dialog.getResult() == JOptionPane.OK_OPTION){
-                pd.addArticulo(dialog.getArticulo(), 1, 0);
-                }
+        dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {}
+            });
+        dialog.setVisible(true);
+        if(dialog.getResult() == JOptionPane.OK_OPTION){
+            pd.addArticulo(dialog.getArticulo(), 1, 0);
+            refrescar(false);
+        }
     }//GEN-LAST:event_jBArticuloActionPerformed
+
+    private void jTAPHierarchyChanged(java.awt.event.HierarchyEvent evt) {//GEN-FIRST:event_jTAPHierarchyChanged
+        
+    }//GEN-LAST:event_jTAPHierarchyChanged
+
+    private void jTAPFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTAPFocusLost
+
+    }//GEN-LAST:event_jTAPFocusLost
+
+    private void jTAPFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTAPFocusGained
+        refrescar(true);
+    }//GEN-LAST:event_jTAPFocusGained
+
+    private void jBDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBDeleteActionPerformed
+        if(jTAP.getSelectedRow() != -1) pd.delArticulo(jTAP.getSelectedRow());
+        else JOptionPane.showMessageDialog(this, "Selecione un articulo que eliminar");
+        refrescar(false);
+    }//GEN-LAST:event_jBDeleteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -319,16 +397,16 @@ public class PanelCrearPedido extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBArticulo;
-    private javax.swing.JButton jBBorrar;
     private javax.swing.JButton jBCliente;
+    private javax.swing.JButton jBDelete;
     private javax.swing.JButton jBFin;
     private javax.swing.JComboBox<String> jCBPago;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTAP;
-    private javax.swing.JLabel jTApellidos;
     private javax.swing.JLabel jTDni;
+    private javax.swing.JLabel jTNA;
     private javax.swing.JTextField jTPrecio;
     // End of variables declaration//GEN-END:variables
 }

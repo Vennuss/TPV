@@ -50,13 +50,13 @@
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jBArticulo" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="jBBorrar" min="-2" max="-2" attributes="0"/>
+                      <Component id="jBDelete" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jBCliente" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="jTDni" min="-2" max="-2" attributes="0"/>
+                      <Component id="jTDni" max="32767" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="jTApellidos" max="32767" attributes="0"/>
+                      <Component id="jTNA" min="-2" pref="560" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -69,11 +69,11 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="jBArticulo" min="-2" pref="40" max="-2" attributes="0"/>
-                  <Component id="jBBorrar" min="-2" max="-2" attributes="0"/>
                   <Component id="jCBPago" min="-2" max="-2" attributes="0"/>
                   <Component id="jBCliente" min="-2" max="-2" attributes="0"/>
                   <Component id="jTDni" min="-2" pref="40" max="-2" attributes="0"/>
-                  <Component id="jTApellidos" min="-2" pref="40" max="-2" attributes="0"/>
+                  <Component id="jTNA" min="-2" pref="40" max="-2" attributes="0"/>
+                  <Component id="jBDelete" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="32767" attributes="0"/>
               <Component id="jScrollPane1" min="-2" pref="478" max="-2" attributes="0"/>
@@ -104,11 +104,11 @@
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
               <Table columnCount="6" rowCount="0">
                 <Column editable="false" title="Articulo" type="java.lang.String"/>
-                <Column editable="false" title="Cantidad" type="java.lang.Integer"/>
+                <Column editable="true" title="Cantidad" type="java.lang.Integer"/>
                 <Column editable="false" title="Precio del Articulo" type="java.lang.Double"/>
-                <Column editable="true" title="Precio Total" type="java.lang.Double"/>
-                <Column editable="false" title="Descuento" type="java.lang.Integer"/>
-                <Column editable="true" title="Precio Final" type="java.lang.Double"/>
+                <Column editable="false" title="Precio Total" type="java.lang.Double"/>
+                <Column editable="true" title="Descuento" type="java.lang.Integer"/>
+                <Column editable="false" title="Precio Final" type="java.lang.Double"/>
               </Table>
             </Property>
             <Property name="minimumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
@@ -120,6 +120,11 @@
             </Property>
             <Property name="rowHeight" type="int" value="40"/>
           </Properties>
+          <Events>
+            <EventHandler event="hierarchyChanged" listener="java.awt.event.HierarchyListener" parameters="java.awt.event.HierarchyEvent" handler="jTAPHierarchyChanged"/>
+            <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jTAPFocusGained"/>
+            <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jTAPFocusLost"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -207,7 +212,23 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jBClienteActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="jBBorrar">
+    <Component class="javax.swing.JLabel" name="jTDni">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Segoe UI" size="24" style="0"/>
+        </Property>
+        <Property name="horizontalAlignment" type="int" value="0"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="jTNA">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Segoe UI" size="24" style="0"/>
+        </Property>
+        <Property name="horizontalAlignment" type="int" value="0"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="jBDelete">
       <Properties>
         <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
           <Dimension value="[40, 40]"/>
@@ -219,23 +240,9 @@
           <Dimension value="[40, 40]"/>
         </Property>
       </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="jTDni">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="24" style="0"/>
-        </Property>
-        <Property name="horizontalAlignment" type="int" value="0"/>
-        <Property name="text" type="java.lang.String" value="12345678X"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="jTApellidos">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="24" style="0"/>
-        </Property>
-        <Property name="horizontalAlignment" type="int" value="0"/>
-      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jBDeleteActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

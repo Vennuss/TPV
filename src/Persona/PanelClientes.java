@@ -67,6 +67,15 @@ public class PanelClientes extends javax.swing.JDialog {
             }
         });
     }
+    
+    public int getResult() {
+        return result;
+    }
+    
+    public Cliente getCliente(){
+        return cliente;
+    }
+    
     public void cargarFiltro() {
        
         if (txtBusqueda.getText().length() > 0) {

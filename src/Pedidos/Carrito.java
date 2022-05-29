@@ -6,33 +6,25 @@ import bd.bd;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 
 /**
  *
  * @author Vennuss
  */
-public class Carrito extends Pedido{
+public final class Carrito extends Pedido{
     
     private static final bd bd = new bd();
     
-    private final Cliente client;
-    
     public Carrito(Cliente client){
-        this.client = client;
+        super.setCliente(client);
         setEstadoPago(false);
         recuperarArticulos();
     }
-
-    public Cliente getClient() {
-        return client;
-    }
     
     public ArrayList<ArticuloPedido> recuperarArticulos(){
-        String sql = "select * from cestas where dniCliente = '" + client.getDni() + "';";
+        String sql = "select * from cestas where dniCliente = '" + super.getCliente().getDni() + "';";
         ResultSet rs = bd.Consulta(sql);
         try {
             while(rs.next()){
@@ -47,7 +39,7 @@ public class Carrito extends Pedido{
     @Override
     public void registrar() {
         super.registrar();
-        String sql = "delete from cestas where dnicliente = '" + client.getDni() + "';";
+        String sql = "delete from cestas where dnicliente = '" + super.getCliente().getDni() + "';";
         bd.Sentencia(sql);
     }
 }
