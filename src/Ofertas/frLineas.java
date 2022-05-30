@@ -6,6 +6,7 @@ package Ofertas;
 
 import Articulos.Articulo;
 import Articulos.PanelArticulos;
+import bd.validaciones;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -41,7 +42,7 @@ public class frLineas extends javax.swing.JDialog {
         } else {
             this.arti = new Articulo();
         }
-        cargarIMG("/Imagenes/add.png", this.btArticulo);
+        cargarIMG("/Imagenes/lupa.png", this.btArticulo);
     }
     
     private void cargarIMG(String url, JButton boton) {
@@ -89,7 +90,6 @@ public class frLineas extends javax.swing.JDialog {
         txtDescripcion = new javax.swing.JTextField();
         btAceptar = new javax.swing.JButton();
         btCancelar = new javax.swing.JButton();
-        btAyuda = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -100,6 +100,12 @@ public class frLineas extends javax.swing.JDialog {
         btArticulo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btArticuloActionPerformed(evt);
+            }
+        });
+
+        txtDto.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtDtoFocusLost(evt);
             }
         });
 
@@ -135,13 +141,6 @@ public class frLineas extends javax.swing.JDialog {
         btCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btCancelarActionPerformed(evt);
-            }
-        });
-
-        btAyuda.setText("Ayuda");
-        btAyuda.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btAyudaActionPerformed(evt);
             }
         });
 
@@ -184,9 +183,7 @@ public class frLineas extends javax.swing.JDialog {
                 .addComponent(btAceptar)
                 .addGap(18, 18, 18)
                 .addComponent(btCancelar)
-                .addGap(18, 18, 18)
-                .addComponent(btAyuda)
-                .addGap(66, 66, 66))
+                .addGap(115, 115, 115))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -214,12 +211,12 @@ public class frLineas extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btAceptar)
-                    .addComponent(btCancelar)
-                    .addComponent(btAyuda))
+                    .addComponent(btCancelar))
                 .addContainerGap(16, Short.MAX_VALUE))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btArticuloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btArticuloActionPerformed
@@ -240,11 +237,7 @@ public class frLineas extends javax.swing.JDialog {
     }//GEN-LAST:event_btArticuloActionPerformed
 
     private void txtCantidadFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCantidadFocusLost
-        double aux = 0;
-        try {
-            aux = Double.parseDouble(this.txtCantidad.getText());
-
-        } catch (Exception ex) {
+        if(!validaciones.vDouble(this.txtCantidad.getText())){
             this.txtCantidad.requestFocus();
         }
     }//GEN-LAST:event_txtCantidadFocusLost
@@ -264,9 +257,11 @@ public class frLineas extends javax.swing.JDialog {
         this.dispose();
     }//GEN-LAST:event_btCancelarActionPerformed
 
-    private void btAyudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAyudaActionPerformed
-
-    }//GEN-LAST:event_btAyudaActionPerformed
+    private void txtDtoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDtoFocusLost
+        if(!validaciones.vDouble(this.txtDto.getText())){
+            this.txtDto.requestFocus();
+        }
+    }//GEN-LAST:event_txtDtoFocusLost
 
     /**
      * @param args the command line arguments
@@ -313,7 +308,6 @@ public class frLineas extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btAceptar;
     private javax.swing.JButton btArticulo;
-    private javax.swing.JButton btAyuda;
     private javax.swing.JButton btCancelar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

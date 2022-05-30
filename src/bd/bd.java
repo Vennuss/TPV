@@ -70,16 +70,14 @@ public class bd {
             PreparedStatement st
                     = con.prepareStatement(sql,
                             Statement.RETURN_GENERATED_KEYS);
-            int affectedRows = st.executeUpdate();
-            if (affectedRows == 0) {
+           numFilas = st.executeUpdate();
+            if (numFilas == 0) {
                 throw new SQLException("No se pudo guardar");
             }
 
             ResultSet generatedKeys = st.getGeneratedKeys();
-            System.out.println("asdasdasd");
             if (generatedKeys.next()) {
-                idNuevo = generatedKeys.getInt(1);
-                
+                idNuevo = generatedKeys.getInt(1);                
                 System.out.println("ID nuevvvvv" + idNuevo);
             }
         } catch (Exception ex) {
@@ -97,7 +95,7 @@ public class bd {
             numFilas = st.executeUpdate(sql);
             System.out.println("numero de registros actualizados:" + numFilas);
         } catch (Exception ex) {
-            System.out.println("");
+            System.out.println(ex.getMessage());
         }
 
         return numFilas;
