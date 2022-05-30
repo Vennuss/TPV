@@ -1,2 +1,7 @@
+<<<<<<< HEAD
+=======
+*.xml
+*.class
+>>>>>>> 2477cffff4964793c4a5beadfddad5fd8d0a67c6
 /dist/
 /build/
