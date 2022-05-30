@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
@@ -42,6 +43,7 @@ public class PanelPedido extends javax.swing.JFrame {
     public PanelPedido(boolean admin, Cliente client) {
         initComponents();
         this.admin = admin;
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         if(admin != true){
             this.client = client;
             jBDelete.setEnabled(false);
