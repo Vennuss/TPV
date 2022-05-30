@@ -17,23 +17,33 @@ import java.util.logging.Logger;
  * @see bd
  */
 public class Pedido {
+    
     /**
      * Variable encargada de conectarse con la Base de Datos
      * @see bd
      */
     private static final bd bd = new bd();
+    
+    /**
+     * ArrayList conteniendo todos los ArticulosPedido del pedido
+     * @see ArticuloPedido
+     */
+    private ArrayList<ArticuloPedido> articulos = new ArrayList();
+    
+    /**
+     * Devuelve ArticulosPedido del pedido
+     * @return ArrayList
+     * @see ArticuloPedido
+     */
+    public ArrayList<ArticuloPedido> getArticulos() {
+        return articulos;
+    }
+    
     /**
      * Id de cada pedido.
      * Autoincrement en la base de datos.
      * No setear.
      */
-    
-    private ArrayList<ArticuloPedido> articulos = new ArrayList();
-    
-    public ArrayList<ArticuloPedido> getArticulos() {
-        return articulos;
-    }
-    
     private int id;
     /**
      * true: Ha sido pagado.
@@ -95,10 +105,13 @@ public class Pedido {
         recuperarDatos();
     }
     
-    public Pedido(Cliente _cliente){
-        
-    }
-    
+    /**
+     * Combierte un Articulo a ArticuloPedido y lo añade a articulos
+     * @param _art: Articulo
+     * @param _cant: Cantidad
+     * @param _dto: Descuento
+     * @return ArticuloPedido
+     */
     public final ArticuloPedido addArticulo(Articulo _art, int _cant, int _dto){
         try {
             ArticuloPedido ap = new ArticuloPedido(_art.getReferencia(), this.getId() , _cant, _dto);
@@ -111,10 +124,19 @@ public class Pedido {
         }
     }
     
+    /**
+     * Modifica el index de articulos y lo reemplaza con un nuevo ArticuloPedido
+     * @param _i: index del ArticuloPedido
+     * @param _artP: nuevo ArticuloPedido
+     */
     public final void modArticulo(final int _i, final ArticuloPedido _artP){
-        articulos.set(id, _artP);
+        articulos.set(_i, _artP);
     }
     
+    /**
+     * Elimina un ArticuloPedido de articulos
+     * @param _i: index que borrar
+     */
     public final void delArticulo(final int _i){
         ArrayList<ArticuloPedido> articulos2 = new ArrayList();
         for(int i = 0; i < articulos.size(); i++){
@@ -126,11 +148,19 @@ public class Pedido {
         articulos = articulos2;
     }
     
+    /**
+     * Setea articulos a un nuevo ArrayList de ArticuloPedido
+     * @param _ap: Nuevo ArrayList< ArticuloPedido >
+     */
     public final void redoArticulos(ArrayList<ArticuloPedido> _ap){
         articulos = null;
         articulos = _ap;
     }
     
+    /**
+     * Suma de precios de articulos
+     * @return double
+     */
     public double getprecioFinal(){
         double pf = 0;
         for(ArticuloPedido a: articulos){
@@ -140,7 +170,7 @@ public class Pedido {
     }
 
     /**
-     * No usar.
+     * Crea un pedido sin mas
      */
     public Pedido() {
         

@@ -46,7 +46,10 @@ public class ArticuloPedido {
      */
     private double articuloPrecio;
     
-
+    /**
+     * Descuento a aplicar entre (0% y 100%) en numeros enteros
+     * precio *= (100.00 - this.descuento) / 100.00;
+     */
     private int descuento = 0;
 
     
@@ -66,6 +69,16 @@ public class ArticuloPedido {
         setArticuloPrecio();
     }
     
+    /**
+     * Crea la clase ArticuloPedido especificando la cantidad a comprar y 
+     * el descuento a aplicar.
+     * Crea un nuevo ArticuloPedido.
+     * @param _articulo
+     * @param _pedido
+     * @param _cantidad
+     * @param _descuento
+     * @throws SQLException 
+     */
     public ArticuloPedido(String _articulo, int _pedido, int _cantidad, int _descuento) throws SQLException{
         this.articuloRef = _articulo;
         this.pedidoId = _pedido;
@@ -89,7 +102,13 @@ public class ArticuloPedido {
         setArticuloPrecio();
     }
     
-    
+    /**
+     * Pasa de Articulo a ArticuloPedido con su cantidad y su descuento.
+     * @param _articulo
+     * @param _cant
+     * @param _dto
+     * @throws SQLException 
+     */
     public ArticuloPedido(Articulo _articulo, int _cant, int _dto) throws SQLException{
         this.articuloRef = _articulo.getReferencia();
         this.cantidad = _cant;
@@ -145,7 +164,11 @@ public class ArticuloPedido {
         setPrecio();
         return precio;
     }
-
+    
+    /**
+     * 
+     * @param pedidoId 
+     */
     public void setPedidoId(int pedidoId) {
         this.pedidoId = pedidoId;
     }

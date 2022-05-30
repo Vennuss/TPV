@@ -17,12 +17,21 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 /**
- *
- * @author admin
+ * Panel Administrativo tanto de Clientes como de Usuarios
+ * @author Hugo de la Torre Pizarro
+ * @version 0.1
  */
 public class PanelPedido extends javax.swing.JFrame {
     
+    /**
+     * Especifica si lo esta abriendo un Usuario o un Cliente
+     */
     private final boolean admin;
+    
+    /**
+     * Cliente en caso de ser abierto por un Cliente.
+     * En caso contrario puede ser null.
+     */
     private Cliente client = null;
     
     /**
@@ -241,19 +250,32 @@ public class PanelPedido extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    /**
+     * Borra el buscador y refresca la tabla.
+     * @param evt 
+     */
     private void jBCleanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBCleanActionPerformed
         // TODO add your handling code here:
         jTSearch.setText("");
         recuperarDatos();  
     }//GEN-LAST:event_jBCleanActionPerformed
 
+    /**
+     * Cierra la ventana
+     * @param evt 
+     */
     private void jBExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBExitActionPerformed
         // TODO add your handling code here:
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_jBExitActionPerformed
 
+    /**
+     * Como Usuario, borra la de la fila especificada el Pedido en la Base de Datos
+     * @param evt
+     * @see bd
+     */
     private void jBDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBDeleteActionPerformed
         // TODO add your handling code here:
         int fila = this.jTResultados.getSelectedRow();
@@ -273,6 +295,10 @@ public class PanelPedido extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jBDeleteActionPerformed
 
+    /**
+     * Muestra el contenido del Pedido
+     * @param evt 
+     */
     private void jBEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEditActionPerformed
         // TODO add your handling code here:
         int fila = jTResultados.getSelectedRow();
@@ -286,19 +312,27 @@ public class PanelPedido extends javax.swing.JFrame {
             /*frFamilia fa=new frFamilia(fami, false);
             // JDialog dial=(JDialog)fa;
             fa.setVisible(true);*/
-            PanelCMPedido dialog = new PanelCMPedido(pd, true);
+            PanelCMPedido dialog = new PanelCMPedido(pd);
             dialog.setVisible(true);          
         } else {
             JOptionPane.showMessageDialog(null, "Seleccione un registro");
         }
     }//GEN-LAST:event_jBEditActionPerformed
-
+    
+    /**
+     * Como Usuario, crea un Nuevo Pedido
+     * @param evt 
+     */
     private void jBAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAddActionPerformed
         PanelCrearPedido dialog = new PanelCrearPedido();
         dialog.setVisible(true); 
         
     }//GEN-LAST:event_jBAddActionPerformed
-
+    
+    /**
+     * Funcion que se ejecutara con el inicio del panel
+     * @param evt 
+     */
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         // TODO add your handling code here
         _main();
@@ -308,7 +342,11 @@ public class PanelPedido extends javax.swing.JFrame {
         // TODO add your handling code here:
         
     }//GEN-LAST:event_jTSearchActionPerformed
-
+    
+    /**
+     * Refresca la tabla cada vez que se modifica la barra de busqueda
+     * @param evt 
+     */
     private void jTSearchKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTSearchKeyPressed
         // TODO add your handling code here:
         recuperarDatos();        
@@ -359,6 +397,9 @@ public class PanelPedido extends javax.swing.JFrame {
         });
     }
     
+    /**
+     * Funcion que se ejecutara con el inicio del panel
+     */
     public final void _main(){
         recuperarDatos();
         cargarIMG("/Imagenes/add.png", jBAdd);
@@ -368,6 +409,11 @@ public class PanelPedido extends javax.swing.JFrame {
         cargarIMG("/Imagenes/exit.png", jBExit);
     }
     
+    /**
+     * Carga icono seleccionado en el boton especificado
+     * @param url
+     * @param boton 
+     */
     private void cargarIMG(String url, JButton boton) {
         
         ImageIcon icon = new ImageIcon(getClass().getResource(url));

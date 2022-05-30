@@ -9,33 +9,20 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 /**
- * Pede tanto modificar un pedido como crearlo
- * @author Hugo
+ * Pede ver un pedido.
+ * @author Hugo de la Torre Pizarro
+ * @version 0.1
  */
 public class PanelCMPedido extends javax.swing.JFrame {
-
-    private final Pedido pd;
-    private final boolean admin;
     
     /**
-     * Crea un nuevo pedido
-     */
-    PanelCMPedido() {
-        this.admin = false;
-        this.pd = new Pedido();
-        initComponents();
-    }
-    
-    /**
-     * Modifica un pedido ya existente
+     * Ver un pedido ya existente
      * @param pd 
      */
-    PanelCMPedido(Pedido pd, boolean admin) {
-        this.admin = admin;
-        this.pd = pd;
+    PanelCMPedido(final Pedido pd) {
         initComponents();
         jLId.setText(String.valueOf(pd.getId()));
-        recuperarDatos();
+        recuperarDatos(pd);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
@@ -209,12 +196,15 @@ public class PanelCMPedido extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new PanelCMPedido().setVisible(true);
+                new PanelCMPedido(new Pedido(10)).setVisible(true);
             }
         });
     }
     
-    private void recuperarDatos() {
+    /**
+     * Recupera los datos del Pedido.
+     */
+    private void recuperarDatos(final Pedido pd) {
         
         DefaultTableModel tm = (DefaultTableModel) jTAP.getModel();
         jTAP.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
