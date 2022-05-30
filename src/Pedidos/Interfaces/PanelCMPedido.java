@@ -9,33 +9,20 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 /**
- * Pede tanto modificar un pedido como crearlo
- * @author Hugo
+ * Pede ver un pedido.
+ * @author Hugo de la Torre Pizarro
+ * @version 0.1
  */
 public class PanelCMPedido extends javax.swing.JFrame {
-
-    private final Pedido pd;
-    private final boolean admin;
     
     /**
-     * Crea un nuevo pedido
-     */
-    PanelCMPedido() {
-        this.admin = false;
-        this.pd = new Pedido();
-        initComponents();
-    }
-    
-    /**
-     * Modifica un pedido ya existente
+     * Ver un pedido ya existente
      * @param pd 
      */
-    PanelCMPedido(Pedido pd, boolean admin) {
-        this.admin = admin;
-        this.pd = pd;
+    PanelCMPedido(Pedido pd) {
         initComponents();
         jLId.setText(String.valueOf(pd.getId()));
-        recuperarDatos();
+        recuperarDatos(pd);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
@@ -48,11 +35,27 @@ public class PanelCMPedido extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jTPrecio = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLId = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTAP = new javax.swing.JTable();
+        jTPF = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+
+        jTPrecio.setEditable(false);
+        jTPrecio.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jTPrecio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTPrecioActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel3.setText("Precio Final €");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(800, 600));
@@ -76,7 +79,7 @@ public class PanelCMPedido extends javax.swing.JFrame {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLId, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE)
+            .addComponent(jLId, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         jTAP.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
@@ -106,6 +109,19 @@ public class PanelCMPedido extends javax.swing.JFrame {
         jTAP.setRowHeight(40);
         jScrollPane1.setViewportView(jTAP);
 
+        jTPF.setEditable(false);
+        jTPF.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        jTPF.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jTPF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTPFActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel4.setText("Precio Final €");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -118,7 +134,10 @@ public class PanelCMPedido extends javax.swing.JFrame {
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTPF, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -127,14 +146,24 @@ public class PanelCMPedido extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jTPF)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 452, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jTPrecioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTPrecioActionPerformed
+
+    }//GEN-LAST:event_jTPrecioActionPerformed
+
+    private void jTPFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTPFActionPerformed
+
+    }//GEN-LAST:event_jTPFActionPerformed
 
     /**
      * @param args the command line arguments
@@ -167,12 +196,15 @@ public class PanelCMPedido extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new PanelCMPedido().setVisible(true);
+                new PanelCMPedido(new Pedido(10)).setVisible(true);
             }
         });
     }
     
-    private void recuperarDatos() {
+    /**
+     * Recupera los datos del Pedido.
+     */
+    private void recuperarDatos(final Pedido pd) {
         
         DefaultTableModel tm = (DefaultTableModel) jTAP.getModel();
         jTAP.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -182,25 +214,31 @@ public class PanelCMPedido extends javax.swing.JFrame {
         String sql = "select * from contiene where pedidosId = " + String.valueOf(pd.getId()) + " ;";
         try {
             ResultSet rs = bd.Consulta(sql);
+            double _Pf = 0;
             while (rs.next()) {
                 String articulo = rs.getString("articulosRef");
                 int cantidad = rs.getInt("cantidad");
                 double precio = rs.getDouble("precio");
                 Object nuev[] = {articulo, cantidad, precio};
                 tm.addRow(nuev);
+                _Pf += precio;
+                jTPF.setText(Double.toString(_Pf));
             }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
-        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLId;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTAP;
+    private javax.swing.JTextField jTPF;
+    private javax.swing.JTextField jTPrecio;
     // End of variables declaration//GEN-END:variables
 
 }

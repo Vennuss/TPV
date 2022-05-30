@@ -15,6 +15,7 @@ import Persona.Usuario;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 
 /**
  *
@@ -29,6 +30,7 @@ public class PanelAdministrativo extends javax.swing.JFrame {
     public PanelAdministrativo(Usuario usuario) {
         initComponents();
         this.usuario=usuario;
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         cargarIMG("/Imagenes/avatar.png", this.btClientes);
         cargarIMG("/Imagenes/paquete.png", this.btArticulos);
         cargarIMG("/Imagenes/articulos.png", this.btFamilias);
@@ -265,7 +267,8 @@ public class PanelAdministrativo extends javax.swing.JFrame {
     }//GEN-LAST:event_btOfertasActionPerformed
 
     private void btPedidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPedidosActionPerformed
-        new PanelPedido(true, new Cliente()).setVisible(true);
+        PanelPedido pedido=new PanelPedido(true, null);
+        pedido.setVisible(true);
     }//GEN-LAST:event_btPedidosActionPerformed
 
     private void btUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btUsuariosActionPerformed

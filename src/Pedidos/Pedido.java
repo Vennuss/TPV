@@ -2,13 +2,13 @@ package Pedidos;
 
 import Articulos.Articulo;
 import Persona.Cliente;
+
 import bd.bd;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 
 /**
  * Clase encargada de las opercaiones con los pedidos.
@@ -17,23 +17,33 @@ import javax.swing.JOptionPane;
  * @see bd
  */
 public class Pedido {
+    
     /**
      * Variable encargada de conectarse con la Base de Datos
      * @see bd
      */
     private static final bd bd = new bd();
+    
+    /**
+     * ArrayList conteniendo todos los ArticulosPedido del pedido
+     * @see ArticuloPedido
+     */
+    private ArrayList<ArticuloPedido> articulos = new ArrayList();
+    
+    /**
+     * Devuelve ArticulosPedido del pedido
+     * @return ArrayList
+     * @see ArticuloPedido
+     */
+    public ArrayList<ArticuloPedido> getArticulos() {
+        return articulos;
+    }
+    
     /**
      * Id de cada pedido.
      * Autoincrement en la base de datos.
      * No setear.
      */
-    
-    private ArrayList<ArticuloPedido> articulos = new ArrayList();
-    
-    public ArrayList<ArticuloPedido> getArticulos() {
-        return articulos;
-    }
-    
     private int id;
     /**
      * true: Ha sido pagado.
@@ -80,7 +90,7 @@ public class Pedido {
     public Pedido(String _formaPago, boolean _estadoPago, String _cliente){
         this.formaPago = _formaPago;
         this.estadoPago = _estadoPago;
-        this.cliente = new Cliente(_cliente);;
+        this.cliente = new Cliente(_cliente);
     }
     
     /**
@@ -95,10 +105,13 @@ public class Pedido {
         recuperarDatos();
     }
     
-    public Pedido(Cliente _cliente){
-        
-    }
-    
+    /**
+     * Combierte un Articulo a ArticuloPedido y lo añade a articulos
+     * @param _art: Articulo
+     * @param _cant: Cantidad
+     * @param _dto: Descuento
+     * @return ArticuloPedido
+     */
     public final ArticuloPedido addArticulo(Articulo _art, int _cant, int _dto){
         try {
             ArticuloPedido ap = new ArticuloPedido(_art.getReferencia(), this.getId() , _cant, _dto);
@@ -111,6 +124,43 @@ public class Pedido {
         }
     }
     
+    /**
+     * Modifica el index de articulos y lo reemplaza con un nuevo ArticuloPedido
+     * @param _i: index del ArticuloPedido
+     * @param _artP: nuevo ArticuloPedido
+     */
+    public final void modArticulo(final int _i, final ArticuloPedido _artP){
+        articulos.set(_i, _artP);
+    }
+    
+    /**
+     * Elimina un ArticuloPedido de articulos
+     * @param _i: index que borrar
+     */
+    public final void delArticulo(final int _i){
+        ArrayList<ArticuloPedido> articulos2 = new ArrayList();
+        for(int i = 0; i < articulos.size(); i++){
+            if(i != _i){
+                articulos2.add(articulos.get(i));
+            }
+        }
+        articulos = null;
+        articulos = articulos2;
+    }
+    
+    /**
+     * Setea articulos a un nuevo ArrayList de ArticuloPedido
+     * @param _ap: Nuevo ArrayList< ArticuloPedido >
+     */
+    public final void redoArticulos(ArrayList<ArticuloPedido> _ap){
+        articulos = null;
+        articulos = _ap;
+    }
+    
+    /**
+     * Suma de precios de articulos
+     * @return double
+     */
     public double getprecioFinal(){
         double pf = 0;
         for(ArticuloPedido a: articulos){
@@ -118,13 +168,9 @@ public class Pedido {
         }
         return pf;
     }
-    
-    public final void añadirArticulo(Articulo _articulo, int _cant, int _dto) throws SQLException{
-        ArticuloPedido ap = new ArticuloPedido(_articulo.getReferencia(), this.id, _cant, _dto);
-    }
 
     /**
-     * No usar.
+     * Crea un pedido sin mas
      */
     public Pedido() {
         
@@ -230,7 +276,9 @@ public class Pedido {
                     this.estadoPago = Boolean.getBoolean("estadoPago");
                     this.cliente = new Cliente(rs.getString("cliete"));
                 }
-            } catch (Exception ex) {}
+            } catch (SQLException ex) {
+                System.out.println(ex.getCause());
+            }
         
     }
     
@@ -307,7 +355,9 @@ public class Pedido {
                     ArticuloPedido ap = new ArticuloPedido(_ref, this.id);
                     ap.eliminar();
                 }
-            } catch (Exception ex) {System.out.println(ex.getMessage());}
+            } catch (SQLException ex) {
+                System.out.println(ex.getCause());
+            }
     }
     
     /**
@@ -315,13 +365,13 @@ public class Pedido {
      * @see id
      */
     public void eliminar() {
-        String sql = "delete from pedidos where id = " + this.id + ";";
+        String sql = "delete from pedidos where id = " + this.id + " ;";
         System.out.println(sql);
         try {
             eliminarArticulosPedido();
             bd.Sentencia(sql);
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
+        } catch (SQLException ex) {
+            System.out.println(ex.getCause());
         }
     }
 }

@@ -4,7 +4,6 @@ import Articulos.Articulo;
 import bd.bd;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Set;
 
 /**
  * Clase encargada de los articulos por pedido.
@@ -47,7 +46,10 @@ public class ArticuloPedido {
      */
     private double articuloPrecio;
     
-
+    /**
+     * Descuento a aplicar entre (0% y 100%) en numeros enteros
+     * precio *= (100.00 - this.descuento) / 100.00;
+     */
     private int descuento = 0;
 
     
@@ -67,6 +69,16 @@ public class ArticuloPedido {
         setArticuloPrecio();
     }
     
+    /**
+     * Crea la clase ArticuloPedido especificando la cantidad a comprar y 
+     * el descuento a aplicar.
+     * Crea un nuevo ArticuloPedido.
+     * @param _articulo
+     * @param _pedido
+     * @param _cantidad
+     * @param _descuento
+     * @throws SQLException 
+     */
     public ArticuloPedido(String _articulo, int _pedido, int _cantidad, int _descuento) throws SQLException{
         this.articuloRef = _articulo;
         this.pedidoId = _pedido;
@@ -90,7 +102,13 @@ public class ArticuloPedido {
         setArticuloPrecio();
     }
     
-    
+    /**
+     * Pasa de Articulo a ArticuloPedido con su cantidad y su descuento.
+     * @param _articulo
+     * @param _cant
+     * @param _dto
+     * @throws SQLException 
+     */
     public ArticuloPedido(Articulo _articulo, int _cant, int _dto) throws SQLException{
         this.articuloRef = _articulo.getReferencia();
         this.cantidad = _cant;
@@ -146,7 +164,11 @@ public class ArticuloPedido {
         setPrecio();
         return precio;
     }
-
+    
+    /**
+     * 
+     * @param pedidoId 
+     */
     public void setPedidoId(int pedidoId) {
         this.pedidoId = pedidoId;
     }
@@ -166,8 +188,8 @@ public class ArticuloPedido {
                 this.articuloPrecio = (double) rs.getLong("pvp");
             }
         }
-        catch(Exception e){
-            System.out.println("No se pudo obtener el precio del articulo");
+        catch(SQLException ex){
+            System.out.println(ex.getCause());
         }
     }
 
@@ -202,7 +224,7 @@ public class ArticuloPedido {
      * @see bd
      */
     public void recuperarDatos() {
-        String sql = "select * from contiene where articulosRef = " + this.articuloRef + " and pedidosId = " + this.pedidoId;
+        String sql = "select * from contiene where articulosRef = '" + this.articuloRef + "' and pedidosId = " + this.pedidoId + " ;";
             // Informamos que la conexión es correcta
             try {
                ResultSet rs = bd.Consulta(sql);
@@ -210,7 +232,9 @@ public class ArticuloPedido {
                     this.cantidad = rs.getInt("cantidad");
                     this.precio = (double) rs.getLong("precio");
                 }
-            } catch (Exception ex) {}
+            } catch (SQLException ex) {
+                System.out.println(ex.getCause());
+            }
         
     }
     
