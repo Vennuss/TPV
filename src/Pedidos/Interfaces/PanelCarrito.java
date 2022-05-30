@@ -8,18 +8,22 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 /**
- *
- * @author Vennuss
+ * Panel que permite al Cliente confirmar un Pedido.
+ * @author Hugo de la Torre Pizarro
+ * @version 0.1
  */
 public class PanelCarrito extends javax.swing.JFrame {
     
+    /**
+     * Clase Carrito con la que se va a trabajar.
+     */
     private final Carrito carro;
 
     /**
-     * Creates new form PanelCarrito
+     * Crea un PanelCarrito con el Cliente.
      * @param cliente
      */
-    public PanelCarrito(Cliente cliente) {
+    public PanelCarrito(final Cliente cliente) {
         initComponents();
         cliente.recuperaDatos();
         System.out.println(cliente.getDni());
@@ -31,7 +35,11 @@ public class PanelCarrito extends javax.swing.JFrame {
         refrescar();
     }
     
-    private void setCliente(Cliente cliente){
+    /**
+     * Muestra en el Panel los datos del Cliente
+     * @param cliente 
+     */
+    private void setCliente(final Cliente cliente){
         if(cliente != null){
             jTNombre.setText(cliente.getNombres());
             jTApellidos.setText(cliente.getApellidos());
@@ -42,6 +50,9 @@ public class PanelCarrito extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Añade los Articulos de su cesta a la tabla
+     */
     private void refrescar(){
         
         DefaultTableModel tm = (DefaultTableModel) this.jTAP.getModel();
@@ -221,14 +232,18 @@ public class PanelCarrito extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jTPrecio)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jBFin, javax.swing.GroupLayout.DEFAULT_SIZE, 58, Short.MAX_VALUE))
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 58, Short.MAX_VALUE)
+                    .addComponent(jBFin, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Selecciona la forma de pago del desplegable
+     * @param evt 
+     */
     private void jCBPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBPagoActionPerformed
         carro.setFormaPago(jCBPago.getItemAt(jCBPago.getSelectedIndex()));
     }//GEN-LAST:event_jCBPagoActionPerformed
@@ -241,6 +256,10 @@ public class PanelCarrito extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jTPrecioActionPerformed
 
+    /**
+     * Registra el Pedido y borra Articulos de la Cesta
+     * @param evt 
+     */
     private void jBFinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBFinActionPerformed
         carro.registrar();
         this.dispose();

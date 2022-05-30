@@ -4,12 +4,10 @@ import Articulos.Articulo;
 import Articulos.PanelArticulos;
 import Pedidos.ArticuloPedido;
 import Pedidos.Pedido;
-import Persona.Cliente;
 import Persona.PanelClientes;
 import java.awt.Image;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -20,15 +18,20 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 /**
- *
- * @author Vennuss
+ * Panel que permite al Usuario crear un pedido.
+ * @author Hugo de la Torre Pizarro
+ * @version 0.1
  */
 public class PanelCrearPedido extends javax.swing.JFrame {
     
+    /**
+     * Pedido sobre el cual se va a trabajar
+     * @see Pedido
+     */
     private final Pedido pd = new Pedido();
 
     /**
-     * Creates new form PanelCarrito
+     * Crea el PanelCrearPedido
      */
     public PanelCrearPedido() {
         initComponents();
@@ -38,6 +41,9 @@ public class PanelCrearPedido extends javax.swing.JFrame {
         jBFin.setEnabled(false);
     }
     
+    /**
+     * Muestra en el Panel los datos del Cliente
+     */
     private void setCliente(){
         if(pd.getCliente() != null){
             jTNA.setText(pd.getCliente().getNombres() + " " + pd.getCliente().getApellidos());
@@ -49,6 +55,15 @@ public class PanelCrearPedido extends javax.swing.JFrame {
         }
     }
     
+    /**
+     * Refresca la tabla con los valores del Pedido (pd).
+     * Basicamente elimina las filas y las vuelve a colocar segun los
+     * ArticulosPedido del Pedido.
+     * 
+     * @param _val: SI DEBE PLASMAR LOS VALORES DE LA TABLA EN EL PEDIDO ANTES DE
+     * REFRESCAR O NO. Ej.(Al borrar un elemento no quieres que se plasmen, 
+     * pero al editar un elemento si quieres que se plasmen)
+     */
     private void refrescar(final boolean _val){
         
         DefaultTableModel tm = (DefaultTableModel) this.jTAP.getModel();
@@ -76,6 +91,11 @@ public class PanelCrearPedido extends javax.swing.JFrame {
         else jBFin.setEnabled(true);
     }
     
+    /**
+     * PLASMAR LOS VALORES DE LA TABLA EN EL PEDIDO ANTES DE
+     * REFRESCAR.
+     * @param tm: Modelo de la tabla
+     */
     private void setValues(DefaultTableModel tm){
             ArrayList<ArticuloPedido> articulosNuevo = new ArrayList();
             for(int i = 0; i < tm.getRowCount(); i++){
@@ -92,13 +112,20 @@ public class PanelCrearPedido extends javax.swing.JFrame {
             pd.redoArticulos(articulosNuevo);
     }
     
-    
+    /**
+     * Funcion que se ejecutara con el inicio del panel
+     */
     public final void _main(){
         cargarIMG("/Imagenes/add.png", jBArticulo);
         cargarIMG("/Imagenes/delete.png", jBDelete);
         cargarIMG("/Imagenes/lupa.png", jBCliente);
     }
     
+    /**
+     * Carga icono seleccionado en el boton especificado
+     * @param url
+     * @param boton 
+     */
     private void cargarIMG(String url, JButton boton) {
         
         ImageIcon icon = new ImageIcon(getClass().getResource(url));
@@ -295,7 +322,11 @@ public class PanelCrearPedido extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    /**
+     * Setea la forma de pago a el valor seleccionado en el desplegable
+     * @param evt 
+     */
     private void jCBPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBPagoActionPerformed
         pd.setFormaPago(jCBPago.getItemAt(jCBPago.getSelectedIndex()));
     }//GEN-LAST:event_jCBPagoActionPerformed
@@ -308,12 +339,23 @@ public class PanelCrearPedido extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jTPrecioActionPerformed
 
+    /**
+     * Finaliza el pedido refrescando una ultima vez, y registrandolo en la bd.
+     * @param evt
+     * @see bd
+     */
     private void jBFinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBFinActionPerformed
         refrescar(true);
         pd.registrar();
         this.dispose();
     }//GEN-LAST:event_jBFinActionPerformed
 
+    
+    /**
+     * Selecciona un Clietne de los ya creados en la Base de Datos
+     * @param evt
+     * @see PanelClientes
+     */
     private void jBClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBClienteActionPerformed
         PanelClientes dialog = new PanelClientes(true, new javax.swing.JFrame(), true);
         dialog.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -328,6 +370,11 @@ public class PanelCrearPedido extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jBClienteActionPerformed
 
+    /**
+     * Selecciona un Articulo de los ya creados en la Base de Datos
+     * @param evt
+     * @see PanelArticulos
+     */
     private void jBArticuloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBArticuloActionPerformed
         PanelArticulos dialog = new PanelArticulos(true, new javax.swing.JFrame(), true);
         dialog.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -349,10 +396,19 @@ public class PanelCrearPedido extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jTAPFocusLost
 
+    /**
+     * Refresca la pantalla seteando valores.
+     * @param evt 
+     */
     private void jTAPFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTAPFocusGained
         refrescar(true);
     }//GEN-LAST:event_jTAPFocusGained
 
+    /**
+     * Borra la fila seleccionada, en caso de no tener selecionada niguna fila
+     * mostrara un mensaje.
+     * @param evt 
+     */
     private void jBDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBDeleteActionPerformed
         if(jTAP.getSelectedRow() != -1) pd.delArticulo(jTAP.getSelectedRow());
         else JOptionPane.showMessageDialog(this, "Selecione un articulo que eliminar");
