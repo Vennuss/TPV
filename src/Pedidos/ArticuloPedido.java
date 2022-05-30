@@ -249,6 +249,9 @@ public class ArticuloPedido {
         try {
             int nr = bd.Sentencia(sql);
             System.out.println("numero de registros actualizados:" + nr);
+            sql = "update Articulos set stock = stock - " + this.cantidad + " where ref = '" + this.articuloRef + "';";
+            nr = bd.Sentencia(sql);
+            System.out.println("numero de registros actualizados:" + nr);
         } catch (Exception ex) {
             System.out.println("Error de Registro");
         }   
