@@ -4,12 +4,15 @@
  */
 package validaciones;
 
+import bd.bd;
 import java.awt.Color;
+import java.sql.ResultSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.InputVerifier;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 /**
@@ -19,9 +22,15 @@ import javax.swing.JTextField;
 public class Verificador extends InputVerifier {
 
     JLabel Etiqueta;
+    String comparativa;
 
-    public Verificador(JLabel l) {
-        this.Etiqueta = l;
+    public Verificador(JLabel etiqueta) {
+        this.Etiqueta = etiqueta;
+    }
+
+    public Verificador(JLabel etiqueta, String campo) {
+        this.Etiqueta = etiqueta;
+        this.comparativa = campo;
     }
 
     @Override
@@ -37,18 +46,47 @@ public class Verificador extends InputVerifier {
             matcher = pattern.matcher(campo.getText());
             System.out.printf(campo.getToolTipText());
             if (matcher.matches()) {
-                Etiqueta.setForeground(new Color(0,0,0));
+                Etiqueta.setForeground(new Color(0, 0, 0));
                 return true;
             } else {
                 Etiqueta.setForeground(Color.RED);
                 return false;
             }
 
+        } else if (campo.getToolTipText().contains("IDENTIFICACION")) {
+            campo.setText(campo.getText().toUpperCase());
+            pattern = Pattern.compile("(([0-9]{7,8}[A-Z])|((X|Y)[1-9]{7}[A-Z]))");
+            matcher = pattern.matcher(campo.getText());
+            if (matcher.matches()) {
+                String sql = "select dni from clientes where dni='" + campo.getText() + "'";
+                int contador = 0;
+                try {
+                    ResultSet rs = bd.Consulta(sql);
+                    while (rs.next()) {
+                        contador++;
+                    }
+                    bd.cerrarConexion();
+                    if (contador == 0) {
+                        Etiqueta.setForeground(new Color(0, 0, 0));                        
+                        return true;
+                    } else {
+                        JOptionPane.showMessageDialog(campo, "DNI ya Registrado");
+                        Etiqueta.setForeground(Color.RED);
+                        return false;
+                    }
+                } catch (Exception ex) {
+                    System.out.println(ex.getMessage());
+                    return false;
+                }
+            } else {
+                Etiqueta.setForeground(Color.RED);
+                return false;
+            }
         } else if (campo.getToolTipText().contains("MOVIL")) {
             pattern = Pattern.compile("[1-9]{1}+[0-9]{8}");
             matcher = pattern.matcher(campo.getText());
             if (matcher.matches()) {
-                Etiqueta.setForeground(new Color(0,0,0));
+                Etiqueta.setForeground(new Color(0, 0, 0));
                 return true;
             } else {
                 Etiqueta.setForeground(Color.RED);
@@ -58,7 +96,7 @@ public class Verificador extends InputVerifier {
             pattern = Pattern.compile("[1-9]{1}+[0-9]{10}");
             matcher = pattern.matcher(campo.getText());
             if (matcher.matches()) {
-                Etiqueta.setForeground(new Color(0,0,0));
+                Etiqueta.setForeground(new Color(0, 0, 0));
                 return true;
             } else {
                 Etiqueta.setForeground(Color.RED);
@@ -68,40 +106,88 @@ public class Verificador extends InputVerifier {
             pattern = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
             matcher = pattern.matcher(campo.getText());
             campo.setText(campo.getText().toLowerCase());
-            if (matcher.matches()) {                
-                Etiqueta.setForeground(new Color(0,0,0));
+            if (matcher.matches()) {
+                Etiqueta.setForeground(new Color(0, 0, 0));
                 return true;
             } else {
                 Etiqueta.setForeground(Color.RED);
                 return false;
             }
-        } else if(campo.getToolTipText().contains("NUMERICO")){
+        } else if (campo.getToolTipText().contains("NUMERICO")) {
             //
             pattern = Pattern.compile("^[0-9]+([,][0-9]+)?$");
             matcher = pattern.matcher(campo.getText());
             campo.setText(campo.getText().toLowerCase());
-            if (matcher.matches()) {                
-                Etiqueta.setForeground(new Color(0,0,0));                
+            if (matcher.matches()) {
+                Etiqueta.setForeground(new Color(0, 0, 0));
                 return true;
             } else {
                 Etiqueta.setForeground(Color.RED);
                 return false;
             }
-        }
-        else if(campo.getToolTipText().contains("ENTERO")){
+        } else if (campo.getToolTipText().contains("ENTERO")) {
             //
             pattern = Pattern.compile("^[0-9]*");
             matcher = pattern.matcher(campo.getText());
             campo.setText(campo.getText().toLowerCase());
-            if (matcher.matches()) {                
-                Etiqueta.setForeground(new Color(0,0,0));                
+            if (matcher.matches()) {
+                Etiqueta.setForeground(new Color(0, 0, 0));
                 return true;
             } else {
                 Etiqueta.setForeground(Color.RED);
                 return false;
             }
-        }
-        else {
+        } else if (campo.getToolTipText().contains("ACTUAL")) {
+            //
+            if (campo.getText().equals(comparativa)) {
+                Etiqueta.setForeground(new Color(0, 0, 0));
+                return true;
+            } else {
+                Etiqueta.setForeground(Color.RED);
+                return false;
+            }
+        } else if (campo.getToolTipText().contains("NUEVA")) {
+            //
+            pattern = Pattern.compile("^[0-9]*");
+            matcher = pattern.matcher(campo.getText());
+            campo.setText(campo.getText().toLowerCase());
+            if (matcher.matches()) {
+                Etiqueta.setForeground(new Color(0, 0, 0));
+                return true;
+            } else {
+                Etiqueta.setForeground(Color.RED);
+                return false;
+            }
+        }else if (campo.getToolTipText().contains("MAIL")) {
+            pattern = Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
+            matcher = pattern.matcher(campo.getText());
+            campo.setText(campo.getText().toLowerCase());
+            if (matcher.matches()) {
+               String sql = "select correo from clientes where correo='" + campo.getText() + "'";
+                int contador = 0;
+                try {
+                    ResultSet rs = bd.Consulta(sql);
+                    while (rs.next()) {
+                        contador++;
+                    }
+                    bd.cerrarConexion();
+                    if (contador == 0) {
+                        Etiqueta.setForeground(new Color(0, 0, 0));                       
+                        return true;
+                    } else {
+                        Etiqueta.setForeground(Color.RED);
+                         JOptionPane.showMessageDialog(campo, "Correo ya Registrado");
+                        return false;
+                    }
+                } catch (Exception ex) {
+                    System.out.println(ex.getMessage());
+                    return false;
+                }
+            } else {
+                Etiqueta.setForeground(Color.RED);
+                return false;
+            }
+        } else {
             return true;
         }
     }

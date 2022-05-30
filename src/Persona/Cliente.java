@@ -4,7 +4,7 @@
  */
 package Persona;
 
-import Articulos.Familia;
+
 import Maqueta.Maqueta;
 import bd.bd;
 import java.sql.ResultSet;

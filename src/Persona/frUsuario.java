@@ -86,6 +86,10 @@ public class frUsuario extends javax.swing.JDialog {
             this.txtUsuario.setText(usuario.getLogin());
             this.cargarImg("/Imagenes/" + usuario.getRutaImg(), true);
         }
+         else{
+            this.cargarImg("/Imagenes/predePer.png", true);
+            usu.setRutaImg("predePer.png");
+        }
     }
 
     private void cargarImg(String url, boolean almacen) {

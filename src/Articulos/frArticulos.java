@@ -5,7 +5,6 @@
 package Articulos;
 
 import bd.bd;
-import bd.validaciones;
 import java.awt.Color;
 import java.awt.Image;
 import java.io.File;
@@ -56,6 +55,9 @@ public class frArticulos extends javax.swing.JDialog {
             this.txtFamilia.setText(String.valueOf(art.getFa().getId()));
             this.lFamilia.setText(art.getFa().getNombre());
             this.cargarImg("/Imagenes/" + art.getRutaImg(), true);
+        } else {
+            this.cargarImg("/Imagenes/predeArt.png", true);
+            art.setRutaImg("predeArt.png");
         }
     }
 
@@ -162,25 +164,12 @@ public class frArticulos extends javax.swing.JDialog {
     public boolean validarFamilia() {
         boolean retorno = false;
         if (this.operacion) {
-            String sql = "select * from familia where id=" + this.txtReferencia.getText();
+            String sql = "select * from familias where id=" + this.art.getFa().getId();
             try {
                 int cantFilas = 0;
                 ResultSet rs = bd.Consulta(sql);
                 while (rs.next()) {
                     cantFilas++;
-                }
-                if (cantFilas == 1) {
-                    retorno = true;
-                    //volver a la fila primera;
-                    rs.first();
-                    while (rs.next()) {
-                        int id = rs.getInt("id");
-                        Familia fami = new Familia(id);
-                        fami.recuperaDatos();
-                        this.art.setFa(fami);
-                    }
-                } else {
-
                 }
                 retorno = cantFilas == 1;
                 bd.cerrarConexion();
@@ -445,25 +434,30 @@ public class frArticulos extends javax.swing.JDialog {
     }//GEN-LAST:event_btImgActionPerformed
 
     private void btAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAceptarActionPerformed
-
-        art.setDescripcion(this.txtDescripcion.getText());
-        art.setNotas(this.txtANotas.getText());
-        art.setMarca(this.txtMarca.getText());
-        art.setPvp(Double.parseDouble(this.txtPvp.getText().replace(",", ".")));
-        art.setStock(Integer.parseInt(this.txtStock.getText().replace(",", ".")));
-        validarRuta(rutaorigen);
-        if (operacion) {
-            art.setReferencia(this.txtReferencia.getText());
-            art.registrar();
-            this.result = JOptionPane.OK_OPTION;
-            this.setVisible(false);
-            this.dispose();
-        } else {
-            art.actualizar();
-            this.result = JOptionPane.OK_OPTION;
-            this.setVisible(false);
-            this.dispose();
+        if (validarFamilia()) {
+            art.setDescripcion(this.txtDescripcion.getText());
+            art.setNotas(this.txtANotas.getText());
+            art.setMarca(this.txtMarca.getText());
+            art.setPvp(Double.parseDouble(this.txtPvp.getText().replace(",", ".")));
+            art.setStock(Integer.parseInt(this.txtStock.getText().replace(",", ".")));
+            validarRuta(rutaorigen);
+            if (operacion) {
+                art.setReferencia(this.txtReferencia.getText());
+                art.registrar();
+                this.result = JOptionPane.OK_OPTION;
+                this.setVisible(false);
+                this.dispose();
+            } else {
+                art.actualizar();
+                this.result = JOptionPane.OK_OPTION;
+                this.setVisible(false);
+                this.dispose();
+            }
         }
+        else{
+            JOptionPane.showMessageDialog(this, "Seleccione Familia");
+        }
+
     }//GEN-LAST:event_btAceptarActionPerformed
 
     private void btCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelarActionPerformed

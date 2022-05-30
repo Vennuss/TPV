@@ -4,19 +4,14 @@
  */
 package Persona;
 
-import Articulos.Articulo;
-import java.awt.Color;
 import java.awt.Image;
 import java.io.File;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import javax.swing.ImageIcon;
-import javax.swing.InputVerifier;
-import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import validaciones.Verificador;
 
@@ -51,6 +46,10 @@ public class frCliente extends javax.swing.JDialog {
             this.txtApellidos.setText(cli.getApellidos());
             this.txtPassword.setText(cli.getPass());
             this.cargarImg("/Imagenes/" + cli.getRutaImg(), true);
+        }
+        else{
+            this.cargarImg("/Imagenes/predePer.png", true);
+            cli.setRutaImg("predePer.png");
         }
 
     }

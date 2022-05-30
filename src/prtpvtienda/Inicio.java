@@ -7,8 +7,10 @@ package prtpvtienda;
 import Articulos.Familia;
 import Persona.Cliente;
 import Persona.Usuario;
+import Persona.frRegistro;
 import bd.bd;
 import java.awt.Image;
+import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -60,6 +62,7 @@ public class Inicio extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        chkInterno.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         chkInterno.setText("Seleccione para acceso Interno");
         chkInterno.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -67,10 +70,22 @@ public class Inicio extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel1.setText("Usuario:");
 
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setText("Contraseña:");
 
+        txtUsuario.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtUsuario.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtUsuarioKeyPressed(evt);
+            }
+        });
+
+        txtPassword.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        btAceptar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btAceptar.setText("Aceptar");
         btAceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -78,6 +93,7 @@ public class Inicio extends javax.swing.JFrame {
             }
         });
 
+        btCancelar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btCancelar.setText("Cancelar");
         btCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -85,6 +101,7 @@ public class Inicio extends javax.swing.JFrame {
             }
         });
 
+        btRegistro.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btRegistro.setText("Registrese");
         btRegistro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -92,6 +109,7 @@ public class Inicio extends javax.swing.JFrame {
             }
         });
 
+        lIcono.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lIcono.setMaximumSize(new java.awt.Dimension(115, 115));
         lIcono.setMinimumSize(new java.awt.Dimension(115, 115));
         lIcono.setPreferredSize(new java.awt.Dimension(115, 115));
@@ -101,59 +119,52 @@ public class Inicio extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addComponent(lIcono, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(lIcono, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
+                        .addGap(57, 57, 57)
+                        .addComponent(chkInterno))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel2)
                             .addComponent(jLabel1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(29, 29, 29)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txtPassword)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(26, 26, 26))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(chkInterno)
-                                .addGap(41, 41, 41))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(btAceptar)
-                                .addGap(12, 12, 12)
-                                .addComponent(btCancelar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btRegistro)
-                                .addGap(14, 14, 14))))))
+                            .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addComponent(btAceptar)
+                        .addGap(12, 12, 12)
+                        .addComponent(btCancelar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btRegistro)))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(27, 27, 27)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(24, 24, 24)
                         .addComponent(chkInterno)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
                             .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(32, 32, 32)
-                        .addComponent(lIcono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btAceptar)
-                    .addComponent(btCancelar)
-                    .addComponent(btRegistro))
-                .addGap(23, 23, 23))
+                            .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btAceptar)
+                            .addComponent(btCancelar)
+                            .addComponent(btRegistro)))
+                    .addComponent(lIcono, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         pack();
@@ -175,15 +186,14 @@ public class Inicio extends javax.swing.JFrame {
             } catch (Exception ex) {
                 System.out.println(ex.getMessage());
             }
-            if(contador==1){
-                Usuario usuario=new Usuario(dni);
+            if (contador == 1) {
+                Usuario usuario = new Usuario(dni);
                 usuario.recuperaDatos();
-                PanelAdministrativo admin=new PanelAdministrativo(usuario);
+                PanelAdministrativo admin = new PanelAdministrativo(usuario);
                 this.setVisible(false);
                 admin.setVisible(true);
-            }
-            else{
-                JOptionPane.showMessageDialog(rootPane, "Error de Acceso.\nLos Datos Introducidos son Icorrectos");                
+            } else {
+                JOptionPane.showMessageDialog(rootPane, "Error de Acceso.\nLos Datos Introducidos son Icorrectos");
             }
         } else {
             String sql = "select dni from clientes where correo='" + this.txtUsuario.getText() + "' and pass='" + String.valueOf(this.txtPassword.getPassword()) + "'";
@@ -199,29 +209,33 @@ public class Inicio extends javax.swing.JFrame {
             } catch (Exception ex) {
                 System.out.println(ex.getMessage());
             }
-            if(contador==1){
-                Cliente cliente=new Cliente(dni);
+            if (contador == 1) {
+                Cliente cliente = new Cliente(dni);
                 cliente.recuperaDatos();
-                PanelOfertasCli panel=new PanelOfertasCli(cliente);
+                PanelOfertasCli panel = new PanelOfertasCli(cliente);
                 this.setVisible(false);
                 panel.setVisible(true);
-                
-            }
-            else{
-                JOptionPane.showMessageDialog(rootPane, "Error de Acceso.\nLos Datos Introducidos son Icorrectos");                
+
+            } else {
+                JOptionPane.showMessageDialog(rootPane, "Error de Acceso.\nLos Datos Introducidos son Icorrectos");
             }
         }
     }//GEN-LAST:event_btAceptarActionPerformed
 
     private void btCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelarActionPerformed
-        // TODO add your handling code here:
+        System.exit(0);
     }//GEN-LAST:event_btCancelarActionPerformed
 
     private void btRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btRegistroActionPerformed
-        if (this.chkInterno.isSelected()) {
-
-        } else {
-
+        if (!this.chkInterno.isSelected()) {
+            frRegistro dialog = new frRegistro(new Cliente(), new javax.swing.JFrame(), true);
+            dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                @Override
+                public void windowClosing(java.awt.event.WindowEvent e) {
+                    //System.exit(0);
+                }
+            });
+            dialog.setVisible(true);
         }
     }//GEN-LAST:event_btRegistroActionPerformed
 
@@ -232,6 +246,12 @@ public class Inicio extends javax.swing.JFrame {
             this.btRegistro.setEnabled(true);
         }
     }//GEN-LAST:event_chkInternoActionPerformed
+
+    private void txtUsuarioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUsuarioKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            this.txtUsuario.setNextFocusableComponent(this.txtPassword);
+        }
+    }//GEN-LAST:event_txtUsuarioKeyPressed
 
     /**
      * @param args the command line arguments

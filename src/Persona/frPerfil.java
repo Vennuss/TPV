@@ -13,6 +13,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import validaciones.Verificador;
 
 /**
  *
@@ -27,10 +28,18 @@ public class frPerfil extends javax.swing.JDialog {
     /**
      * Creates new form frPerfil
      */
-    public frPerfil(Cliente cliente,java.awt.Frame parent, boolean modal) {
-        super(parent, modal);        
+    public frPerfil(Cliente cliente, java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
-        this.cliente=cliente;        
+        this.cliente = cliente;
+        this.txtActual.setInputVerifier(new Verificador(this.lActual, cliente.getPass()));
+        this.txtDni.setText(cliente.getDni());
+        this.txtApellidos.setText(cliente.getApellidos());
+        this.txtNombres.setText(cliente.getNombres());
+        this.txtCorreo.setText(cliente.getCorreo());
+        this.txtApellidos.setText(cliente.getApellidos());
+        this.txtPassword.setText(cliente.getPass());
+        this.cargarImg("/Imagenes/" + cliente.getRutaImg(), true);
     }
 
     private void cargarPerfil() {
@@ -124,12 +133,13 @@ public class frPerfil extends javax.swing.JDialog {
         txtNueva = new javax.swing.JPasswordField();
         txtRepita = new javax.swing.JPasswordField();
         txtActual = new javax.swing.JPasswordField();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
+        lActual = new javax.swing.JLabel();
+        lNueva = new javax.swing.JLabel();
+        lRepita = new javax.swing.JLabel();
         chkPassword = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("ACTUALIZACIÓN DEL PERFIL");
 
         btCancelar.setText("Cancelar");
         btCancelar.addActionListener(new java.awt.event.ActionListener() {
@@ -160,7 +170,8 @@ public class frPerfil extends javax.swing.JDialog {
 
         lCorreo.setText("Correo:");
 
-        btAceptar.setText("Aceptar");
+        btAceptar.setText("Guardar Cambios");
+        btAceptar.setToolTipText("");
         btAceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btAceptarActionPerformed(evt);
@@ -172,17 +183,20 @@ public class frPerfil extends javax.swing.JDialog {
 
         pnPass.setBorder(javax.swing.BorderFactory.createTitledBorder("Contraseña"));
 
+        txtNueva.setToolTipText("CONTRASEÑA NUEVA");
         txtNueva.setEnabled(false);
 
+        txtRepita.setToolTipText("REPITA CONTRASEÑA");
         txtRepita.setEnabled(false);
 
+        txtActual.setToolTipText("ACTUAL");
         txtActual.setEnabled(false);
 
-        jLabel3.setText("Actual:");
+        lActual.setText("Actual:");
 
-        jLabel4.setText("Contraseña Nueva:");
+        lNueva.setText("Contraseña Nueva:");
 
-        jLabel6.setText("Repita Contraseña");
+        lRepita.setText("Repita Contraseña");
 
         javax.swing.GroupLayout pnPassLayout = new javax.swing.GroupLayout(pnPass);
         pnPass.setLayout(pnPassLayout);
@@ -191,9 +205,9 @@ public class frPerfil extends javax.swing.JDialog {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnPassLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(pnPassLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel6))
+                    .addComponent(lActual)
+                    .addComponent(lNueva)
+                    .addComponent(lRepita))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnPassLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtActual)
@@ -204,17 +218,17 @@ public class frPerfil extends javax.swing.JDialog {
         pnPassLayout.setVerticalGroup(
             pnPassLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnPassLayout.createSequentialGroup()
-                .addGroup(pnPassLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(pnPassLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(txtActual, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
+                    .addComponent(lActual))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
                 .addGroup(pnPassLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtNueva, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
+                    .addComponent(lNueva))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(pnPassLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtRepita, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6))
+                    .addComponent(lRepita))
                 .addGap(22, 22, 22))
         );
 
@@ -236,6 +250,11 @@ public class frPerfil extends javax.swing.JDialog {
                     .addComponent(lImg, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(btAceptar, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
@@ -258,12 +277,6 @@ public class frPerfil extends javax.swing.JDialog {
                         .addComponent(pnPass, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(chkPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(15, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btAceptar)
-                .addGap(18, 18, 18)
-                .addComponent(btCancelar)
-                .addGap(154, 154, 154))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -290,21 +303,19 @@ public class frPerfil extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5))))
+                            .addComponent(jLabel5))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(chkPassword)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btImg)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(16, 16, 16)
-                        .addComponent(btImg))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(11, 11, 11)
-                        .addComponent(chkPassword)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(pnPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btAceptar)
-                            .addComponent(btCancelar))))
-                .addGap(17, 18, Short.MAX_VALUE))
+                        .addGap(9, 9, 9)
+                        .addComponent(pnPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btAceptar)
+                    .addComponent(btCancelar))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -346,11 +357,15 @@ public class frPerfil extends javax.swing.JDialog {
     private void btAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAceptarActionPerformed
         cliente.setApellidos(this.txtApellidos.getText());
         cliente.setNombres(this.txtNombres.getText());
-        cliente.setCorreo(this.txtCorreo.getText());
-        String pass = String.valueOf(this.txtPassword.getPassword());
-        cliente.setPass(pass);
         validarRuta(rutaorigen);
-
+        if(this.chkPassword.isSelected()){
+            if(String.valueOf(this.txtNueva.getPassword()).equals(String.valueOf(this.txtRepita.getText()))){
+                cliente.setPass(this.txtNueva.getText());
+            }
+            else{
+                System.out.println("no compara");
+            }
+        }        
         cliente.actualizar();
         this.result = JOptionPane.OK_OPTION;
         this.setVisible(false);
@@ -358,12 +373,11 @@ public class frPerfil extends javax.swing.JDialog {
     }//GEN-LAST:event_btAceptarActionPerformed
 
     private void chkPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkPasswordActionPerformed
-        if(this.chkPassword.isSelected()){
+        if (this.chkPassword.isSelected()) {
             this.txtActual.setEnabled(true);
             this.txtNueva.setEnabled(true);
             this.txtRepita.setEnabled(true);
-        }
-        else{
+        } else {
             this.txtActual.setEnabled(false);
             this.txtNueva.setEnabled(false);
             this.txtRepita.setEnabled(false);
@@ -379,6 +393,7 @@ public class frPerfil extends javax.swing.JDialog {
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
+
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -400,7 +415,8 @@ public class frPerfil extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                frPerfil dialog = new frPerfil(new Cliente(),new javax.swing.JFrame(), true);
+
+                frPerfil dialog = new frPerfil(new Cliente(), new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -419,13 +435,13 @@ public class frPerfil extends javax.swing.JDialog {
     private javax.swing.JCheckBox chkPassword;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel lActual;
     private javax.swing.JLabel lCorreo;
     private javax.swing.JLabel lDNI;
     private javax.swing.JLabel lImg;
+    private javax.swing.JLabel lNueva;
+    private javax.swing.JLabel lRepita;
     private javax.swing.JPanel pnPass;
     private javax.swing.JPasswordField txtActual;
     private javax.swing.JTextField txtApellidos;

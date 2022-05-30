@@ -9,6 +9,7 @@ import Ofertas.PanelOfertas;
 import Pedidos.Interfaces.PanelCarrito;
 import Pedidos.Interfaces.PanelPedido;
 import Persona.Cliente;
+import Persona.frPerfil;
 import bd.bd;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -24,17 +25,18 @@ import javax.swing.JOptionPane;
  * @author Familia
  */
 public class PanelOfertasCli extends javax.swing.JFrame {
-    
+
     private Cliente cliente;
+
     /**
      * Creates new form PanelOfertasCli
      */
     public PanelOfertasCli(Cliente cli) {
-        initComponents();  
-        this.cliente=cli;
+        initComponents();
+        this.cliente = cli;
         this.cargarPerfil();
-        this.setExtendedState(JFrame.MAXIMIZED_BOTH);        
-        cargarIMG("/Imagenes/perfil.png", this.btPerfil);        
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        cargarIMG("/Imagenes/perfil.png", this.btPerfil);
         cargarIMG("/Imagenes/lista.png", this.btPedidos);
         cargarIMG("/Imagenes/carrito2.png", this.btCesto);
 
@@ -42,6 +44,7 @@ public class PanelOfertasCli extends javax.swing.JFrame {
         ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(35, 35, Image.SCALE_DEFAULT));
         this.btOfertas.setIcon(icono);
     }
+
     private void cargarIMG(String url, JButton boton) {
 
         ImageIcon icon = new ImageIcon(getClass().getResource(url));
@@ -55,12 +58,13 @@ public class PanelOfertasCli extends javax.swing.JFrame {
         boton.setVerticalTextPosition(javax.swing.SwingConstants.CENTER);
 
     }
-     private void cargarPerfil() {
-         this.lCorreoCli.setText(cliente.getCorreo());
-        this.lNombre.setText(cliente.getApellidos()+", "+cliente.getNombres());
+
+    private void cargarPerfil() {
+        this.lCorreoCli.setText(cliente.getCorreo());
+        this.lNombre.setText(cliente.getApellidos() + ", " + cliente.getNombres());
         try {
-            ImageIcon icon = new ImageIcon(getClass().getResource("/Imagenes/"+cliente.getRutaImg()));
-            
+            ImageIcon icon = new ImageIcon(getClass().getResource("/Imagenes/" + cliente.getRutaImg()));
+
             ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(this.lbCliImg.getWidth(), this.lbCliImg.getHeight(), Image.SCALE_DEFAULT));
             this.lbCliImg.setIcon(icono);
         } catch (Exception ex) {
@@ -131,6 +135,7 @@ public class PanelOfertasCli extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("TPV-GESTION");
@@ -176,6 +181,11 @@ public class PanelOfertasCli extends javax.swing.JFrame {
         btPerfil.setMinimumSize(new java.awt.Dimension(120, 45));
         btPerfil.setPreferredSize(new java.awt.Dimension(120, 45));
         btPerfil.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btPerfil.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btPerfilActionPerformed(evt);
+            }
+        });
         jToolBar1.add(btPerfil);
         jToolBar1.add(jSeparator1);
 
@@ -253,12 +263,21 @@ public class PanelOfertasCli extends javax.swing.JFrame {
 
         jMenu2.setText("File");
 
-        jMenuItem1.setText("jMenuItem1");
+        jMenuItem1.setText("Salir");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenuItem1);
 
         jMenuBar1.add(jMenu2);
 
-        jMenu3.setText("Edit");
+        jMenu3.setText("Ayuda");
+
+        jMenuItem2.setText("Acerca de");
+        jMenu3.add(jMenuItem2);
+
         jMenuBar1.add(jMenu3);
 
         setJMenuBar(jMenuBar1);
@@ -320,7 +339,7 @@ public class PanelOfertasCli extends javax.swing.JFrame {
         String sql = this.cargarFiltros();
         /*
         [200, 250]
-        */
+         */
         int xPanel = this.pnVisor.getSize().width;
         int yPanel = this.pnVisor.getSize().height;
         this.pnVisor.removeAll();
@@ -344,7 +363,7 @@ public class PanelOfertasCli extends javax.swing.JFrame {
                 }
                 Articulo arti = new Articulo(refe);
                 arti.recuperaDatos();
-                Muestra muestra = new Muestra(arti,"01", dto, cantidad);
+                Muestra muestra = new Muestra(arti, this.cliente.getDni(), dto, cantidad);
                 muestra.setSize(200, 250);
                 muestra.setLocation(x, y);
                 this.pnVisor.add(muestra, BorderLayout.LINE_END);
@@ -358,7 +377,7 @@ public class PanelOfertasCli extends javax.swing.JFrame {
                 }
             }
             bd.cerrarConexion();
-            this.pnVisor.setPreferredSize(new Dimension(xPanel, (y+255)));          
+            this.pnVisor.setPreferredSize(new Dimension(xPanel, (y + 255)));
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
@@ -385,14 +404,30 @@ public class PanelOfertasCli extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowStateChanged
 
     private void btPedidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPedidosActionPerformed
-        PanelPedido pedido= new PanelPedido(false, this.cliente);
+        PanelPedido pedido = new PanelPedido(false, this.cliente);
         pedido.setVisible(true);
     }//GEN-LAST:event_btPedidosActionPerformed
 
     private void btCestoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCestoActionPerformed
-        PanelCarrito carr=new PanelCarrito(cliente);
+        PanelCarrito carr = new PanelCarrito(cliente);
         carr.setVisible(true);
     }//GEN-LAST:event_btCestoActionPerformed
+
+    private void btPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPerfilActionPerformed
+
+        frPerfil dialog = new frPerfil(this.cliente, new javax.swing.JFrame(), true);
+        dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                //System.exit(0);
+            }
+        });
+        dialog.setVisible(true);
+    }//GEN-LAST:event_btPerfilActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -424,10 +459,10 @@ public class PanelOfertasCli extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                
-                PanelOfertasCli jj=new PanelOfertasCli(new Cliente());
+
+                PanelOfertasCli jj = new PanelOfertasCli(new Cliente());
                 jj.setVisible(true);
-               // jj.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                // jj.setExtendedState(JFrame.MAXIMIZED_BOTH);
             }
         });
     }
@@ -447,6 +482,7 @@ public class PanelOfertasCli extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator3;
