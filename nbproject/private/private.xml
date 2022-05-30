@@ -2,24 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-<<<<<<< HEAD
-            <file>file:/C:/Users/admin/Documents/TPV/src/Pedidos/ArticuloPedido.java</file>
-            <file>file:/C:/Users/admin/Documents/TPV/src/Pedidos/Carrito.java</file>
-            <file>file:/C:/Users/admin/Documents/TPV/src/Pedidos/Interfaces/PanelPedido.java</file>
-            <file>file:/C:/Users/admin/Documents/TPV/src/Pedidos/Pedido.java</file>
-=======
-            <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/prtpvtienda/PanelOfertasCli.java</file>
-            <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/Articulos/PanelFamilias.java</file>
-            <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/Pedidos/Interfaces/PanelPedido.java</file>
-            <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/Pedidos/Interfaces/PanelCMPedido.java</file>
-            <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/Articulos/frArticulos.java</file>
-            <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/Persona/PanelClientes.java</file>
-            <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/Persona/frCliente.java</file>
-            <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/Persona/frPerfil.java</file>
-            <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/prtpvtienda/PanelAdministrativo.java</file>
-            <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/Pedidos/Interfaces/PanelCarrito.java</file>
->>>>>>> f8de5c00441e8641b7e56efd230f5609dc363352
-        </group>
+        <group/>
     </open-files>
 </project-private>
