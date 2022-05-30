@@ -1,20 +1,21 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
+ */
 package prtpvtienda;
-
-import Pedidos.*;
-import java.sql.SQLException;
 
 /**
  *
- * @author Ronal, Guille y Hugo.
+ * @author admin
  */
 public class PrTpvTienda {
 
-    public static void main(String[] args) throws SQLException {
-    
-        //Pedido pd1 = new Pedido("Visa", true, "12345678X");
-        //pd1.;
-        //ArticuloPedido ap1 = new ArticuloPedido("Monitor", 5, 5);
-        //ap1.;
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        Inicio ini=new Inicio();
+        ini.setVisible(true);
     }
     
 }

@@ -24,21 +24,23 @@ import validaciones.Verificador;
  * @author Familia
  */
 public class frUsuario extends javax.swing.JDialog {
+
     final Usuario usuario;
     private boolean operacion = false;
     private int result = JOptionPane.CANCEL_OPTION;
     private String rutaorigen = "";
+
     /**
      * Creates new form frUsuario
      */
-    public frUsuario(Usuario usu, boolean operacion,java.awt.Frame parent, boolean modal) {
-        super(parent, modal);        
+    public frUsuario(Usuario usu, boolean operacion, java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
-        this.usuario=usu;
-        this.operacion=operacion;
+        this.usuario = usu;
+        this.operacion = operacion;
         this.txtDni.setInputVerifier(new Verificador(this.lDNI));
         this.txtCorreo.setInputVerifier(new Verificador(this.lCorreo));
-        System.out.println("El color es: "+this.lDNI.getForeground().toString()+" ");
+        System.out.println("El color es: " + this.lDNI.getForeground().toString() + " ");
         /*this.txtDni.setInputVerifier(
           new InputVerifier() {
             @Override
@@ -73,7 +75,7 @@ public class frUsuario extends javax.swing.JDialog {
               return isValid;
             }
           });*/
-        if(!operacion){
+        if (!operacion) {
             this.txtDni.setText(usuario.getDni());
             this.txtDni.setEnabled(false);
             this.txtApellidos.setText(usuario.getApellidos());
@@ -85,21 +87,23 @@ public class frUsuario extends javax.swing.JDialog {
             this.cargarImg("/Imagenes/" + usuario.getRutaImg(), true);
         }
     }
-    private void cargarImg(String url, boolean almacen) {
-        try{
-        ImageIcon icon;
-        if (almacen) {
-            icon = new ImageIcon(getClass().getResource(url));
-        } else {
-            icon = new ImageIcon(url);
-        }
 
-        ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(this.lImg.getWidth(), this.lImg.getHeight(), Image.SCALE_DEFAULT));
-        this.lImg.setIcon(icono);}
-        catch(Exception ex){
-            
+    private void cargarImg(String url, boolean almacen) {
+        try {
+            ImageIcon icon;
+            if (almacen) {
+                icon = new ImageIcon(getClass().getResource(url));
+            } else {
+                icon = new ImageIcon(url);
+            }
+
+            ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(this.lImg.getWidth(), this.lImg.getHeight(), Image.SCALE_DEFAULT));
+            this.lImg.setIcon(icono);
+        } catch (Exception ex) {
+
         }
     }
+
     private void validarRuta(String url) {
         if (url.length() > 0) {
             String nombre = "";
@@ -144,7 +148,6 @@ public class frUsuario extends javax.swing.JDialog {
     public void setResult(int result) {
         this.result = result;
     }
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -358,19 +361,15 @@ public class frUsuario extends javax.swing.JDialog {
     }//GEN-LAST:event_btAceptarActionPerformed
 
     private void btCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelarActionPerformed
-        /*Cliente cl=new Cliente("121");
-        cl.recuperaDatos();
-        this.txtApellidos.setText(cl.getApellidos());
-        this.txtCorreo.setText(cl.getEmail());
-        this.txtNombres.setText(cl.getNombres());
-        this.txtPassword.setText(cl.getPassword());
-        this.txtUsuario.setText(cl.getUsuario());*/
+        this.result = JOptionPane.CANCEL_OPTION;
+        this.setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_btCancelarActionPerformed
 
     private void btAyudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAyudaActionPerformed
-        Cliente cl=new Cliente("555");
+        Cliente cl = new Cliente("555");
         cl.eliminar();
-        cl=null;
+        cl = null;
     }//GEN-LAST:event_btAyudaActionPerformed
 
     private void txtDniActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDniActionPerformed

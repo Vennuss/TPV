@@ -79,7 +79,7 @@ public class PanelCrearPedido extends javax.swing.JFrame {
             int cantidad = a.getCantidad();
             double precioDelArticulo = a.getArticuloPrecio();
             double precioTotal = a.getArticuloPrecio() * a.getCantidad();
-            int descuento = a.getDescuento();
+            double descuento = a.getDescuento();
             double precioFinal = a.getPrecio();
             
             Object nuev[] = {articulo, cantidad, precioDelArticulo, precioTotal, descuento, precioFinal};
@@ -99,15 +99,11 @@ public class PanelCrearPedido extends javax.swing.JFrame {
     private void setValues(DefaultTableModel tm){
             ArrayList<ArticuloPedido> articulosNuevo = new ArrayList();
             for(int i = 0; i < tm.getRowCount(); i++){
-                try {
-                    Articulo r = new Articulo(String.valueOf(tm.getValueAt(i, 0)));
-                    int c = Integer.parseInt(String.valueOf(tm.getValueAt(i, 1)));
-                    int d = Integer.parseInt(String.valueOf(tm.getValueAt(i, 4)));
-                    ArticuloPedido _artP = new ArticuloPedido(r,c,d);
-                    articulosNuevo.add(_artP);
-                } catch (SQLException ex) {
-                    Logger.getLogger(PanelCrearPedido.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                Articulo r = new Articulo(String.valueOf(tm.getValueAt(i, 0)));
+                int c = Integer.parseInt(String.valueOf(tm.getValueAt(i, 1)));
+                double d = Double.parseDouble(String.valueOf(tm.getValueAt(i, 4)));
+                ArticuloPedido _artP = new ArticuloPedido(r,c,d);
+                articulosNuevo.add(_artP);
             }
             pd.redoArticulos(articulosNuevo);
     }
@@ -127,7 +123,6 @@ public class PanelCrearPedido extends javax.swing.JFrame {
      * @param boton 
      */
     private void cargarIMG(String url, JButton boton) {
-        
         ImageIcon icon = new ImageIcon(getClass().getResource(url));
         ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT));
         boton.setIcon(icono);
@@ -170,7 +165,7 @@ public class PanelCrearPedido extends javax.swing.JFrame {
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class, java.lang.Integer.class, java.lang.Double.class
+                java.lang.String.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class
             };
             boolean[] canEdit = new boolean [] {
                 false, true, false, false, true, false

@@ -11,9 +11,11 @@ import Pedidos.Interfaces.PanelPedido;
 import Persona.Cliente;
 import Persona.PanelClientes;
 import Persona.PanelUsuarios;
+import Persona.Usuario;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 
 /**
  *
@@ -21,11 +23,14 @@ import javax.swing.JButton;
  */
 public class PanelAdministrativo extends javax.swing.JFrame {
 
+    private Usuario usuario;
     /**
      * Creates new form PanelAdministrativo
      */
-    public PanelAdministrativo() {
+    public PanelAdministrativo(Usuario usuario) {
         initComponents();
+        this.usuario=usuario;
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         cargarIMG("/Imagenes/avatar.png", this.btClientes);
         cargarIMG("/Imagenes/paquete.png", this.btArticulos);
         cargarIMG("/Imagenes/articulos.png", this.btFamilias);
@@ -186,7 +191,7 @@ public class PanelAdministrativo extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 621, Short.MAX_VALUE)
+            .addGap(0, 942, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -218,7 +223,7 @@ public class PanelAdministrativo extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
+            .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 583, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -262,7 +267,8 @@ public class PanelAdministrativo extends javax.swing.JFrame {
     }//GEN-LAST:event_btOfertasActionPerformed
 
     private void btPedidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPedidosActionPerformed
-        new PanelPedido(true, new Cliente()).setVisible(true);
+        PanelPedido pedido=new PanelPedido(true, null);
+        pedido.setVisible(true);
     }//GEN-LAST:event_btPedidosActionPerformed
 
     private void btUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btUsuariosActionPerformed
@@ -318,7 +324,7 @@ public class PanelAdministrativo extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
 
-                new PanelAdministrativo().setVisible(true);
+                new PanelAdministrativo(new Usuario()).setVisible(true);
             }
         });
     }

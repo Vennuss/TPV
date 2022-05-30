@@ -26,10 +26,8 @@ public class Aplican implements Maqueta {
 
     public Aplican(int ofertasId, String Referencia) {
         this.ofertasId = ofertasId;
-        this.Referencia = Referencia;        
+        this.Referencia = Referencia;
     }
-    
-    
 
     public int getOfertasId() {
         return ofertasId;
@@ -72,18 +70,19 @@ public class Aplican implements Maqueta {
 
     @Override
     public void recuperaDatos() {
-         String sql="select * from aplican where ofertasid="+this.getOfertasId()+" and articulosref='"+this.getReferencia()+"'";
-         
-       try {
-               
-                ResultSet rs = bd.Consulta(sql);
-                while (rs.next()) {
-                    this.setDescuento(rs.getDouble("descuento"));
-                    this.setCantidad(rs.getDouble("cantidad"));
-                }
-            } catch (Exception ex) {
-                System.out.println(ex.getMessage());
+        String sql = "select * from aplican where ofertasid=" + this.getOfertasId() + " and articulosref='" + this.getReferencia() + "'";
+
+        try {
+
+            ResultSet rs = bd.Consulta(sql);
+            while (rs.next()) {
+                this.setDescuento(rs.getDouble("descuento"));
+                this.setCantidad(rs.getDouble("cantidad"));
             }
+            bd.cerrarConexion();
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 
     @Override
@@ -92,7 +91,7 @@ public class Aplican implements Maqueta {
                 + this.getDescuento() + "," + this.getCantidad() + ")";
         int resultado = bd.Sentencia(sql);
         if (resultado > 0) {
-           // JOptionPane.showMessageDialog(null, "Registro Exitoso");
+            // JOptionPane.showMessageDialog(null, "Registro Exitoso");
 
         }
     }

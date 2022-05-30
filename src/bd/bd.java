@@ -9,8 +9,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -23,6 +21,7 @@ public class bd {
     private static final String usuario = "root";
     private static final String clave = "";
     private static Connection conex = null;
+    private static Statement st=null;
 
     public static boolean cargarDriver() {
         try {
@@ -74,16 +73,17 @@ public class bd {
             if (numFilas == 0) {
                 throw new SQLException("No se pudo guardar");
             }
-
             ResultSet generatedKeys = st.getGeneratedKeys();
             if (generatedKeys.next()) {
                 idNuevo = generatedKeys.getInt(1);                
                 System.out.println("ID nuevvvvv" + idNuevo);
             }
+            st.close();
+            con.close();
         } catch (Exception ex) {
             System.out.println("");
         }
-
+        
         return idNuevo;
     }
 
@@ -94,6 +94,8 @@ public class bd {
             Statement st = con.createStatement();
             numFilas = st.executeUpdate(sql);
             System.out.println("numero de registros actualizados:" + numFilas);
+            st.close();
+            con.close();
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
@@ -106,12 +108,12 @@ public class bd {
     }
 
     public static ResultSet Consulta(String sql) {
-        Connection cone = Conexion();
+        conex = Conexion();
         ResultSet rs = null;
-        if (cone != null) {
+        if (conex != null) {
             // Informamos que la conexión es correcta
             try {
-                Statement st = cone.createStatement();
+                st = conex.createStatement();
                 rs = st.executeQuery(sql);
                 // st.close();
                 // cone.close();
@@ -123,4 +125,14 @@ public class bd {
         }
         return rs;
     }
+    public static void cerrarConexion(){
+        try{
+            st.close();
+            conex.close();
+        }
+        catch (Exception ex){
+            
+        }
+    }
+    
 }

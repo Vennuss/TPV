@@ -3,13 +3,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Articulos;
+import Maqueta.Maqueta;
 import java.util.Date;
 
 /**
  *
  * @author admin
  */
-public class Llegada {
+public class Llegada implements Maqueta {
    private String id;
    private int cantidad;
    private Date fecha;
@@ -78,24 +79,20 @@ public class Llegada {
         this.id = referencia;
     }
 
-    private void recuperaDatos(){
+   @Override
+    public void recuperaDatos(){
         
     }
-    
-    private void registrar(){
+    @Override
+    public void registrar(){
         
     }
-    
-    private void eliminar(){
+    @Override
+    public void eliminar(){
         
     }
-    
-    private void actualizar(){
+    @Override
+    public void actualizar(){
         
-    }
-    
-    private void idNuevo(){
-        
-    }
-           
+    }  
 }

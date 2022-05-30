@@ -75,7 +75,33 @@ public class Verificador extends InputVerifier {
                 Etiqueta.setForeground(Color.RED);
                 return false;
             }
-        } else {
+        } else if(campo.getToolTipText().contains("NUMERICO")){
+            //
+            pattern = Pattern.compile("^[0-9]+([,][0-9]+)?$");
+            matcher = pattern.matcher(campo.getText());
+            campo.setText(campo.getText().toLowerCase());
+            if (matcher.matches()) {                
+                Etiqueta.setForeground(new Color(0,0,0));                
+                return true;
+            } else {
+                Etiqueta.setForeground(Color.RED);
+                return false;
+            }
+        }
+        else if(campo.getToolTipText().contains("ENTERO")){
+            //
+            pattern = Pattern.compile("^[0-9]*");
+            matcher = pattern.matcher(campo.getText());
+            campo.setText(campo.getText().toLowerCase());
+            if (matcher.matches()) {                
+                Etiqueta.setForeground(new Color(0,0,0));                
+                return true;
+            } else {
+                Etiqueta.setForeground(Color.RED);
+                return false;
+            }
+        }
+        else {
             return true;
         }
     }

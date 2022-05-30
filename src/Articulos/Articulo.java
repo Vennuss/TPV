@@ -84,6 +84,7 @@ public class Articulo {
                 this.fa = new Familia(rs.getInt("idfamilia"));
                 fa.recuperaDatos();
             }
+            bd.cerrarConexion();
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }

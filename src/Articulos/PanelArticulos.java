@@ -188,6 +188,7 @@ public class PanelArticulos extends javax.swing.JDialog {
                 Object nuev[] = {referencia, descripcion, marca, pvp, stock};
                 tm.addRow(nuev);
             }
+            bd.cerrarConexion();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }

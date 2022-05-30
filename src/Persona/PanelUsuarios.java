@@ -323,6 +323,7 @@ public class PanelUsuarios extends javax.swing.JDialog {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btSeleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSeleActionPerformed

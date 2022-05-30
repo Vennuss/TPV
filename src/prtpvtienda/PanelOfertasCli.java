@@ -6,6 +6,9 @@ package prtpvtienda;
 
 import Articulos.Articulo;
 import Ofertas.PanelOfertas;
+import Pedidos.Interfaces.PanelCarrito;
+import Pedidos.Interfaces.PanelPedido;
+import Persona.Cliente;
 import bd.bd;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -21,12 +24,15 @@ import javax.swing.JOptionPane;
  * @author Familia
  */
 public class PanelOfertasCli extends javax.swing.JFrame {
-
+    
+    private Cliente cliente;
     /**
      * Creates new form PanelOfertasCli
      */
-    public PanelOfertasCli() {
-        initComponents();     
+    public PanelOfertasCli(Cliente cli) {
+        initComponents();  
+        this.cliente=cli;
+        this.cargarPerfil();
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);        
         cargarIMG("/Imagenes/perfil.png", this.btPerfil);        
         cargarIMG("/Imagenes/lista.png", this.btPedidos);
@@ -48,6 +54,18 @@ public class PanelOfertasCli extends javax.swing.JFrame {
         boton.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
         boton.setVerticalTextPosition(javax.swing.SwingConstants.CENTER);
 
+    }
+     private void cargarPerfil() {
+         this.lCorreoCli.setText(cliente.getCorreo());
+        this.lNombre.setText(cliente.getApellidos()+", "+cliente.getNombres());
+        try {
+            ImageIcon icon = new ImageIcon(getClass().getResource("/Imagenes/"+cliente.getRutaImg()));
+            
+            ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(this.lbCliImg.getWidth(), this.lbCliImg.getHeight(), Image.SCALE_DEFAULT));
+            this.lbCliImg.setIcon(icono);
+        } catch (Exception ex) {
+            
+        }
     }
 
     public void cargarOfertas() {
@@ -89,6 +107,12 @@ public class PanelOfertasCli extends javax.swing.JFrame {
 
         txtArticulos = new javax.swing.JTextField();
         jToolBar1 = new javax.swing.JToolBar();
+        jLabel5 = new javax.swing.JLabel();
+        lbCliImg = new javax.swing.JLabel();
+        lNombre = new javax.swing.JLabel();
+        lCorreoCli = new javax.swing.JLabel();
+        jSeparator2 = new javax.swing.JToolBar.Separator();
+        jSeparator3 = new javax.swing.JToolBar.Separator();
         jLabel1 = new javax.swing.JLabel();
         btPerfil = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JToolBar.Separator();
@@ -103,9 +127,6 @@ public class PanelOfertasCli extends javax.swing.JFrame {
         pnVisor = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -122,6 +143,27 @@ public class PanelOfertasCli extends javax.swing.JFrame {
 
         jToolBar1.setOrientation(javax.swing.SwingConstants.VERTICAL);
         jToolBar1.setRollover(true);
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel5.setText("Bienvenido");
+        jToolBar1.add(jLabel5);
+
+        lbCliImg.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbCliImg.setMaximumSize(new java.awt.Dimension(50, 50));
+        lbCliImg.setMinimumSize(new java.awt.Dimension(50, 50));
+        lbCliImg.setPreferredSize(new java.awt.Dimension(50, 50));
+        jToolBar1.add(lbCliImg);
+
+        lNombre.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lNombre.setText("Ronal Arrayaza Gonzales");
+        jToolBar1.add(lNombre);
+
+        lCorreoCli.setFont(new java.awt.Font("Segoe UI", 3, 12)); // NOI18N
+        lCorreoCli.setForeground(new java.awt.Color(0, 51, 255));
+        lCorreoCli.setText("jLabel7");
+        jToolBar1.add(lCorreoCli);
+        jToolBar1.add(jSeparator2);
+        jToolBar1.add(jSeparator3);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
         jLabel1.setText("ADMINISTRATIVO");
@@ -149,6 +191,11 @@ public class PanelOfertasCli extends javax.swing.JFrame {
         btPedidos.setMinimumSize(new java.awt.Dimension(120, 45));
         btPedidos.setPreferredSize(new java.awt.Dimension(120, 45));
         btPedidos.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btPedidos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btPedidosActionPerformed(evt);
+            }
+        });
         jToolBar1.add(btPedidos);
 
         btCesto.setText("CESTA");
@@ -158,6 +205,11 @@ public class PanelOfertasCli extends javax.swing.JFrame {
         btCesto.setMinimumSize(new java.awt.Dimension(120, 45));
         btCesto.setPreferredSize(new java.awt.Dimension(120, 45));
         btCesto.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btCesto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btCestoActionPerformed(evt);
+            }
+        });
         jToolBar1.add(btCesto);
 
         btBuscar.setText("Busar");
@@ -199,13 +251,6 @@ public class PanelOfertasCli extends javax.swing.JFrame {
 
         jLabel4.setText("ARTICULOS:");
 
-        jLabel5.setText("SISTEMA DE GESTION DE PEDIDOS");
-
-        jLabel6.setText("Bienvenido: ");
-
-        jTextField1.setEditable(false);
-        jTextField1.setText("jTextField1");
-
         jMenu2.setText("File");
 
         jMenuItem1.setText("jMenuItem1");
@@ -225,50 +270,31 @@ public class PanelOfertasCli extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(scroll, javax.swing.GroupLayout.DEFAULT_SIZE, 942, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addComponent(scroll)
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel6)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 339, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 901, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel4)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtArticulos, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(btBuscar)
-                                        .addGap(0, 566, Short.MAX_VALUE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel3)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtOfertas, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(btOfertas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(lDescricpcion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
-                        .addGap(16, 16, 16))))
+                        .addComponent(txtArticulos, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btBuscar)
+                        .addGap(0, 582, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtOfertas, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btOfertas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lDescricpcion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jToolBar1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 686, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lDescricpcion, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -318,7 +344,7 @@ public class PanelOfertasCli extends javax.swing.JFrame {
                 }
                 Articulo arti = new Articulo(refe);
                 arti.recuperaDatos();
-                Muestra muestra = new Muestra(arti,"01", dto, cantidad);
+                Muestra muestra = new Muestra(arti,cliente.getDni(), dto, cantidad);
                 muestra.setSize(200, 250);
                 muestra.setLocation(x, y);
                 this.pnVisor.add(muestra, BorderLayout.LINE_END);
@@ -331,16 +357,8 @@ public class PanelOfertasCli extends javax.swing.JFrame {
                     x = x + 205;
                 }
             }
-            this.pnVisor.setPreferredSize(new Dimension(xPanel, (y+255)));
-          /*  if(yPanel<(y+255)){
-                //this.pnVisor.setSize(new Dimension(xPanel, (y+255)));
-                this.pnVisor.setPreferredSize(new Dimension(xPanel, (y+255)));
-                this.scroll.updateUI();
-            }
-            else{
-
-                this.pnVisor.setPreferredSize(this.scroll.getPreferredSize());
-            }*/
+            bd.cerrarConexion();
+            this.pnVisor.setPreferredSize(new Dimension(xPanel, (y+255)));          
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
@@ -365,6 +383,16 @@ public class PanelOfertasCli extends javax.swing.JFrame {
         System.out.println("sasdasd");
         this.btBuscarActionPerformed(null);
     }//GEN-LAST:event_formWindowStateChanged
+
+    private void btPedidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPedidosActionPerformed
+        PanelPedido pedido= new PanelPedido(false, this.cliente);
+        pedido.setVisible(true);
+    }//GEN-LAST:event_btPedidosActionPerformed
+
+    private void btCestoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCestoActionPerformed
+        PanelCarrito carr=new PanelCarrito(cliente);
+        carr.setVisible(true);
+    }//GEN-LAST:event_btCestoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -397,7 +425,7 @@ public class PanelOfertasCli extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 
-                PanelOfertasCli jj=new PanelOfertasCli();
+                PanelOfertasCli jj=new PanelOfertasCli(new Cliente());
                 jj.setVisible(true);
                // jj.setExtendedState(JFrame.MAXIMIZED_BOTH);
             }
@@ -415,15 +443,18 @@ public class PanelOfertasCli extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JToolBar.Separator jSeparator1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JToolBar.Separator jSeparator2;
+    private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JLabel lCorreoCli;
     private javax.swing.JLabel lDescricpcion;
+    private javax.swing.JLabel lNombre;
+    private javax.swing.JLabel lbCliImg;
     private javax.swing.JPanel pnVisor;
     private javax.swing.JScrollPane scroll;
     private javax.swing.JTextField txtArticulos;

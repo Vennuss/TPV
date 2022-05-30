@@ -4,63 +4,44 @@
  */
 package Persona;
 
-import Articulos.Articulo;
-import java.awt.Color;
 import java.awt.Image;
 import java.io.File;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import javax.swing.ImageIcon;
-import javax.swing.InputVerifier;
-import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import validaciones.Verificador;
 
 /**
  *
- * @author Familia
+ * @author admin
  */
-public class frCliente extends javax.swing.JDialog {
+public class frPerfil extends javax.swing.JDialog {
 
-    final Cliente cliente;
-    private boolean operacion = false;
     private int result = JOptionPane.CANCEL_OPTION;
     private String rutaorigen = "";
+    final Cliente cliente;
 
     /**
-     * Creates new form frCliente
+     * Creates new form frPerfil
      */
-
-    public frCliente(Cliente cli, boolean operacion, java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
+    public frPerfil(Cliente cliente,java.awt.Frame parent, boolean modal) {
+        super(parent, modal);        
         initComponents();
-        this.cliente = cli;
-        this.operacion = operacion;
-        this.txtDni.setInputVerifier(new Verificador(this.lDNI));
-        this.txtCorreo.setInputVerifier(new Verificador(this.lCorreo));
-        if (!operacion) {
-            this.txtDni.setText(cli.getDni());
-            this.txtDni.setEnabled(false);
-            this.txtApellidos.setText(cli.getApellidos());
-            this.txtNombres.setText(cli.getNombres());
-            this.txtCorreo.setText(cli.getCorreo());
-            this.txtApellidos.setText(cli.getApellidos());
-            this.txtPassword.setText(cli.getPass());
-            this.cargarImg("/Imagenes/" + cli.getRutaImg(), true);
+        this.cliente=cliente;        
+    }
+
+    private void cargarPerfil() {
+        try {
+            ImageIcon icon = new ImageIcon(getClass().getResource("/Imagenes/" + cliente.getRutaImg()));
+
+            ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(this.lImg.getWidth(), this.lImg.getHeight(), Image.SCALE_DEFAULT));
+            this.lImg.setIcon(icono);
+        } catch (Exception ex) {
+
         }
-
-    }
-
-    public int getResult() {
-        return result;
-    }
-
-    public void setResult(int result) {
-        this.result = result;
     }
 
     private void cargarImg(String url, boolean almacen) {
@@ -125,10 +106,11 @@ public class frCliente extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        btAceptar = new javax.swing.JButton();
         btCancelar = new javax.swing.JButton();
-        btAyuda = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        btImg = new javax.swing.JButton();
         txtPassword = new javax.swing.JPasswordField();
+        lImg = new javax.swing.JLabel();
         lDNI = new javax.swing.JLabel();
         txtDni = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
@@ -136,19 +118,18 @@ public class frCliente extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
         txtApellidos = new javax.swing.JTextField();
         lCorreo = new javax.swing.JLabel();
+        btAceptar = new javax.swing.JButton();
         txtCorreo = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        btImg = new javax.swing.JButton();
-        lImg = new javax.swing.JLabel();
+        pnPass = new javax.swing.JPanel();
+        txtNueva = new javax.swing.JPasswordField();
+        txtRepita = new javax.swing.JPasswordField();
+        txtActual = new javax.swing.JPasswordField();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        chkPassword = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-
-        btAceptar.setText("Aceptar");
-        btAceptar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btAceptarActionPerformed(evt);
-            }
-        });
 
         btCancelar.setText("Cancelar");
         btCancelar.addActionListener(new java.awt.event.ActionListener() {
@@ -157,15 +138,20 @@ public class frCliente extends javax.swing.JDialog {
             }
         });
 
-        btAyuda.setText("Ayuda");
-        btAyuda.addActionListener(new java.awt.event.ActionListener() {
+        jLabel5.setText("Contraseña:");
+
+        btImg.setText("Cambiar IMG");
+        btImg.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btAyudaActionPerformed(evt);
+                btImgActionPerformed(evt);
             }
         });
 
+        txtPassword.setEditable(false);
+
         lDNI.setText("DNI:");
 
+        txtDni.setEditable(false);
         txtDni.setToolTipText("Entrada DNI ");
 
         jLabel1.setText("Nombres:");
@@ -174,14 +160,68 @@ public class frCliente extends javax.swing.JDialog {
 
         lCorreo.setText("Correo:");
 
+        btAceptar.setText("Aceptar");
+        btAceptar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btAceptarActionPerformed(evt);
+            }
+        });
+
+        txtCorreo.setEditable(false);
         txtCorreo.setToolTipText("CORREO");
 
-        jLabel5.setText("Contraseña:");
+        pnPass.setBorder(javax.swing.BorderFactory.createTitledBorder("Contraseña"));
 
-        btImg.setText("Localizar IMG");
-        btImg.addActionListener(new java.awt.event.ActionListener() {
+        txtNueva.setEnabled(false);
+
+        txtRepita.setEnabled(false);
+
+        txtActual.setEnabled(false);
+
+        jLabel3.setText("Actual:");
+
+        jLabel4.setText("Contraseña Nueva:");
+
+        jLabel6.setText("Repita Contraseña");
+
+        javax.swing.GroupLayout pnPassLayout = new javax.swing.GroupLayout(pnPass);
+        pnPass.setLayout(pnPassLayout);
+        pnPassLayout.setHorizontalGroup(
+            pnPassLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnPassLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnPassLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnPassLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtActual)
+                    .addComponent(txtNueva)
+                    .addComponent(txtRepita))
+                .addGap(6, 6, 6))
+        );
+        pnPassLayout.setVerticalGroup(
+            pnPassLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnPassLayout.createSequentialGroup()
+                .addGroup(pnPassLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtActual, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+                .addGroup(pnPassLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtNueva, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(pnPassLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtRepita, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6))
+                .addGap(22, 22, 22))
+        );
+
+        chkPassword.setText("Cambiar Contraseña");
+        chkPassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btImgActionPerformed(evt);
+                chkPasswordActionPerformed(evt);
             }
         });
 
@@ -194,21 +234,10 @@ public class frCliente extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btImg, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lImg, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btAceptar)
-                        .addGap(18, 18, 18)
-                        .addComponent(btCancelar)
-                        .addGap(18, 18, 18)
-                        .addComponent(btAyuda)
-                        .addGap(24, 24, 24))
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addGap(5, 5, 5)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -218,17 +247,30 @@ public class frCliente extends javax.swing.JDialog {
                                     .addComponent(lDNI))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(txtNombres, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+                                    .addComponent(txtNombres, javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(txtDni, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtApellidos, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtCorreo))))
-                        .addGap(0, 9, Short.MAX_VALUE))))
+                                    .addComponent(txtCorreo, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(pnPass, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(chkPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(15, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btAceptar)
+                .addGap(18, 18, 18)
+                .addComponent(btCancelar)
+                .addGap(154, 154, 154))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lImg, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(lDNI)
@@ -248,54 +290,31 @@ public class frCliente extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5))
-                        .addGap(18, 18, 18)
+                            .addComponent(jLabel5))))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addComponent(btImg))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(11, 11, 11)
+                        .addComponent(chkPassword)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(pnPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btAceptar)
-                            .addComponent(btCancelar)
-                            .addComponent(btAyuda)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lImg, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btImg)))
-                .addContainerGap(12, Short.MAX_VALUE))
+                            .addComponent(btCancelar))))
+                .addGap(17, 18, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAceptarActionPerformed
-        cliente.setApellidos(this.txtApellidos.getText());
-        cliente.setNombres(this.txtNombres.getText());
-        cliente.setCorreo(this.txtCorreo.getText());
-        String pass = String.valueOf(this.txtPassword.getPassword());
-        cliente.setPass(pass);
-        validarRuta(rutaorigen);
-        if (operacion) {
-            cliente.setDni(this.txtDni.getText());
-            cliente.registrar();
-            this.result = JOptionPane.OK_OPTION;
-            this.setVisible(false);
-            this.dispose();
-        } else {
-            cliente.actualizar();
-            this.result = JOptionPane.OK_OPTION;
-            this.setVisible(false);
-            this.dispose();
-        }
-    }//GEN-LAST:event_btAceptarActionPerformed
-
     private void btCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelarActionPerformed
-       this.result = JOptionPane.CANCEL_OPTION;
+        this.result = JOptionPane.CANCEL_OPTION;
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btCancelarActionPerformed
-
-    private void btAyudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAyudaActionPerformed
-        Cliente cl = new Cliente("555");
-        cl.eliminar();
-        cl = null;
-    }//GEN-LAST:event_btAyudaActionPerformed
 
     private void btImgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btImgActionPerformed
 
@@ -324,6 +343,33 @@ public class frCliente extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_btImgActionPerformed
 
+    private void btAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAceptarActionPerformed
+        cliente.setApellidos(this.txtApellidos.getText());
+        cliente.setNombres(this.txtNombres.getText());
+        cliente.setCorreo(this.txtCorreo.getText());
+        String pass = String.valueOf(this.txtPassword.getPassword());
+        cliente.setPass(pass);
+        validarRuta(rutaorigen);
+
+        cliente.actualizar();
+        this.result = JOptionPane.OK_OPTION;
+        this.setVisible(false);
+        this.dispose();
+    }//GEN-LAST:event_btAceptarActionPerformed
+
+    private void chkPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chkPasswordActionPerformed
+        if(this.chkPassword.isSelected()){
+            this.txtActual.setEnabled(true);
+            this.txtNueva.setEnabled(true);
+            this.txtRepita.setEnabled(true);
+        }
+        else{
+            this.txtActual.setEnabled(false);
+            this.txtNueva.setEnabled(false);
+            this.txtRepita.setEnabled(false);
+        }
+    }//GEN-LAST:event_chkPasswordActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -341,20 +387,20 @@ public class frCliente extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(frCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frPerfil.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(frCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frPerfil.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(frCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frPerfil.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(frCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frPerfil.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                frCliente dialog = new frCliente(new Cliente(), true, new javax.swing.JFrame(), true);
+                frPerfil dialog = new frPerfil(new Cliente(),new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -368,19 +414,26 @@ public class frCliente extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btAceptar;
-    private javax.swing.JButton btAyuda;
     private javax.swing.JButton btCancelar;
     private javax.swing.JButton btImg;
+    private javax.swing.JCheckBox chkPassword;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel lCorreo;
     private javax.swing.JLabel lDNI;
     private javax.swing.JLabel lImg;
+    private javax.swing.JPanel pnPass;
+    private javax.swing.JPasswordField txtActual;
     private javax.swing.JTextField txtApellidos;
     private javax.swing.JTextField txtCorreo;
     private javax.swing.JTextField txtDni;
     private javax.swing.JTextField txtNombres;
+    private javax.swing.JPasswordField txtNueva;
     private javax.swing.JPasswordField txtPassword;
+    private javax.swing.JPasswordField txtRepita;
     // End of variables declaration//GEN-END:variables
 }

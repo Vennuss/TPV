@@ -28,24 +28,23 @@ public class PanelOfertas extends javax.swing.JDialog {
     /**
      * Creates new form PanelOfertas
      */
-     DefaultTableModel modelo;
+    DefaultTableModel modelo;
     private String filtro = "";
-    private boolean busqueda=false;
-    Oferta ofertas=null;
-    private int result=JOptionPane.CANCEL_OPTION;
+    private boolean busqueda = false;
+    Oferta ofertas = null;
+    private int result = JOptionPane.CANCEL_OPTION;
     SimpleDateFormat fomatoFecha = new SimpleDateFormat("dd/MM/yyyy");
+
     public PanelOfertas(boolean busqueda, java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        this.busqueda=busqueda;
-        if(this.busqueda){
-            this.btSele.setVisible(true);      
+        this.busqueda = busqueda;
+        if (this.busqueda) {
+            this.btSele.setVisible(true);
             this.btAñadir.setEnabled(false);
             this.btModificar.setEnabled(false);
             this.btEliminar.setEnabled(false);
-        }
-        else
-        {
+        } else {
             this.btSele.setVisible(false);
         }
         recuperarDatos();
@@ -59,7 +58,7 @@ public class PanelOfertas extends javax.swing.JDialog {
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-               cargarFiltro();
+                cargarFiltro();
                 recuperarDatos();
             }
 
@@ -91,13 +90,8 @@ public class PanelOfertas extends javax.swing.JDialog {
     public void setResult(int result) {
         this.result = result;
     }
-    
-    public void cargarFiltro() {
-      /* Defecto:
-Nombre:
-Descripción:
-FechaIni:
-FechaFin:*/
+
+    public void cargarFiltro() {       
         if (txtBusqueda.getText().length() > 0) {
             switch (this.cmbBusqueda.getSelectedIndex()) {
                 case 0:
@@ -108,43 +102,39 @@ FechaFin:*/
                     break;
                 case 2:
                     filtro = " where descripcion like '%" + txtBusqueda.getText() + "%'";
-                    break;                
-                case 3:
-                     try{
-                         if(validaciones.vFecha(this.txtBusqueda.getText())){
-                            filtro = " where fechaini = '" + txtBusqueda.getText()+"'";
-                         }
-                         else{
-                             JOptionPane.showMessageDialog(this, "Parametros de busqueda Incorrectos");
-                         }
-                     }
-                     catch(Exception ex){
-                         
-                     }
                     break;
+                case 3:
+                     try {
+                    if (validaciones.vFecha(this.txtBusqueda.getText())) {
+                        filtro = " where fechaini = '" + txtBusqueda.getText() + "'";
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Parametros de busqueda Incorrectos");
+                    }
+                } catch (Exception ex) {
+
+                }
+                break;
                 case 5:
-                      try{
-                         if(validaciones.vFecha(this.txtBusqueda.getText())){
-                            filtro = " where fechafin = " + txtBusqueda.getText() ;
-                         }
-                         else{
-                             JOptionPane.showMessageDialog(this, "Parametros de busqueda Incorrectos");
-                         }
-                     }
-                     catch(Exception ex){
-                         
-                     }
-                    break;               
+                      try {
+                    if (validaciones.vFecha(this.txtBusqueda.getText())) {
+                        filtro = " where fechafin = " + txtBusqueda.getText();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Parametros de busqueda Incorrectos");
+                    }
+                } catch (Exception ex) {
+
+                }
+                break;
                 default:
                     throw new AssertionError();
             }
-            
+
         } else {
             filtro = "";
         }
     }
-    
-     public final void recuperarDatos() {
+
+    public final void recuperarDatos() {
         Modelo();
         DefaultTableModel tm = (DefaultTableModel) this.tOfertas.getModel();
         this.tOfertas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -154,34 +144,36 @@ FechaFin:*/
 
             ResultSet rs = bd.Consulta(sql);
             while (rs.next()) {
-               int id = rs.getInt("id");
-                String nombre=rs.getString("nombre");
+                int id = rs.getInt("id");
+                String nombre = rs.getString("nombre");
                 String descripcion = rs.getString("descripcion");
-                Date  fechaIni= rs.getDate("fechaini");
-                Date  fechaFin= rs.getDate("fechafin");
-                boolean vip=rs.getBoolean("vip");         
-                
-                Object nuev[] = {id,nombre, descripcion, fomatoFecha.format(fechaIni), fomatoFecha.format(fechaFin), vip};
+                Date fechaIni = rs.getDate("fechaini");
+                Date fechaFin = rs.getDate("fechafin");
+                boolean vip = rs.getBoolean("vip");
+
+                Object nuev[] = {id, nombre, descripcion, fomatoFecha.format(fechaIni), fomatoFecha.format(fechaFin), vip};
                 tm.addRow(nuev);
             }
+            bd.cerrarConexion();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
     }
+
     private void Modelo() {
 
         try {
             modelo = (new DefaultTableModel(
                     null, new String[]{
                         "ID", "Nombre",
-                        "Descripción", "FechaIni","FechaFin", "VIP"}) {
+                        "Descripción", "FechaIni", "FechaFin", "VIP"}) {
                 Class[] types = new Class[]{
                     java.lang.Integer.class,
                     java.lang.String.class,
                     java.lang.String.class,
                     java.lang.String.class,
                     java.lang.String.class,
-                   java.lang.Boolean.class
+                    java.lang.Boolean.class
                 };
                 boolean[] canEdit = new boolean[]{
                     false, false, false, false, false, false
@@ -201,11 +193,12 @@ FechaFin:*/
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e.toString() + "error2");
         }
-       
+
         this.tOfertas.setRowHeight(30);
     }
+
     private void cargarIMG(String url, JButton boton) {
-        
+
         ImageIcon icon = new ImageIcon(getClass().getResource(url));
         ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT));
         boton.setIcon(icono);
@@ -377,7 +370,7 @@ FechaFin:*/
         int fila = this.tOfertas.getSelectedRow();
         System.out.println("Fila seleccionada es" + fila);
         if (this.tOfertas.getSelectedRow() != -1) {
-            int codigo = (Integer)(modelo.getValueAt(fila, 0));
+            int codigo = (Integer) (modelo.getValueAt(fila, 0));
             this.ofertas = new Oferta(codigo);
             ofertas.recuperaDatos();
             this.result = JOptionPane.OK_OPTION;
@@ -387,8 +380,8 @@ FechaFin:*/
     }//GEN-LAST:event_btSeleActionPerformed
 
     private void btAñadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAñadirActionPerformed
-    
-        this.ofertas=new Oferta();
+
+        this.ofertas = new Oferta();
         frOferta dialog = new frOferta(this.ofertas, true, new javax.swing.JFrame(), true);
         dialog.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
@@ -397,7 +390,7 @@ FechaFin:*/
             }
         });
         dialog.setVisible(true);
-        if (dialog.getResult()==JOptionPane.YES_NO_OPTION) {
+        if (dialog.getResult() == JOptionPane.YES_NO_OPTION) {
             this.recuperarDatos();
         } else {
 
@@ -408,11 +401,11 @@ FechaFin:*/
         int fila = this.tOfertas.getSelectedRow();
         System.out.println("Fila seleccionada es" + fila);
         if (this.tOfertas.getSelectedRow() != -1) {
-            int codigo =  (Integer)(modelo.getValueAt(fila, 0));
+            int codigo = (Integer) (modelo.getValueAt(fila, 0));
             System.out.println("El codigo es:" + codigo);
-            ofertas=new Oferta(codigo);
+            ofertas = new Oferta(codigo);
             ofertas.recuperaDatos();
-           
+
             frOferta dialog = new frOferta(ofertas, false, new javax.swing.JFrame(), true);
             dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                 @Override
@@ -421,15 +414,15 @@ FechaFin:*/
                 }
             });
             dialog.setVisible(true);
-            if (dialog.getResult()==JOptionPane.YES_NO_OPTION) {
+            if (dialog.getResult() == JOptionPane.YES_NO_OPTION) {
                 modelo.setValueAt(ofertas.getNombre(), fila, 1);
                 modelo.setValueAt(ofertas.getDescripcion(), fila, 2);
-                Date  fechaIni= ofertas.getFechaIni();
-                Date  fechaFin= ofertas.getFechaFin();
+                Date fechaIni = ofertas.getFechaIni();
+                Date fechaFin = ofertas.getFechaFin();
                 modelo.setValueAt(this.fomatoFecha.format(fechaIni), fila, 3);
                 modelo.setValueAt(this.fomatoFecha.format(fechaIni), fila, 4);
                 modelo.setValueAt(ofertas.isVip(), fila, 5);
-                
+
             } else {
             }
         } else {
@@ -441,9 +434,9 @@ FechaFin:*/
         int fila = this.tOfertas.getSelectedRow();
         System.out.println("Fila seleccionada es" + fila);
         if (this.tOfertas.getSelectedRow() != -1) {
-            int codigo =  (Integer)(modelo.getValueAt(fila, 0));
+            int codigo = (Integer) (modelo.getValueAt(fila, 0));
             System.out.println("El codigo es:" + codigo);
-            ofertas=new Oferta(codigo);
+            ofertas = new Oferta(codigo);
             int resp = JOptionPane.showConfirmDialog(null, "¿Esta seguro?", "Alerta!", JOptionPane.YES_NO_OPTION);
             if (resp == JOptionPane.OK_OPTION) {
                 ofertas.eliminar();

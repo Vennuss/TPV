@@ -11,6 +11,7 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
+import validaciones.Verificador;
 
 /**
  *
@@ -31,6 +32,8 @@ public class frLineas extends javax.swing.JDialog {
         initComponents();
         this.apli = apli;
         this.operacion = operacion;
+        this.txtCantidad.setInputVerifier(new Verificador(this.lCantidad));
+        this.txtDto.setInputVerifier(new Verificador(this.lDto));
         if (!operacion) {
             this.txtReferencia.setText(apli.getReferencia());
             arti = new Articulo(apli.getReferencia());
@@ -78,10 +81,10 @@ public class frLineas extends javax.swing.JDialog {
 
         btArticulo = new javax.swing.JButton();
         txtDto = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
+        lCantidad = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         txtCantidad = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
+        lDto = new javax.swing.JLabel();
         txtReferencia = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -103,24 +106,26 @@ public class frLineas extends javax.swing.JDialog {
             }
         });
 
+        txtDto.setToolTipText("DESCUENTO NUMERICO");
         txtDto.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtDtoFocusLost(evt);
             }
         });
 
-        jLabel3.setText("Cantidad:");
+        lCantidad.setText("Cantidad:");
 
         jLabel5.setText("Referencia:");
 
         txtCantidad.setText("0");
+        txtCantidad.setToolTipText("CANTIDAD MINIMA ENTERO");
         txtCantidad.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtCantidadFocusLost(evt);
             }
         });
 
-        jLabel4.setText("Dto(%):");
+        lDto.setText("Dto(%):");
 
         jLabel1.setText("Descripción:");
 
@@ -152,11 +157,11 @@ public class frLineas extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGap(21, 21, 21)
-                        .addComponent(jLabel3)
+                        .addComponent(lCantidad)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(12, 12, 12)
-                        .addComponent(jLabel4)
+                        .addComponent(lDto)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(txtDto))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
@@ -204,9 +209,9 @@ public class frLineas extends javax.swing.JDialog {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
+                    .addComponent(lCantidad)
                     .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4)
+                    .addComponent(lDto)
                     .addComponent(txtDto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -311,10 +316,10 @@ public class frLineas extends javax.swing.JDialog {
     private javax.swing.JButton btCancelar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lCantidad;
+    private javax.swing.JLabel lDto;
     private javax.swing.JTextField txtCantidad;
     private javax.swing.JTextField txtDescripcion;
     private javax.swing.JTextField txtDto;

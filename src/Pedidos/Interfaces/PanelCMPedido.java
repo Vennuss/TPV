@@ -19,7 +19,7 @@ public class PanelCMPedido extends javax.swing.JFrame {
      * Ver un pedido ya existente
      * @param pd 
      */
-    PanelCMPedido(final Pedido pd) {
+    PanelCMPedido(Pedido pd) {
         initComponents();
         jLId.setText(String.valueOf(pd.getId()));
         recuperarDatos(pd);
@@ -224,6 +224,7 @@ public class PanelCMPedido extends javax.swing.JFrame {
                 _Pf += precio;
                 jTPF.setText(Double.toString(_Pf));
             }
+            bd.cerrarConexion();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }

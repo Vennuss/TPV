@@ -67,13 +67,21 @@ public class PanelClientes extends javax.swing.JDialog {
             }
         });
     }
-    
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
     public int getResult() {
         return result;
     }
-    
-    public Cliente getCliente(){
-        return cliente;
+
+    public void setResult(int result) {
+        this.result = result;
     }
     
     public void cargarFiltro() {
@@ -327,6 +335,7 @@ public class PanelClientes extends javax.swing.JDialog {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btSeleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSeleActionPerformed

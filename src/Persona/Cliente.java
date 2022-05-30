@@ -37,6 +37,7 @@ public class Cliente extends Persona implements Maqueta{
                 this.setPass(rs.getString("pass"));
                 this.setRutaImg(rs.getString("rutaimg"));
             }
+            bd.cerrarConexion();
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
@@ -74,6 +75,4 @@ public class Cliente extends Persona implements Maqueta{
             JOptionPane.showMessageDialog(null, "Registro Exitoso");
         }
     }
-    
-    
 }

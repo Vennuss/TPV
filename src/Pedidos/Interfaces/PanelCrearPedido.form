@@ -107,7 +107,7 @@
                 <Column editable="true" title="Cantidad" type="java.lang.Integer"/>
                 <Column editable="false" title="Precio del Articulo" type="java.lang.Double"/>
                 <Column editable="false" title="Precio Total" type="java.lang.Double"/>
-                <Column editable="true" title="Descuento" type="java.lang.Integer"/>
+                <Column editable="true" title="Descuento" type="java.lang.Double"/>
                 <Column editable="false" title="Precio Final" type="java.lang.Double"/>
               </Table>
             </Property>

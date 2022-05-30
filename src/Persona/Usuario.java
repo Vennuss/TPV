@@ -43,6 +43,7 @@ public class Usuario extends Persona implements Maqueta {
                 this.setRutaImg(rs.getString("rutaimg"));
                 this.setLogin(rs.getString("login"));
             }
+            bd.cerrarConexion();
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }

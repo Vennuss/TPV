@@ -147,6 +147,7 @@ public class PanelFamilias extends javax.swing.JDialog {
                 Object nuev[] = {id, nombre, notas};
                 tm.addRow(nuev);
             }
+            bd.cerrarConexion();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
