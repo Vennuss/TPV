@@ -4,22 +4,22 @@
  */
 package Articulos;
 
+import bd.bd;
+import bd.validaciones;
+import java.awt.Color;
 import java.awt.Image;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import validaciones.Verificador;
 
 /**
  *
@@ -41,52 +41,69 @@ public class frArticulos extends javax.swing.JDialog {
         this.cargarIcono("/Imagenes/lupa.png", this.btFamilia);
         this.operacion = operacion;
         this.art = art;
+        this.txtReferencia.setInputVerifier(new Verificador(this.lReferencia));
+        this.txtPvp.setInputVerifier(new Verificador(this.lPvp));
+        this.txtStock.setInputVerifier(new Verificador(this.lStock));
+
         if (!operacion) {
             this.txtReferencia.setEnabled(false);
             this.txtReferencia.setText(art.getReferencia());
             this.txtANotas.setText(art.getNotas());
-            this.txtStock.setText(String.valueOf(art.getStock()));
-            this.txtPvp.setText(String.valueOf(art.getPvp()));
+            this.txtStock.setText(String.valueOf(art.getStock()).replace(",", "."));
+            this.txtPvp.setText(String.valueOf(art.getPvp()).replace(",", "."));
             this.txtDescripcion.setText(art.getDescripcion());
             this.txtMarca.setText(art.getMarca());
             this.txtFamilia.setText(String.valueOf(art.getFa().getId()));
             this.lFamilia.setText(art.getFa().getNombre());
-            this.cargarImg("/Imagenes/" + art.getRutaImg());
+            this.cargarImg("/Imagenes/" + art.getRutaImg(), true);
         }
     }
 
-    private String validarRuta(String url) {
-        String nombre = "";
-        try {
-            URL main = getClass().getResource("/Imagenes/");
+    private void validarRuta(String url) {
+        if (url.length() > 0) {
+            String nombre = "";
+            try {
+                URL main = getClass().getResource("/Imagenes/");
 
-            if (!"file".equalsIgnoreCase(main.getProtocol())) {
-                throw new IllegalStateException("Main class is not stored in a file.");
+                if (!"file".equalsIgnoreCase(main.getProtocol())) {
+                    throw new IllegalStateException("Main class is not stored in a file.");
+                }
+                File rutaSis = new File(main.getPath());
+
+                File origen = new File(url);
+                File destino = new File(rutaSis.getParent().replace("%20", " ") + "/Imagenes/" + origen.getName());
+                nombre = origen.getName();
+
+                System.out.println("Ruta origen:" + origen.getAbsolutePath());
+                System.out.println("Ruta Destino:" + destino.getAbsolutePath());
+
+                ///Files.copy(origen.toPath(), destino.toPath(),)
+                System.out.println(destino.getPath());
+
+                if (origen.exists()) {
+                    //origen.renameTo(destino);
+                    Files.copy(origen.toPath(), destino.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    nombre = destino.getName();
+                }
+            } catch (Exception ex) {
+                System.out.println("Error:" + ex.getMessage());
             }
-            File rutaSis = new File(main.getPath());
+            if (nombre.equals("")) {
 
-            File origen = new File(url);
-            File destino = new File(rutaSis.getParent().replace("%20", " ") + "/Imagenes/" + origen.getName());
-            nombre = origen.getName();
-
-            System.out.println("Ruta origen:" + origen.getAbsolutePath());
-            System.out.println("Ruta Destino:" + destino.getAbsolutePath());
-
-            
-
-            ///Files.copy(origen.toPath(), destino.toPath(),)
-             
-            System.out.println(destino.getPath());
-          
-            if (origen.exists()) {
-                //origen.renameTo(destino);
-                Files.copy(origen.toPath(), destino.toPath(), StandardCopyOption.REPLACE_EXISTING);
-                nombre=destino.getName();
+            } else {
+                this.art.setRutaImg(nombre);
             }
-        } catch (Exception ex) {
-            System.out.println("Error:" + ex.getMessage());
         }
-        return nombre;
+    }
+
+    public boolean validarCampos() {
+        boolean retorno = true;
+        if (this.txtReferencia.getText().isEmpty()) {
+            retorno = false;
+        } else {
+
+        }
+        return retorno;
     }
 
     public int getResult() {
@@ -98,15 +115,80 @@ public class frArticulos extends javax.swing.JDialog {
     }
 
     private void cargarIcono(String url, JButton boton) {
-        ImageIcon icon = new ImageIcon(getClass().getResource(url));
-        ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT));
-        boton.setIcon(icono);
+        try {
+            ImageIcon icon = new ImageIcon(getClass().getResource(url));
+            ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT));
+            boton.setIcon(icono);
+        } catch (Exception ex) {
+
+        }
     }
 
-    private void cargarImg(String url) {
-        ImageIcon icon = new ImageIcon(getClass().getResource(url));
-        ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(this.lImg.getWidth(), this.lImg.getHeight(), Image.SCALE_DEFAULT));
-        this.lImg.setIcon(icono);
+    private void cargarImg(String url, boolean almacen) {
+        try {
+            ImageIcon icon;
+            if (almacen) {
+                icon = new ImageIcon(getClass().getResource(url));
+            } else {
+                icon = new ImageIcon(url);
+            }
+
+            ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(this.lImg.getWidth(), this.lImg.getHeight(), Image.SCALE_DEFAULT));
+            this.lImg.setIcon(icono);
+        } catch (Exception ex) {
+
+        }
+    }
+
+    public boolean validarReferencia() {
+        boolean retorno = true;
+        if (this.operacion) {
+            String sql = "select * from articulos where ref='" + this.txtReferencia.getText() + "'";
+            try {
+                int cantFilas = 0;
+                ResultSet rs = bd.Consulta(sql);
+                while (rs.next()) {
+                    cantFilas++;
+                }
+                retorno = cantFilas <= 0;
+                bd.cerrarConexion();
+            } catch (SQLException ex) {
+                retorno = false;
+            }
+        }
+        return retorno;
+    }
+
+    public boolean validarFamilia() {
+        boolean retorno = false;
+        if (this.operacion) {
+            String sql = "select * from familia where id=" + this.txtReferencia.getText();
+            try {
+                int cantFilas = 0;
+                ResultSet rs = bd.Consulta(sql);
+                while (rs.next()) {
+                    cantFilas++;
+                }
+                if (cantFilas == 1) {
+                    retorno = true;
+                    //volver a la fila primera;
+                    rs.first();
+                    while (rs.next()) {
+                        int id = rs.getInt("id");
+                        Familia fami = new Familia(id);
+                        fami.recuperaDatos();
+                        this.art.setFa(fami);
+                    }
+                } else {
+
+                }
+                retorno = cantFilas == 1;
+                bd.cerrarConexion();
+            } catch (SQLException ex) {
+                retorno = false;
+            }
+        }
+        return retorno;
     }
 
     /**
@@ -118,47 +200,60 @@ public class frArticulos extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel3 = new javax.swing.JLabel();
+        lPvp = new javax.swing.JLabel();
         lFamilia = new javax.swing.JLabel();
         txtReferencia = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtANotas = new javax.swing.JTextArea();
         txtPvp = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
+        lStock = new javax.swing.JLabel();
         btImg = new javax.swing.JButton();
         btAceptar = new javax.swing.JButton();
         lImg = new javax.swing.JLabel();
         btCancelar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         txtDescripcion = new javax.swing.JTextField();
-        btAyuda = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        lFamiliav = new javax.swing.JLabel();
         txtMarca = new javax.swing.JTextField();
         txtFamilia = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
+        lReferencia = new javax.swing.JLabel();
         btFamilia = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         txtStock = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel3.setText("P.V.P.:");
+        lPvp.setText("P.V.P.:");
 
         lFamilia.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lFamilia.setText("Familia");
+
+        txtReferencia.setToolTipText("REFERENCIA");
+        txtReferencia.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtReferenciaFocusLost(evt);
+            }
+        });
 
         txtANotas.setColumns(20);
         txtANotas.setRows(5);
         jScrollPane1.setViewportView(txtANotas);
 
+        txtPvp.setText("0");
+        txtPvp.setToolTipText("PVP NUMERICO");
         txtPvp.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtPvpFocusLost(evt);
             }
         });
+        txtPvp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPvpActionPerformed(evt);
+            }
+        });
 
-        jLabel4.setText("Stocks:");
+        lStock.setText("Stocks:");
 
         btImg.setText("Localizar IMG");
         btImg.addActionListener(new java.awt.event.ActionListener() {
@@ -183,18 +278,29 @@ public class frArticulos extends javax.swing.JDialog {
 
         jLabel1.setText("Descripción");
 
-        btAyuda.setText("Ayuda");
-        btAyuda.addActionListener(new java.awt.event.ActionListener() {
+        jLabel2.setText("Marca:");
+
+        lFamiliav.setText("Familia:");
+
+        txtFamilia.setEditable(false);
+        txtFamilia.setToolTipText("FAMILIA");
+        txtFamilia.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtFamiliaFocusLost(evt);
+            }
+        });
+        txtFamilia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btAyudaActionPerformed(evt);
+                txtFamiliaActionPerformed(evt);
+            }
+        });
+        txtFamilia.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtFamiliaKeyPressed(evt);
             }
         });
 
-        jLabel2.setText("Marca:");
-
-        jLabel5.setText("Familia:");
-
-        jLabel6.setText("Referencia:");
+        lReferencia.setText("Referencia:");
 
         btFamilia.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/edit.png"))); // NOI18N
         btFamilia.setMaximumSize(new java.awt.Dimension(30, 30));
@@ -208,6 +314,14 @@ public class frArticulos extends javax.swing.JDialog {
 
         jLabel7.setText("Notas:");
 
+        txtStock.setText("0");
+        txtStock.setToolTipText("STOCK ENTERO");
+        txtStock.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtStockFocusLost(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -219,12 +333,12 @@ public class frArticulos extends javax.swing.JDialog {
                     .addComponent(lImg, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lPvp, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lStock, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lReferencia, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lFamiliav, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -242,17 +356,15 @@ public class frArticulos extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btFamilia, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
                     .addComponent(txtStock, javax.swing.GroupLayout.Alignment.LEADING))
-                .addGap(14, 14, 14))
+                .addGap(28, 28, 28))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btAceptar)
                 .addGap(18, 18, 18)
                 .addComponent(btCancelar)
-                .addGap(18, 18, 18)
-                .addComponent(btAyuda)
-                .addGap(117, 117, 117))
+                .addGap(169, 169, 169))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -267,10 +379,10 @@ public class frArticulos extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtReferencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6))
+                            .addComponent(lReferencia))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5)
+                            .addComponent(lFamiliav)
                             .addComponent(txtFamilia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btFamilia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lFamilia))
@@ -285,24 +397,24 @@ public class frArticulos extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtPvp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3))
+                            .addComponent(lPvp))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4))
+                            .addComponent(lStock))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel7)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btAceptar)
-                    .addComponent(btCancelar)
-                    .addComponent(btAyuda))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btCancelar))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btImgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btImgActionPerformed
@@ -326,34 +438,27 @@ public class frArticulos extends javax.swing.JDialog {
 
                 System.out.println(origen.getAbsolutePath());
                 rutaorigen = origen.getAbsolutePath();
-                cargarImg(rutaorigen);
+                cargarImg(rutaorigen, false);
                 // String hola=validarRuta(rutaorigen);
-
             }
-
         }
     }//GEN-LAST:event_btImgActionPerformed
 
     private void btAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAceptarActionPerformed
+
+        art.setDescripcion(this.txtDescripcion.getText());
+        art.setNotas(this.txtANotas.getText());
+        art.setMarca(this.txtMarca.getText());
+        art.setPvp(Double.parseDouble(this.txtPvp.getText().replace(",", ".")));
+        art.setStock(Integer.parseInt(this.txtStock.getText().replace(",", ".")));
+        validarRuta(rutaorigen);
         if (operacion) {
             art.setReferencia(this.txtReferencia.getText());
-            art.setDescripcion(this.txtDescripcion.getText());
-            art.setNotas(this.txtANotas.getText());
-            art.setMarca(this.txtMarca.getText());
-            art.setPvp(Double.parseDouble(this.txtPvp.getText()));
-            art.setStock(Integer.parseInt(this.txtStock.getText()));
-            art.setRutaImg(this.validarRuta(rutaorigen));
             art.registrar();
             this.result = JOptionPane.OK_OPTION;
             this.setVisible(false);
             this.dispose();
         } else {
-            art.setDescripcion(this.txtDescripcion.getText());
-            art.setNotas(this.txtANotas.getText());
-            art.setMarca(this.txtMarca.getText());
-            art.setPvp(Double.parseDouble(this.txtPvp.getText()));
-            art.setStock(Integer.parseInt(this.txtStock.getText()));
-            art.setRutaImg(this.validarRuta(rutaorigen));
             art.actualizar();
             this.result = JOptionPane.OK_OPTION;
             this.setVisible(false);
@@ -367,12 +472,8 @@ public class frArticulos extends javax.swing.JDialog {
         this.dispose();
     }//GEN-LAST:event_btCancelarActionPerformed
 
-    private void btAyudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAyudaActionPerformed
-
-    }//GEN-LAST:event_btAyudaActionPerformed
-
     private void btFamiliaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btFamiliaActionPerformed
-        BFamilias dialog = new BFamilias(new javax.swing.JFrame(), true);
+        PanelFamilias dialog = new PanelFamilias(true, new javax.swing.JFrame(), true);
         dialog.setVisible(true);
 
         if (dialog.getResult() == JOptionPane.OK_OPTION) {
@@ -383,14 +484,47 @@ public class frArticulos extends javax.swing.JDialog {
     }//GEN-LAST:event_btFamiliaActionPerformed
 
     private void txtPvpFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtPvpFocusLost
-        double aux = 0;
-        try {
-            aux = Double.parseDouble(this.txtPvp.getText());
 
-        } catch (Exception ex) {
-            this.txtPvp.requestFocus();
-        }
     }//GEN-LAST:event_txtPvpFocusLost
+
+    private void txtFamiliaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFamiliaKeyPressed
+        String sql = "select * from familias where id=" + this.txtFamilia.getText();
+
+
+    }//GEN-LAST:event_txtFamiliaKeyPressed
+
+    private void txtStockFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtStockFocusLost
+
+    }//GEN-LAST:event_txtStockFocusLost
+
+    private void txtReferenciaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtReferenciaFocusLost
+        if (this.txtReferencia.getText().isEmpty()) {
+            this.lReferencia.setForeground(new Color(0, 0, 0));
+        } else {
+            if (!this.validarReferencia()) {
+                lReferencia.setForeground(Color.red);
+                JOptionPane.showMessageDialog(null, "Entrada no valido");
+            } else {
+                this.lReferencia.setForeground(new Color(0, 0, 0));
+            }
+        }
+    }//GEN-LAST:event_txtReferenciaFocusLost
+
+    private void txtPvpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPvpActionPerformed
+
+    }//GEN-LAST:event_txtPvpActionPerformed
+
+    private void txtFamiliaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtFamiliaFocusLost
+        if (this.txtFamilia.getText().isEmpty()) {
+            this.txtFamilia.setVisible(true);
+        } else {
+
+        }
+    }//GEN-LAST:event_txtFamiliaFocusLost
+
+    private void txtFamiliaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFamiliaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtFamiliaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -437,20 +571,19 @@ public class frArticulos extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btAceptar;
-    private javax.swing.JButton btAyuda;
     private javax.swing.JButton btCancelar;
     private javax.swing.JButton btFamilia;
     private javax.swing.JButton btImg;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lFamilia;
+    private javax.swing.JLabel lFamiliav;
     private javax.swing.JLabel lImg;
+    private javax.swing.JLabel lPvp;
+    private javax.swing.JLabel lReferencia;
+    private javax.swing.JLabel lStock;
     private javax.swing.JTextArea txtANotas;
     private javax.swing.JTextField txtDescripcion;
     private javax.swing.JTextField txtFamilia;

@@ -5,7 +5,7 @@
 package Articulos;
 
 import bd.bd;
-import java.awt.Dimension;
+import bd.validaciones;
 import java.awt.Image;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,47 +28,37 @@ public class PanelArticulos extends javax.swing.JDialog {
      */
     DefaultTableModel modelo;
     private String filtro = "";
-    private boolean busqueda=false;
-    Articulo articulo=null;
-    private int result=JOptionPane.CANCEL_OPTION;
-    
+    private boolean busqueda = false;
+    Articulo articulo = null;
+    private int result = JOptionPane.CANCEL_OPTION;
+
     public PanelArticulos(boolean busqueda, java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        this.busqueda=busqueda;
-        if(this.busqueda){
-            this.btSele.setVisible(true);            
-        }
-        else
-        {
+        this.busqueda = busqueda;
+        if (this.busqueda) {
+            this.btSele.setVisible(true);
+        } else {
             this.btSele.setVisible(false);
         }
         recuperarDatos();
         cargarIMG("/Imagenes/add.png", this.btAñadir);
         cargarIMG("/Imagenes/edit.png", this.btModificar);
         cargarIMG("/Imagenes/delete.png", this.btEliminar);
-        cargarIMG("/Imagenes/clean.png", this.btLimpiar);
+        //cargarIMG("/Imagenes/clean.png", this.btLimpiar);
         cargarIMG("/Imagenes/exit.png", this.btSalir);
         cargarIMG("/Imagenes/sele.png", this.btSele);
-        this.txtBusqueda.getDocument().addDocumentListener(new DocumentListener() {
 
+        this.txtBusqueda.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void removeUpdate(DocumentEvent e) {
-                if (txtBusqueda.getText().length() > 0) {
-                    filtro = " where nombre like '%" + txtBusqueda.getText() + "%' or notas like '%" + txtBusqueda.getText() + "%' ";
-                } else {
-                    filtro = "";
-                }
+                cargarFiltro();
                 recuperarDatos();
             }
 
             @Override
             public void insertUpdate(DocumentEvent e) {
-                if (txtBusqueda.getText().length() > 0) {
-                    filtro = " where nombre like '%" + txtBusqueda.getText() + "%' or notas like '%" + txtBusqueda.getText() + "%'";
-                } else {
-                    filtro = "";
-                }
+                cargarFiltro();
                 recuperarDatos();
             }
 
@@ -77,6 +67,83 @@ public class PanelArticulos extends javax.swing.JDialog {
                 System.out.println("Cambio dessss texto: " + txtBusqueda.getText());
             }
         });
+    }
+
+    public void cargarFiltro() {
+       
+        if (txtBusqueda.getText().length() > 0) {
+            switch (this.cmbBusqueda.getSelectedIndex()) {
+                case 0:
+                    filtro = " where ref like '%" + txtBusqueda.getText() + "%' or descripcion like '%" + txtBusqueda.getText() + "%' or marca like '%" + txtBusqueda.getText() + "%'";
+                    break;
+                case 1:
+                    filtro = " where ref like '%" + txtBusqueda.getText() + "%'";
+                    break;
+                case 2:
+                    filtro = " where descripcion like '%" + txtBusqueda.getText() + "%'";
+                    break;
+                case 3:
+                     filtro = " where marca like '%" + txtBusqueda.getText() + "%'";
+                    break;
+                case 4:
+                     try{
+                         if(validaciones.vDouble(this.txtBusqueda.getText())){
+                            filtro = " where stock <= " + txtBusqueda.getText() ;
+                         }
+                         else{
+                             JOptionPane.showMessageDialog(this, "Parametros de busqueda Incorrectos");
+                         }
+                     }
+                     catch(Exception ex){
+                         
+                     }
+                    break;
+                case 5:
+                      try{
+                         if(validaciones.vDouble(this.txtBusqueda.getText())){
+                            filtro = " where stock >= " + txtBusqueda.getText() ;
+                         }
+                         else{
+                             JOptionPane.showMessageDialog(this, "Parametros de busqueda Incorrectos");
+                         }
+                     }
+                     catch(Exception ex){
+                         
+                     }
+                    break;
+                case 6:
+                    try{
+                         if(validaciones.vDouble(this.txtBusqueda.getText())){
+                            filtro = " where pvp <= " + txtBusqueda.getText() ;
+                         }
+                         else{
+                             JOptionPane.showMessageDialog(this, "Parametros de busqueda Incorrectos");
+                         }
+                     }
+                     catch(Exception ex){
+                         
+                     }
+                    break;
+                case 7:
+                    try{
+                         if(validaciones.vDouble(this.txtBusqueda.getText())){
+                            filtro = " where pvp >= " + txtBusqueda.getText() ;
+                         }
+                         else{
+                             JOptionPane.showMessageDialog(this, "Parametros de busqueda Incorrectos");
+                         }
+                     }
+                     catch(Exception ex){
+                         
+                     }
+                    break;
+                default:
+                    throw new AssertionError();
+            }
+            
+        } else {
+            filtro = "";
+        }
     }
 
     public Articulo getArticulo() {
@@ -94,9 +161,9 @@ public class PanelArticulos extends javax.swing.JDialog {
     public void setResult(int result) {
         this.result = result;
     }
-    
+
     private void cargarIMG(String url, JButton boton) {
-        
+
         ImageIcon icon = new ImageIcon(getClass().getResource(url));
         ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT));
         boton.setIcon(icono);
@@ -112,8 +179,8 @@ public class PanelArticulos extends javax.swing.JDialog {
 
             ResultSet rs = bd.Consulta(sql);
             while (rs.next()) {
-              // int id = rs.getInt("ref");
-                String referencia=rs.getString("ref");
+                // int id = rs.getInt("ref");
+                String referencia = rs.getString("ref");
                 String descripcion = rs.getString("descripcion");
                 String marca = rs.getString("marca");
                 double pvp = rs.getDouble("pvp");
@@ -121,17 +188,19 @@ public class PanelArticulos extends javax.swing.JDialog {
                 Object nuev[] = {referencia, descripcion, marca, pvp, stock};
                 tm.addRow(nuev);
             }
+            bd.cerrarConexion();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
     }
+
     private void Modelo() {
 
         try {
             modelo = (new DefaultTableModel(
                     null, new String[]{
                         "Referencia", "Descripcion",
-                        "Marca", "PVP","Stock"}) {
+                        "Marca", "PVP", "Stock"}) {
                 Class[] types = new Class[]{
                     java.lang.String.class,
                     java.lang.String.class,
@@ -179,8 +248,8 @@ public class PanelArticulos extends javax.swing.JDialog {
         btEliminar = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JToolBar.Separator();
         jLabel2 = new javax.swing.JLabel();
+        cmbBusqueda = new javax.swing.JComboBox<>();
         txtBusqueda = new javax.swing.JTextField();
-        btLimpiar = new javax.swing.JButton();
         btSalir = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tArticulos = new javax.swing.JTable();
@@ -249,6 +318,9 @@ public class PanelArticulos extends javax.swing.JDialog {
         jLabel2.setText("Busquedas:");
         jToolBar1.add(jLabel2);
 
+        cmbBusqueda.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Defecto:", "Referencia:", "Descripción:", "marca:", "stock <= :", "stock >= :", "precio <= :", "precio >= :" }));
+        jToolBar1.add(cmbBusqueda);
+
         txtBusqueda.setToolTipText("");
         txtBusqueda.setMinimumSize(new java.awt.Dimension(150, 35));
         txtBusqueda.setPreferredSize(new java.awt.Dimension(250, 35));
@@ -260,19 +332,6 @@ public class PanelArticulos extends javax.swing.JDialog {
             }
         });
         jToolBar1.add(txtBusqueda);
-
-        btLimpiar.setFocusable(false);
-        btLimpiar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btLimpiar.setMaximumSize(new java.awt.Dimension(40, 40));
-        btLimpiar.setMinimumSize(new java.awt.Dimension(40, 40));
-        btLimpiar.setPreferredSize(new java.awt.Dimension(40, 40));
-        btLimpiar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        btLimpiar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btLimpiarActionPerformed(evt);
-            }
-        });
-        jToolBar1.add(btLimpiar);
 
         btSalir.setFocusable(false);
         btSalir.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -332,11 +391,12 @@ public class PanelArticulos extends javax.swing.JDialog {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btAñadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAñadirActionPerformed
         Articulo arti = new Articulo();
-        
+
         frArticulos dialog = new frArticulos(arti, true, new javax.swing.JFrame(), true);
         dialog.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
@@ -345,7 +405,7 @@ public class PanelArticulos extends javax.swing.JDialog {
             }
         });
         dialog.setVisible(true);
-        if (dialog.getResult()==JOptionPane.YES_NO_OPTION) {
+        if (dialog.getResult() == JOptionPane.YES_NO_OPTION) {
             this.recuperarDatos();
         } else {
 
@@ -355,10 +415,10 @@ public class PanelArticulos extends javax.swing.JDialog {
     private void btModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btModificarActionPerformed
         int fila = this.tArticulos.getSelectedRow();
         System.out.println("Fila seleccionada es" + fila);
-        if (this.tArticulos.getSelectedRow() != -1) {            
-            String codigo =  String.valueOf(modelo.getValueAt(fila, 0));
+        if (this.tArticulos.getSelectedRow() != -1) {
+            String codigo = String.valueOf(modelo.getValueAt(fila, 0));
             System.out.println("El codigo es:" + codigo);
-            Articulo art=new Articulo(codigo);
+            Articulo art = new Articulo(codigo);
             art.recuperaDatos();
             // this.setVisible(false);
             /*frFamilia fa=new frFamilia(fami, false);
@@ -371,13 +431,13 @@ public class PanelArticulos extends javax.swing.JDialog {
                     //System.exit(0);
                 }
             });
-            dialog.setVisible(true);            
-            if (dialog.getResult()==JOptionPane.YES_NO_OPTION) {
+            dialog.setVisible(true);
+            if (dialog.getResult() == JOptionPane.YES_NO_OPTION) {
                 modelo.setValueAt(art.getDescripcion(), fila, 1);
                 modelo.setValueAt(art.getMarca(), fila, 2);
             } else {
                 System.out.println("Mostar ajsjdj");
-            }            
+            }
         } else {
             JOptionPane.showConfirmDialog(null, "Seleccione un registro");
         }
@@ -387,9 +447,9 @@ public class PanelArticulos extends javax.swing.JDialog {
         int fila = this.tArticulos.getSelectedRow();
         System.out.println("Fila seleccionada es" + fila);
         if (this.tArticulos.getSelectedRow() != -1) {
-            String codigo =  String.valueOf(modelo.getValueAt(fila, 0));
+            String codigo = String.valueOf(modelo.getValueAt(fila, 0));
             System.out.println("El codigo es:" + codigo);
-            Articulo art=new Articulo(codigo);           
+            Articulo art = new Articulo(codigo);
             int resp = JOptionPane.showConfirmDialog(null, "¿Esta seguro?", "Alerta!", JOptionPane.YES_NO_OPTION);
             if (resp == JOptionPane.OK_OPTION) {
                 art.eliminar();
@@ -402,10 +462,6 @@ public class PanelArticulos extends javax.swing.JDialog {
     private void txtBusquedaInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_txtBusquedaInputMethodTextChanged
         System.out.println("El texto es:" + this.txtBusqueda.getText());
     }//GEN-LAST:event_txtBusquedaInputMethodTextChanged
-
-    private void btLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btLimpiarActionPerformed
-        this.txtBusqueda.setText("");
-    }//GEN-LAST:event_btLimpiarActionPerformed
 
     private void btSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSalirActionPerformed
         this.setVisible(false);
@@ -470,10 +526,10 @@ public class PanelArticulos extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btAñadir;
     private javax.swing.JButton btEliminar;
-    private javax.swing.JButton btLimpiar;
     private javax.swing.JButton btModificar;
     private javax.swing.JButton btSalir;
     private javax.swing.JButton btSele;
+    private javax.swing.JComboBox<String> cmbBusqueda;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;

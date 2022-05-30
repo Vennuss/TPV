@@ -17,13 +17,22 @@ public class frFamilias extends javax.swing.JDialog {
 
     Familia fa;
     boolean operacion = false; //true=Registro, false=Actualizacion 
-    private int result =  JOptionPane.CANCEL_OPTION;
+    private int result = JOptionPane.CANCEL_OPTION;
 
     public int getResult() {
-        return result;        
+        return result;
     }
-    
-   /* public void cerrar(){
+
+    public boolean validarCampos() {
+        boolean retorno = true;
+        if (this.txtNombre.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "El campo Nombre es Obligatorio");
+            retorno = false;
+        }
+        return retorno;
+    }
+
+    /* public void cerrar(){
         try{
             this.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
             addWindowListener(new WindowAdapter(){
@@ -36,9 +45,7 @@ public class frFamilias extends javax.swing.JDialog {
             
         }
     }*/
-    
-
-    public frFamilias(Familia fa, boolean operacion,java.awt.Frame parent, boolean modal) {
+    public frFamilias(Familia fa, boolean operacion, java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         this.fa = fa;
@@ -67,7 +74,6 @@ public class frFamilias extends javax.swing.JDialog {
         txtNombre = new javax.swing.JTextField();
         btAceptar = new javax.swing.JButton();
         btCancelar = new javax.swing.JButton();
-        btAyuda = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         lID = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -75,7 +81,7 @@ public class frFamilias extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel6.setText("Nombre:");
+        jLabel6.setText("Nombre(*):");
 
         jLabel1.setText("Notas:");
 
@@ -93,17 +99,12 @@ public class frFamilias extends javax.swing.JDialog {
             }
         });
 
-        btAyuda.setText("Ayuda");
-        btAyuda.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btAyudaActionPerformed(evt);
-            }
-        });
-
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("ID"));
 
         lID.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lID.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lID.setText("ID");
+        lID.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -136,21 +137,19 @@ public class frFamilias extends javax.swing.JDialog {
                             .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE)
                             .addComponent(txtNombre))
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(150, 150, 150))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(82, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(135, 135, 135)
                 .addComponent(btAceptar)
                 .addGap(18, 18, 18)
                 .addComponent(btCancelar)
-                .addGap(18, 18, 18)
-                .addComponent(btAyuda)
-                .addGap(100, 100, 100))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -168,43 +167,40 @@ public class frFamilias extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btAceptar)
-                    .addComponent(btCancelar)
-                    .addComponent(btAyuda))
+                    .addComponent(btCancelar))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAceptarActionPerformed
-
-        if (operacion) {
-            fa.setNombre(this.txtNombre.getText());
-            fa.setNotas(this.txtNotas.getText());
-            fa.registrar();
-            this.result =  JOptionPane.OK_OPTION;
-            this.setVisible(false);
-            this.dispose();
-        } else {
-            fa.setNombre(this.txtNombre.getText());
-            fa.setNotas(this.txtNotas.getText());
-            fa.actualizar();
-            this.result =  JOptionPane.OK_OPTION;
-            this.setVisible(false);
-            this.dispose();
+        if (validarCampos()) {
+            if (operacion) {
+                fa.setNombre(this.txtNombre.getText());
+                fa.setNotas(this.txtNotas.getText());
+                fa.registrar();
+                this.result = JOptionPane.OK_OPTION;
+                this.setVisible(false);
+                this.dispose();
+            } else {
+                fa.setNombre(this.txtNombre.getText());
+                fa.setNotas(this.txtNotas.getText());
+                fa.actualizar();
+                this.result = JOptionPane.OK_OPTION;
+                this.setVisible(false);
+                this.dispose();
+            }
         }
 
     }//GEN-LAST:event_btAceptarActionPerformed
 
     private void btCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelarActionPerformed
-        this.result =  JOptionPane.CANCEL_OPTION;
+        this.result = JOptionPane.CANCEL_OPTION;
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_btCancelarActionPerformed
-
-    private void btAyudaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAyudaActionPerformed
-
-    }//GEN-LAST:event_btAyudaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -251,7 +247,6 @@ public class frFamilias extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btAceptar;
-    private javax.swing.JButton btAyuda;
     private javax.swing.JButton btCancelar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel6;

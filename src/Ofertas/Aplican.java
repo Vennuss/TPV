@@ -6,6 +6,7 @@ package Ofertas;
 
 import Maqueta.Maqueta;
 import bd.bd;
+import java.sql.ResultSet;
 import javax.swing.JOptionPane;
 
 /**
@@ -21,6 +22,11 @@ public class Aplican implements Maqueta {
 
     public Aplican() {
 
+    }
+
+    public Aplican(int ofertasId, String Referencia) {
+        this.ofertasId = ofertasId;
+        this.Referencia = Referencia;
     }
 
     public int getOfertasId() {
@@ -64,16 +70,28 @@ public class Aplican implements Maqueta {
 
     @Override
     public void recuperaDatos() {
-        // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String sql = "select * from aplican where ofertasid=" + this.getOfertasId() + " and articulosref='" + this.getReferencia() + "'";
+
+        try {
+
+            ResultSet rs = bd.Consulta(sql);
+            while (rs.next()) {
+                this.setDescuento(rs.getDouble("descuento"));
+                this.setCantidad(rs.getDouble("cantidad"));
+            }
+            bd.cerrarConexion();
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 
     @Override
     public void registrar() {
-        String sql = "insert into aplican(ofertasId, articulosRef, descuento, cantidad) values(" + this.getOfertasId() + "," + this.getReferencia() + "'"
+        String sql = "insert into aplican(ofertasId, articulosRef, descuento, cantidad) values(" + this.getOfertasId() + ",'" + this.getReferencia() + "',"
                 + this.getDescuento() + "," + this.getCantidad() + ")";
         int resultado = bd.Sentencia(sql);
         if (resultado > 0) {
-            JOptionPane.showMessageDialog(null, "Registro Exitoso");
+            // JOptionPane.showMessageDialog(null, "Registro Exitoso");
 
         }
     }
