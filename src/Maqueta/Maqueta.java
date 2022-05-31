@@ -3,14 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Maqueta;
-
-import bd.bd;
-import java.sql.ResultSet;
-import javax.swing.JOptionPane;
-
 /**
  *
- * @author Familia
+* @author Ronal Arrayaza DAM1C
  */
 public interface Maqueta{
     
@@ -18,7 +13,7 @@ public interface Maqueta{
     
     public void registrar();
     
-    public void eliminar();
+    public boolean eliminar();
     
     public void actualizar();
     

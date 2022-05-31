@@ -6,7 +6,7 @@ package prtpvtienda;
 
 /**
  *
- * @author admin
+ * @author Ronal Arrayaza DAM1C
  */
 public class PrTpvTienda {
 

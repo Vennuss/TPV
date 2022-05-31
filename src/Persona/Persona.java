@@ -4,7 +4,6 @@
  */
 package Persona;
 
-import Maqueta.Maqueta;
 
 /**
  *

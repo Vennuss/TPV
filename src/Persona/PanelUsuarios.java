@@ -18,7 +18,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author Familia
+ * @author Ronal Arrayaza DAM1C
  */
 public class PanelUsuarios extends javax.swing.JDialog {
 
@@ -188,6 +188,7 @@ public class PanelUsuarios extends javax.swing.JDialog {
         btSalir = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("PANEL DE ADMINISTRACION DE USUARIOS");
 
         tbClientes.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         tbClientes.setModel(new javax.swing.table.DefaultTableModel(
@@ -263,12 +264,15 @@ public class PanelUsuarios extends javax.swing.JDialog {
         jToolBar1.add(btEliminar);
         jToolBar1.add(jSeparator1);
 
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setText("Busquedas:");
         jToolBar1.add(jLabel2);
 
+        cmbBusqueda.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         cmbBusqueda.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Defecto:", "DNI:", "Nombres:", "Apellidos:", "Correo:", "Login:" }));
         jToolBar1.add(cmbBusqueda);
 
+        txtBusqueda.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtBusqueda.setToolTipText("");
         txtBusqueda.setMinimumSize(new java.awt.Dimension(150, 35));
         txtBusqueda.setPreferredSize(new java.awt.Dimension(250, 35));

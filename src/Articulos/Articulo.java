@@ -4,15 +4,17 @@
  */
 package Articulos;
 
+import Maqueta.Maqueta;
 import bd.bd;
 import java.sql.ResultSet;
 import javax.swing.JOptionPane;
 
 /**
  *
- * @author admin
+ * @author Ronal Arrayaza DAM1C
+ * 
  */
-public class Articulo {
+public class Articulo implements Maqueta{
     
 
     /**
@@ -56,7 +58,7 @@ public class Articulo {
         this.fa = new Familia();
     }
     /**
-     * <h1>Contructor sin parametros
+     * Constructor sin parametros
      */
     public Articulo() {
         this.referencia = "";
@@ -68,6 +70,7 @@ public class Articulo {
         this.fa = new Familia();
     }
 
+    @Override
     public void recuperaDatos() {
         String sql = "select * from articulos where ref='" + this.getReferencia()+"'";
         try {
@@ -90,6 +93,7 @@ public class Articulo {
         }
     }
 
+    @Override
     public void registrar() {
         String sql = "INSERT INTO articulos (ref, descripcion, notas, marca, PVP, stock, rutaimg, idfamilia) VALUES ('"
                 + this.getReferencia() + "', '" + this.getDescripcion() + "', '" + this.getNotas() + "', '" +
@@ -101,16 +105,21 @@ public class Articulo {
         }
     }
 
-    public void eliminar() {
+    @Override
+    public boolean eliminar() {
         String sql = "delete from articulos where ref='" + this.getReferencia() + "'";
         int resultado = bd.Sentencia(sql);
         if (resultado > 0) {
             JOptionPane.showMessageDialog(null, "La operacion se ha realizado con Exito");
+            return true;
         } else {
             JOptionPane.showMessageDialog(null, "No se ha podido realizar la operacion");
+            return false;
         }
+        
     }
 
+    @Override
     public void actualizar() {
         String sql = "UPDATE articulos set descripcion='" + this.getDescripcion() + "', notas='" + this.getNotas() + 
                 "', marca='" + this.getMarca() + "', PVP=" + this.getPvp() + ", stock=" + this.getStock() + ", rutaimg='" + this.getRutaImg() + 

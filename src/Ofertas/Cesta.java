@@ -12,7 +12,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author admin
+ * @author Ronal Arrayaza DAM1C
  */
 public class Cesta implements Maqueta {
 
@@ -94,13 +94,15 @@ public class Cesta implements Maqueta {
     }
 
     @Override
-    public void eliminar() {
+    public boolean eliminar() {
         String sql = "delete from ofertas where dniCliente='" + this.dni + "' and articuloref='" + this.getArticulo().getReferencia() + "'";
         int resultado = bd.Sentencia(sql);
         if (resultado > 0) {
             JOptionPane.showMessageDialog(null, "La operacion se ha realizado con Exito");
+            return true;
         } else {
             JOptionPane.showMessageDialog(null, "No se ha podido realizar la operacion");
+            return false;
         }
     }
 

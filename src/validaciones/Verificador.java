@@ -17,7 +17,7 @@ import javax.swing.JTextField;
 
 /**
  *
- * @author Familia
+ * @author Ronal Arrayaza DAM1C
  */
 public class Verificador extends InputVerifier {
 
@@ -115,7 +115,7 @@ public class Verificador extends InputVerifier {
             }
         } else if (campo.getToolTipText().contains("NUMERICO")) {
             //
-            pattern = Pattern.compile("^[0-9]+([,][0-9]+)?$");
+            pattern = Pattern.compile("((^[0-9]+([,][0-9]+)?$)|(^[0-9]+([.][0-9]+)?$))");
             matcher = pattern.matcher(campo.getText());
             campo.setText(campo.getText().toLowerCase());
             if (matcher.matches()) {

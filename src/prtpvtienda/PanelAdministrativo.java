@@ -8,7 +8,6 @@ import Articulos.PanelFamilias;
 import Articulos.PanelArticulos;
 import Ofertas.PanelOfertas;
 import Pedidos.Interfaces.PanelPedido;
-import Persona.Cliente;
 import Persona.PanelClientes;
 import Persona.PanelUsuarios;
 import Persona.Usuario;
@@ -19,7 +18,7 @@ import javax.swing.JFrame;
 
 /**
  *
- * @author Familia
+ * @author Ronal Arrayaza DAM1C
  */
 public class PanelAdministrativo extends javax.swing.JFrame {
 
@@ -30,6 +29,7 @@ public class PanelAdministrativo extends javax.swing.JFrame {
     public PanelAdministrativo(Usuario usuario) {
         initComponents();
         this.usuario=usuario;
+        this.cargarPerfil();
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         cargarIMG("/Imagenes/avatar.png", this.btClientes);
         cargarIMG("/Imagenes/paquete.png", this.btArticulos);
@@ -37,6 +37,18 @@ public class PanelAdministrativo extends javax.swing.JFrame {
         cargarIMG("/Imagenes/oferta.png", this.btOfertas);
         cargarIMG("/Imagenes/lista.png", this.btPedidos);
         cargarIMG("/Imagenes/clientes.png", this.btUsuarios);
+    }
+    private void cargarPerfil() {
+        this.lCorreoCli.setText(usuario.getCorreo());
+        this.lNombre.setText(usuario.getApellidos() + ", " + usuario.getNombres());
+        try {
+            ImageIcon icon = new ImageIcon(getClass().getResource("/Imagenes/" + usuario.getRutaImg()));
+
+            ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(this.lbCliImg.getWidth(), this.lbCliImg.getHeight(), Image.SCALE_DEFAULT));
+            this.lbCliImg.setIcon(icono);
+        } catch (Exception ex) {
+
+        }
     }
 
     private void cargarIMG(String url, JButton boton) {
@@ -65,6 +77,12 @@ public class PanelAdministrativo extends javax.swing.JFrame {
         jMenu3 = new javax.swing.JMenu();
         jMenu4 = new javax.swing.JMenu();
         jToolBar1 = new javax.swing.JToolBar();
+        jLabel5 = new javax.swing.JLabel();
+        lbCliImg = new javax.swing.JLabel();
+        lNombre = new javax.swing.JLabel();
+        lCorreoCli = new javax.swing.JLabel();
+        jSeparator2 = new javax.swing.JToolBar.Separator();
+        jSeparator3 = new javax.swing.JToolBar.Separator();
         jLabel1 = new javax.swing.JLabel();
         btFamilias = new javax.swing.JButton();
         btArticulos = new javax.swing.JButton();
@@ -92,6 +110,27 @@ public class PanelAdministrativo extends javax.swing.JFrame {
         jToolBar1.setOrientation(javax.swing.SwingConstants.VERTICAL);
         jToolBar1.setRollover(true);
 
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel5.setText("Bienvenido");
+        jToolBar1.add(jLabel5);
+
+        lbCliImg.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbCliImg.setMaximumSize(new java.awt.Dimension(50, 50));
+        lbCliImg.setMinimumSize(new java.awt.Dimension(50, 50));
+        lbCliImg.setPreferredSize(new java.awt.Dimension(50, 50));
+        jToolBar1.add(lbCliImg);
+
+        lNombre.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lNombre.setText("Ronal Arrayaza Gonzales");
+        jToolBar1.add(lNombre);
+
+        lCorreoCli.setFont(new java.awt.Font("Segoe UI", 3, 12)); // NOI18N
+        lCorreoCli.setForeground(new java.awt.Color(0, 51, 255));
+        lCorreoCli.setText("jLabel7");
+        jToolBar1.add(lCorreoCli);
+        jToolBar1.add(jSeparator2);
+        jToolBar1.add(jSeparator3);
+
         jLabel1.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
         jLabel1.setText("ADMINISTRATIVO");
         jToolBar1.add(jLabel1);
@@ -99,9 +138,9 @@ public class PanelAdministrativo extends javax.swing.JFrame {
         btFamilias.setText("FAMILIAS");
         btFamilias.setFocusable(false);
         btFamilias.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btFamilias.setMaximumSize(new java.awt.Dimension(120, 45));
-        btFamilias.setMinimumSize(new java.awt.Dimension(120, 45));
-        btFamilias.setPreferredSize(new java.awt.Dimension(120, 45));
+        btFamilias.setMaximumSize(new java.awt.Dimension(160, 45));
+        btFamilias.setMinimumSize(new java.awt.Dimension(160, 45));
+        btFamilias.setPreferredSize(new java.awt.Dimension(160, 45));
         btFamilias.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btFamilias.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -113,9 +152,9 @@ public class PanelAdministrativo extends javax.swing.JFrame {
         btArticulos.setText("ARTICULOS");
         btArticulos.setFocusable(false);
         btArticulos.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btArticulos.setMaximumSize(new java.awt.Dimension(120, 45));
-        btArticulos.setMinimumSize(new java.awt.Dimension(120, 45));
-        btArticulos.setPreferredSize(new java.awt.Dimension(120, 45));
+        btArticulos.setMaximumSize(new java.awt.Dimension(160, 45));
+        btArticulos.setMinimumSize(new java.awt.Dimension(160, 45));
+        btArticulos.setPreferredSize(new java.awt.Dimension(160, 45));
         btArticulos.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btArticulos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -127,9 +166,9 @@ public class PanelAdministrativo extends javax.swing.JFrame {
         btUsuarios.setText("USUARIOS");
         btUsuarios.setFocusable(false);
         btUsuarios.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btUsuarios.setMaximumSize(new java.awt.Dimension(120, 45));
-        btUsuarios.setMinimumSize(new java.awt.Dimension(120, 45));
-        btUsuarios.setPreferredSize(new java.awt.Dimension(120, 45));
+        btUsuarios.setMaximumSize(new java.awt.Dimension(160, 45));
+        btUsuarios.setMinimumSize(new java.awt.Dimension(160, 45));
+        btUsuarios.setPreferredSize(new java.awt.Dimension(160, 45));
         btUsuarios.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btUsuarios.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -141,9 +180,9 @@ public class PanelAdministrativo extends javax.swing.JFrame {
         btClientes.setText("CLIENTES");
         btClientes.setFocusable(false);
         btClientes.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btClientes.setMaximumSize(new java.awt.Dimension(120, 45));
-        btClientes.setMinimumSize(new java.awt.Dimension(120, 45));
-        btClientes.setPreferredSize(new java.awt.Dimension(120, 45));
+        btClientes.setMaximumSize(new java.awt.Dimension(160, 45));
+        btClientes.setMinimumSize(new java.awt.Dimension(160, 45));
+        btClientes.setPreferredSize(new java.awt.Dimension(160, 45));
         btClientes.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btClientes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -161,8 +200,8 @@ public class PanelAdministrativo extends javax.swing.JFrame {
         btPedidos.setText("PEDIDOS");
         btPedidos.setFocusable(false);
         btPedidos.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btPedidos.setMaximumSize(new java.awt.Dimension(120, 45));
-        btPedidos.setMinimumSize(new java.awt.Dimension(120, 45));
+        btPedidos.setMaximumSize(new java.awt.Dimension(160, 45));
+        btPedidos.setMinimumSize(new java.awt.Dimension(160, 45));
         btPedidos.setPreferredSize(new java.awt.Dimension(120, 45));
         btPedidos.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btPedidos.addActionListener(new java.awt.event.ActionListener() {
@@ -176,9 +215,9 @@ public class PanelAdministrativo extends javax.swing.JFrame {
         btOfertas.setToolTipText("");
         btOfertas.setFocusable(false);
         btOfertas.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btOfertas.setMaximumSize(new java.awt.Dimension(120, 45));
-        btOfertas.setMinimumSize(new java.awt.Dimension(120, 45));
-        btOfertas.setPreferredSize(new java.awt.Dimension(120, 45));
+        btOfertas.setMaximumSize(new java.awt.Dimension(160, 45));
+        btOfertas.setMinimumSize(new java.awt.Dimension(160, 45));
+        btOfertas.setPreferredSize(new java.awt.Dimension(160, 45));
         btOfertas.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btOfertas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -191,7 +230,7 @@ public class PanelAdministrativo extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 942, Short.MAX_VALUE)
+            .addGap(0, 919, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -221,7 +260,7 @@ public class PanelAdministrativo extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
@@ -347,6 +386,7 @@ public class PanelAdministrativo extends javax.swing.JFrame {
     private javax.swing.JButton btUsuarios;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
@@ -356,6 +396,11 @@ public class PanelAdministrativo extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JToolBar.Separator jSeparator1;
+    private javax.swing.JToolBar.Separator jSeparator2;
+    private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JLabel lCorreoCli;
+    private javax.swing.JLabel lNombre;
+    private javax.swing.JLabel lbCliImg;
     // End of variables declaration//GEN-END:variables
 }

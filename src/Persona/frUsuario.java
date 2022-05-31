@@ -4,24 +4,21 @@
  */
 package Persona;
 
-import java.awt.Color;
 import java.awt.Image;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import javax.swing.ImageIcon;
-import javax.swing.InputVerifier;
-import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import validaciones.Verificador;
 
 /**
  *
- * @author Familia
+ * @author 
  */
 public class frUsuario extends javax.swing.JDialog {
 
@@ -76,6 +73,7 @@ public class frUsuario extends javax.swing.JDialog {
             }
           });*/
         if (!operacion) {
+            this.setTitle("ACTUALIZACION DE USUARIOS");
             this.txtDni.setText(usuario.getDni());
             this.txtDni.setEnabled(false);
             this.txtApellidos.setText(usuario.getApellidos());
@@ -85,8 +83,8 @@ public class frUsuario extends javax.swing.JDialog {
             this.txtPassword.setText(usuario.getPass());
             this.txtUsuario.setText(usuario.getLogin());
             this.cargarImg("/Imagenes/" + usuario.getRutaImg(), true);
-        }
-         else{
+        } else {
+            this.setTitle("REGISTRO DE USUARIOS");
             this.cargarImg("/Imagenes/predePer.png", true);
             usu.setRutaImg("predePer.png");
         }
@@ -125,16 +123,13 @@ public class frUsuario extends javax.swing.JDialog {
 
                 System.out.println("Ruta origen:" + origen.getAbsolutePath());
                 System.out.println("Ruta Destino:" + destino.getAbsolutePath());
-
-                ///Files.copy(origen.toPath(), destino.toPath(),)
                 System.out.println(destino.getPath());
-
                 if (origen.exists()) {
                     //origen.renameTo(destino);
                     Files.copy(origen.toPath(), destino.toPath(), StandardCopyOption.REPLACE_EXISTING);
                     nombre = destino.getName();
                 }
-            } catch (Exception ex) {
+            } catch (IOException | IllegalStateException ex) {
                 System.out.println("Error:" + ex.getMessage());
             }
             if (nombre.equals("")) {
@@ -182,8 +177,14 @@ public class frUsuario extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
+        txtNombres.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setText("Apellidos:");
 
+        txtApellidos.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        btImg.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btImg.setText("Localizar IMG");
         btImg.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -191,6 +192,7 @@ public class frUsuario extends javax.swing.JDialog {
             }
         });
 
+        btAceptar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btAceptar.setText("Aceptar");
         btAceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -198,9 +200,11 @@ public class frUsuario extends javax.swing.JDialog {
             }
         });
 
+        lCorreo.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lCorreo.setText("Correo:");
         lCorreo.setToolTipText("CORREO");
 
+        btCancelar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btCancelar.setText("Cancelar");
         btCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -208,8 +212,10 @@ public class frUsuario extends javax.swing.JDialog {
             }
         });
 
+        txtCorreo.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtCorreo.setToolTipText("CORREO");
 
+        btAyuda.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btAyuda.setText("Ayuda");
         btAyuda.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -217,13 +223,23 @@ public class frUsuario extends javax.swing.JDialog {
             }
         });
 
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel4.setText("Usuario:");
 
+        lImg.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel5.setText("Contraseña:");
 
+        txtPassword.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        txtUsuario.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        lDNI.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lDNI.setText("DNI:");
         lDNI.setToolTipText("DNI");
 
+        txtDni.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtDni.setToolTipText("DNI");
         txtDni.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -231,6 +247,7 @@ public class frUsuario extends javax.swing.JDialog {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel1.setText("Nombres:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -238,12 +255,16 @@ public class frUsuario extends javax.swing.JDialog {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btImg, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lImg, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(lImg, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(53, 53, 53)
+                        .addComponent(btImg, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(17, 17, 17)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel4)
                             .addComponent(lCorreo)
@@ -262,7 +283,7 @@ public class frUsuario extends javax.swing.JDialog {
                             .addComponent(txtApellidos, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(txtNombres)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 45, Short.MAX_VALUE)
+                        .addGap(0, 126, Short.MAX_VALUE)
                         .addComponent(btAceptar)
                         .addGap(18, 18, 18)
                         .addComponent(btCancelar)
@@ -274,13 +295,9 @@ public class frUsuario extends javax.swing.JDialog {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(lImg, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btImg))
-                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtDni, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lDNI))
@@ -303,13 +320,17 @@ public class frUsuario extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btAceptar)
-                            .addComponent(btCancelar)
-                            .addComponent(btAyuda))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jLabel5)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addComponent(lImg, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btAceptar)
+                    .addComponent(btCancelar)
+                    .addComponent(btAyuda)
+                    .addComponent(btImg))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         pack();

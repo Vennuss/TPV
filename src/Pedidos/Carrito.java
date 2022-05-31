@@ -40,12 +40,14 @@ public final class Carrito extends Pedido{
      * @return ArrayList< ArticuloPedido >
      */
     public ArrayList<ArticuloPedido> recuperarArticulos(){
+        
         String sql = "select * from cestas where dniCliente = '" + super.getCliente().getDni() + "';";
         ResultSet rs = bd.Consulta(sql);
         try {
             while(rs.next()){
                 addArticulo(new Articulo(rs.getString("articuloRef")), rs.getInt("cantidad"), rs.getInt("dto"));
             }
+            bd.cerrarConexion();
         } catch (SQLException ex) {
             Logger.getLogger(Carrito.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -60,6 +62,12 @@ public final class Carrito extends Pedido{
     public void registrar() {
         super.registrar();
         String sql = "delete from cestas where dnicliente = '" + super.getCliente().getDni() + "';";
+        bd.Sentencia(sql);
+    }
+    
+    public void eliminar(final String _art) {
+        String sql = "delete from cestas where dnicliente = '" + getCliente().getDni() + "' and articuloref = '" + _art +"';";
+        System.out.println(sql);
         bd.Sentencia(sql);
     }
 }

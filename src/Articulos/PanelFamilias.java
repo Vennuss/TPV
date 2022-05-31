@@ -18,20 +18,18 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author Familia
+ * @author Ronal Arrayaza DAM1C
  */
 public class PanelFamilias extends javax.swing.JDialog {
 
     /**
      * Creates new form BFamilias
      */
-    
     DefaultTableModel modelo;
     private String filtro = "";
     private boolean busqueda = false;
     Familia fami = null;
-    private int result = JOptionPane.CANCEL_OPTION;    
-    
+    private int result = JOptionPane.CANCEL_OPTION;
 
     public Familia getFamilia() {
         return fami;
@@ -44,13 +42,13 @@ public class PanelFamilias extends javax.swing.JDialog {
     public PanelFamilias(boolean busqueda, java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-          this.busqueda = busqueda;
+        this.busqueda = busqueda;
         if (this.busqueda) {
             this.btSele.setVisible(true);
         } else {
             this.btSele.setVisible(false);
         }
-         recuperarDatos();
+        recuperarDatos();
         cargarIMG("/Imagenes/add.png", this.btAñadir);
         cargarIMG("/Imagenes/edit.png", this.btModificar);
         cargarIMG("/Imagenes/delete.png", this.btEliminar);
@@ -176,6 +174,7 @@ public class PanelFamilias extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("PANEL DE ADMINISTRACION DE FAMILIAS");
         setResizable(false);
 
         jToolBar1.setRollover(true);
@@ -236,9 +235,11 @@ public class PanelFamilias extends javax.swing.JDialog {
         jToolBar1.add(btEliminar);
         jToolBar1.add(jSeparator1);
 
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setText("Busquedas:");
         jToolBar1.add(jLabel2);
 
+        txtBusqueda.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtBusqueda.setToolTipText("");
         txtBusqueda.setMinimumSize(new java.awt.Dimension(150, 35));
         txtBusqueda.setPreferredSize(new java.awt.Dimension(250, 35));
@@ -316,7 +317,7 @@ public class PanelFamilias extends javax.swing.JDialog {
         int fila = this.tFamilias.getSelectedRow();
         System.out.println("Fila seleccionada es" + fila);
         if (this.tFamilias.getSelectedRow() != -1) {
-            int codigo = (int)modelo.getValueAt(fila, 0);
+            int codigo = (int) modelo.getValueAt(fila, 0);
             this.fami = new Familia(codigo);
             fami.recuperaDatos();
             this.result = JOptionPane.OK_OPTION;
@@ -335,7 +336,7 @@ public class PanelFamilias extends javax.swing.JDialog {
             }
         });
         dialog.setVisible(true);
-        if (dialog.getResult()==JOptionPane.YES_NO_OPTION) {
+        if (dialog.getResult() == JOptionPane.YES_NO_OPTION) {
             this.recuperarDatos();
         } else {
 
@@ -362,7 +363,7 @@ public class PanelFamilias extends javax.swing.JDialog {
                 }
             });
             dialog.setVisible(true);
-            if (dialog.getResult()==JOptionPane.YES_NO_OPTION) {
+            if (dialog.getResult() == JOptionPane.YES_NO_OPTION) {
                 modelo.setValueAt(fami.getNombre(), fila, 1);
                 modelo.setValueAt(fami.getNotas(), fila, 2);
             } else {
@@ -382,9 +383,10 @@ public class PanelFamilias extends javax.swing.JDialog {
             Familia fami = new Familia(codigo);
             int resp = JOptionPane.showConfirmDialog(null, "¿Esta seguro?", "Alerta!", JOptionPane.YES_NO_OPTION);
             if (resp == JOptionPane.OK_OPTION) {
-                fami.eliminar();
-                fami = null;
-                this.modelo.removeRow(fila);
+                if (fami.eliminar()) {
+                    fami = null;
+                    this.modelo.removeRow(fila);
+                }
             }
         }
     }//GEN-LAST:event_btEliminarActionPerformed

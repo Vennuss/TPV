@@ -15,7 +15,7 @@ import validaciones.Verificador;
 
 /**
  *
- * @author admin
+* @author Ronal Arrayaza DAM1C
  */
 public class frLineas extends javax.swing.JDialog {
 
@@ -35,6 +35,7 @@ public class frLineas extends javax.swing.JDialog {
         this.txtCantidad.setInputVerifier(new Verificador(this.lCantidad));
         this.txtDto.setInputVerifier(new Verificador(this.lDto));
         if (!operacion) {
+            this.setTitle("ACTUALIZACION DE LINEAS");
             this.txtReferencia.setText(apli.getReferencia());
             arti = new Articulo(apli.getReferencia());
             arti.recuperaDatos();
@@ -43,6 +44,7 @@ public class frLineas extends javax.swing.JDialog {
             this.txtCantidad.setText(Double.toString(apli.getCantidad()));
             this.txtDto.setText(Double.toString(apli.getDescuento()));
         } else {
+            this.setTitle("REGISTRO DE LINEAS");
             this.arti = new Articulo();
         }
         cargarIMG("/Imagenes/lupa.png", this.btArticulo);
@@ -50,7 +52,7 @@ public class frLineas extends javax.swing.JDialog {
     
     private void cargarIMG(String url, JButton boton) {
         ImageIcon icon = new ImageIcon(getClass().getResource(url));
-        ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT));
+        ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(25, 25, Image.SCALE_DEFAULT));
         boton.setIcon(icono);
     }
 
@@ -106,6 +108,7 @@ public class frLineas extends javax.swing.JDialog {
             }
         });
 
+        txtDto.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtDto.setToolTipText("DESCUENTO NUMERICO");
         txtDto.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
@@ -113,10 +116,13 @@ public class frLineas extends javax.swing.JDialog {
             }
         });
 
+        lCantidad.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lCantidad.setText("Cantidad:");
 
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel5.setText("Referencia:");
 
+        txtCantidad.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtCantidad.setText("0");
         txtCantidad.setToolTipText("CANTIDAD MINIMA ENTERO");
         txtCantidad.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -127,14 +133,22 @@ public class frLineas extends javax.swing.JDialog {
 
         lDto.setText("Dto(%):");
 
+        txtReferencia.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel1.setText("Descripción:");
 
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setText("Notas:");
 
         txtNotas.setColumns(20);
+        txtNotas.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtNotas.setRows(5);
         jScrollPane1.setViewportView(txtNotas);
 
+        txtDescripcion.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        btAceptar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btAceptar.setText("Aceptar");
         btAceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -142,6 +156,7 @@ public class frLineas extends javax.swing.JDialog {
             }
         });
 
+        btCancelar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btCancelar.setText("Cancelar");
         btCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

@@ -266,7 +266,7 @@ public class Pedido {
      * @see estadoPago
      * @see cliente
      */
-    public void recuperarDatos() {
+    public final void recuperarDatos() {
         String sql = "select * from pedidos where id = " + this.id;
             try {
                 ResultSet rs = bd.Consulta(sql);
@@ -276,6 +276,7 @@ public class Pedido {
                     this.estadoPago = Boolean.getBoolean("estadoPago");
                     this.cliente = new Cliente(rs.getString("cliete"));
                 }
+                bd.cerrarConexion();
             } catch (SQLException ex) {
                 System.out.println(ex.getCause());
             }
@@ -355,6 +356,7 @@ public class Pedido {
                     ArticuloPedido ap = new ArticuloPedido(_ref, this.id);
                     ap.eliminar();
                 }
+                bd.cerrarConexion();
             } catch (SQLException ex) {
                 System.out.println(ex.getCause());
             }

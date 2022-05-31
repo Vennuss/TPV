@@ -19,7 +19,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author Familia
+ * @author Ronal Arrayaza DAM1C
  */
 public class PanelArticulos extends javax.swing.JDialog {
 
@@ -70,7 +70,7 @@ public class PanelArticulos extends javax.swing.JDialog {
     }
 
     public void cargarFiltro() {
-       
+
         if (txtBusqueda.getText().length() > 0) {
             switch (this.cmbBusqueda.getSelectedIndex()) {
                 case 0:
@@ -83,64 +83,56 @@ public class PanelArticulos extends javax.swing.JDialog {
                     filtro = " where descripcion like '%" + txtBusqueda.getText() + "%'";
                     break;
                 case 3:
-                     filtro = " where marca like '%" + txtBusqueda.getText() + "%'";
+                    filtro = " where marca like '%" + txtBusqueda.getText() + "%'";
                     break;
                 case 4:
-                     try{
-                         if(validaciones.vDouble(this.txtBusqueda.getText())){
-                            filtro = " where stock <= " + txtBusqueda.getText() ;
-                         }
-                         else{
-                             JOptionPane.showMessageDialog(this, "Parametros de busqueda Incorrectos");
-                         }
-                     }
-                     catch(Exception ex){
-                         
-                     }
-                    break;
+                     try {
+                    if (validaciones.vDouble(this.txtBusqueda.getText())) {
+                        filtro = " where stock <= " + txtBusqueda.getText();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Parametros de busqueda Incorrectos");
+                    }
+                } catch (Exception ex) {
+
+                }
+                break;
                 case 5:
-                      try{
-                         if(validaciones.vDouble(this.txtBusqueda.getText())){
-                            filtro = " where stock >= " + txtBusqueda.getText() ;
-                         }
-                         else{
-                             JOptionPane.showMessageDialog(this, "Parametros de busqueda Incorrectos");
-                         }
-                     }
-                     catch(Exception ex){
-                         
-                     }
-                    break;
+                      try {
+                    if (validaciones.vDouble(this.txtBusqueda.getText())) {
+                        filtro = " where stock >= " + txtBusqueda.getText();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Parametros de busqueda Incorrectos");
+                    }
+                } catch (Exception ex) {
+
+                }
+                break;
                 case 6:
-                    try{
-                         if(validaciones.vDouble(this.txtBusqueda.getText())){
-                            filtro = " where pvp <= " + txtBusqueda.getText() ;
-                         }
-                         else{
-                             JOptionPane.showMessageDialog(this, "Parametros de busqueda Incorrectos");
-                         }
-                     }
-                     catch(Exception ex){
-                         
-                     }
-                    break;
+                    try {
+                    if (validaciones.vDouble(this.txtBusqueda.getText())) {
+                        filtro = " where pvp <= " + txtBusqueda.getText();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Parametros de busqueda Incorrectos");
+                    }
+                } catch (Exception ex) {
+
+                }
+                break;
                 case 7:
-                    try{
-                         if(validaciones.vDouble(this.txtBusqueda.getText())){
-                            filtro = " where pvp >= " + txtBusqueda.getText() ;
-                         }
-                         else{
-                             JOptionPane.showMessageDialog(this, "Parametros de busqueda Incorrectos");
-                         }
-                     }
-                     catch(Exception ex){
-                         
-                     }
-                    break;
+                    try {
+                    if (validaciones.vDouble(this.txtBusqueda.getText())) {
+                        filtro = " where pvp >= " + txtBusqueda.getText();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Parametros de busqueda Incorrectos");
+                    }
+                } catch (Exception ex) {
+
+                }
+                break;
                 default:
                     throw new AssertionError();
             }
-            
+
         } else {
             filtro = "";
         }
@@ -256,6 +248,7 @@ public class PanelArticulos extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("PANEL DE ADMINISTRACION DE ARTICULOS");
 
         jToolBar1.setRollover(true);
 
@@ -315,12 +308,15 @@ public class PanelArticulos extends javax.swing.JDialog {
         jToolBar1.add(btEliminar);
         jToolBar1.add(jSeparator1);
 
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setText("Busquedas:");
         jToolBar1.add(jLabel2);
 
+        cmbBusqueda.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         cmbBusqueda.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Defecto:", "Referencia:", "Descripción:", "marca:", "stock <= :", "stock >= :", "precio <= :", "precio >= :" }));
         jToolBar1.add(cmbBusqueda);
 
+        txtBusqueda.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtBusqueda.setToolTipText("");
         txtBusqueda.setMinimumSize(new java.awt.Dimension(150, 35));
         txtBusqueda.setPreferredSize(new java.awt.Dimension(250, 35));
@@ -452,9 +448,11 @@ public class PanelArticulos extends javax.swing.JDialog {
             Articulo art = new Articulo(codigo);
             int resp = JOptionPane.showConfirmDialog(null, "¿Esta seguro?", "Alerta!", JOptionPane.YES_NO_OPTION);
             if (resp == JOptionPane.OK_OPTION) {
-                art.eliminar();
-                art = null;
-                this.modelo.removeRow(fila);
+                if (art.eliminar()) {
+                    art = null;
+                    this.modelo.removeRow(fila);
+                }
+
             }
         }
     }//GEN-LAST:event_btEliminarActionPerformed

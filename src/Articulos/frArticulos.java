@@ -22,7 +22,7 @@ import validaciones.Verificador;
 
 /**
  *
- * @author Familia
+* @author Ronal Arrayaza DAM1C
  */
 public class frArticulos extends javax.swing.JDialog {
 
@@ -45,6 +45,7 @@ public class frArticulos extends javax.swing.JDialog {
         this.txtStock.setInputVerifier(new Verificador(this.lStock));
 
         if (!operacion) {
+            this.setTitle("ACTUALIZACION DE ARTICULOS");
             this.txtReferencia.setEnabled(false);
             this.txtReferencia.setText(art.getReferencia());
             this.txtANotas.setText(art.getNotas());
@@ -56,6 +57,7 @@ public class frArticulos extends javax.swing.JDialog {
             this.lFamilia.setText(art.getFa().getNombre());
             this.cargarImg("/Imagenes/" + art.getRutaImg(), true);
         } else {
+            this.setTitle("REGISTRO DE ARTICULOS");
             this.cargarImg("/Imagenes/predeArt.png", true);
             art.setRutaImg("predeArt.png");
         }
@@ -177,6 +179,9 @@ public class frArticulos extends javax.swing.JDialog {
                 retorno = false;
             }
         }
+        else{
+            return true;
+        }
         return retorno;
     }
 
@@ -213,11 +218,13 @@ public class frArticulos extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
+        lPvp.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lPvp.setText("P.V.P.:");
 
-        lFamilia.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lFamilia.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         lFamilia.setText("Familia");
 
+        txtReferencia.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtReferencia.setToolTipText("REFERENCIA");
         txtReferencia.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
@@ -226,9 +233,11 @@ public class frArticulos extends javax.swing.JDialog {
         });
 
         txtANotas.setColumns(20);
+        txtANotas.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtANotas.setRows(5);
         jScrollPane1.setViewportView(txtANotas);
 
+        txtPvp.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtPvp.setText("0");
         txtPvp.setToolTipText("PVP NUMERICO");
         txtPvp.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -242,8 +251,10 @@ public class frArticulos extends javax.swing.JDialog {
             }
         });
 
+        lStock.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lStock.setText("Stocks:");
 
+        btImg.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btImg.setText("Localizar IMG");
         btImg.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -251,6 +262,7 @@ public class frArticulos extends javax.swing.JDialog {
             }
         });
 
+        btAceptar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btAceptar.setText("Aceptar");
         btAceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -258,6 +270,7 @@ public class frArticulos extends javax.swing.JDialog {
             }
         });
 
+        btCancelar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btCancelar.setText("Cancelar");
         btCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -265,13 +278,21 @@ public class frArticulos extends javax.swing.JDialog {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel1.setText("Descripción");
 
+        txtDescripcion.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setText("Marca:");
 
+        lFamiliav.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lFamiliav.setText("Familia:");
 
+        txtMarca.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
         txtFamilia.setEditable(false);
+        txtFamilia.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtFamilia.setToolTipText("FAMILIA");
         txtFamilia.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
@@ -289,6 +310,7 @@ public class frArticulos extends javax.swing.JDialog {
             }
         });
 
+        lReferencia.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lReferencia.setText("Referencia:");
 
         btFamilia.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/edit.png"))); // NOI18N
@@ -301,8 +323,10 @@ public class frArticulos extends javax.swing.JDialog {
             }
         });
 
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel7.setText("Notas:");
 
+        txtStock.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtStock.setText("0");
         txtStock.setToolTipText("STOCK ENTERO");
         txtStock.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -316,10 +340,12 @@ public class frArticulos extends javax.swing.JDialog {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btImg, javax.swing.GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE)
-                    .addComponent(lImg, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lImg, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(btImg, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lPvp, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -337,15 +363,13 @@ public class frArticulos extends javax.swing.JDialog {
                         .addGap(1, 1, 1)
                         .addComponent(txtMarca))
                     .addComponent(txtReferencia)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(lFamilia, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(txtFamilia, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btFamilia, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 282, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lFamilia, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 274, Short.MAX_VALUE)
                     .addComponent(txtStock, javax.swing.GroupLayout.Alignment.LEADING))
                 .addGap(28, 28, 28))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -399,7 +423,7 @@ public class frArticulos extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btAceptar)
                     .addComponent(btCancelar))
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();

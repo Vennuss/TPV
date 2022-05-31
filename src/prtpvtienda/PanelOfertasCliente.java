@@ -17,7 +17,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author Ronal Arrayaza Gonzales
+ * @author Ronal Arrayaza DAM1C
  */
 public class PanelOfertasCliente extends javax.swing.JDialog {
 

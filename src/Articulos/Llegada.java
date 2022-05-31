@@ -8,7 +8,7 @@ import java.util.Date;
 
 /**
  *
- * @author admin
+ * @author Ronal Arrayaza DAM1C
  */
 public class Llegada implements Maqueta {
    private String id;
@@ -88,8 +88,8 @@ public class Llegada implements Maqueta {
         
     }
     @Override
-    public void eliminar(){
-        
+    public boolean eliminar(){
+        return false;
     }
     @Override
     public void actualizar(){

@@ -4,14 +4,11 @@
  */
 package Articulos;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
 /**
  *
- * @author admin
+* @author Ronal Arrayaza DAM1C
  */
 public class frFamilias extends javax.swing.JDialog {
 
@@ -51,9 +48,9 @@ public class frFamilias extends javax.swing.JDialog {
         this.fa = fa;
         this.operacion = operacion;
         if (operacion) {
-            this.setTitle("Registro de Nuevas Familias");
+            this.setTitle("REGISTRO DE FAMILIAS");
         } else {
-            this.setTitle("Actualizacion de Familias");
+            this.setTitle("ACTUALIZACION DE FAMILIAS");
             this.txtNombre.setText(fa.getNombre());
             this.txtNotas.setText(fa.getNotas());
             this.lID.setText(String.valueOf(fa.getId()));
@@ -81,10 +78,15 @@ public class frFamilias extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel6.setText("Nombre(*):");
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel1.setText("Notas:");
 
+        txtNombre.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        btAceptar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btAceptar.setText("Aceptar");
         btAceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -92,6 +94,7 @@ public class frFamilias extends javax.swing.JDialog {
             }
         });
 
+        btCancelar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btCancelar.setText("Cancelar");
         btCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -101,7 +104,7 @@ public class frFamilias extends javax.swing.JDialog {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("ID"));
 
-        lID.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lID.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         lID.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lID.setText("ID");
         lID.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -121,6 +124,7 @@ public class frFamilias extends javax.swing.JDialog {
         );
 
         txtNotas.setColumns(20);
+        txtNotas.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtNotas.setRows(5);
         jScrollPane1.setViewportView(txtNotas);
 

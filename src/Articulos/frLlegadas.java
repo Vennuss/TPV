@@ -6,7 +6,7 @@ package Articulos;
 
 /**
  *
- * @author admin
+* @author Ronal Arrayaza DAM1C
  */
 public class frLlegadas extends javax.swing.JFrame {
 

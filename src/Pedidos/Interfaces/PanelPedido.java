@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package Pedidos.Interfaces;
 
 import Pedidos.*;
@@ -287,7 +283,6 @@ public class PanelPedido extends javax.swing.JFrame {
             
             int id = Integer.parseInt(String.valueOf(jTResultados.getValueAt(fila, 0)));
             System.out.println("El codigo es:" + id);
-//            Articulo art=new Articulo(codigo);
             Pedido pd = new Pedido(id);
             int resp = JOptionPane.showConfirmDialog(null, "¿Esta seguro?", "Alerta!", JOptionPane.YES_NO_OPTION);
             if (resp == JOptionPane.OK_OPTION) {
@@ -302,18 +297,11 @@ public class PanelPedido extends javax.swing.JFrame {
      * @param evt 
      */
     private void jBEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEditActionPerformed
-        // TODO add your handling code here:
         int fila = jTResultados.getSelectedRow();
         if (this.jTResultados.getSelectedRow() != -1) {            
             int id = Integer.parseInt(String.valueOf(jTResultados.getValueAt(fila, 0)));
             System.out.println("El codigo es:" + id);
             Pedido pd = new Pedido(id);
-//            Articulo art=new Articulo(codigo);
-//            art.recuperaDatos();
-            // this.setVisible(false);
-            /*frFamilia fa=new frFamilia(fami, false);
-            // JDialog dial=(JDialog)fa;
-            fa.setVisible(true);*/
             PanelCMPedido dialog = new PanelCMPedido(pd);
             dialog.setVisible(true);          
         } else {
@@ -468,6 +456,7 @@ public class PanelPedido extends javax.swing.JFrame {
                 Object nuev[] = {id, fecha, formaPago};
                 tm.addRow(nuev);
             }
+            bd.cerrarConexion();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }

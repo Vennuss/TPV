@@ -9,7 +9,7 @@ import validaciones.Verificador;
 
 /**
  *
- * @author admin
+ * @author Ronal Arrayaza DAM1C
  */
 public class frRegistro extends javax.swing.JDialog {
     

@@ -50,7 +50,7 @@ public class ArticuloPedido {
      * Descuento a aplicar entre (0% y 100%) en numeros enteros
      * precio *= (100.00 - this.descuento) / 100.00;
      */
-    private int descuento = 0;
+    private double descuento = 0;
 
     
     /**
@@ -79,7 +79,7 @@ public class ArticuloPedido {
      * @param _descuento
      * @throws SQLException 
      */
-    public ArticuloPedido(String _articulo, int _pedido, int _cantidad, int _descuento) throws SQLException{
+    public ArticuloPedido(String _articulo, int _pedido, int _cantidad, double _descuento) throws SQLException{
         this.articuloRef = _articulo;
         this.pedidoId = _pedido;
         this.cantidad = _cantidad;
@@ -91,11 +91,10 @@ public class ArticuloPedido {
      * Recupera informacion de un articulo que ya estaba en un pedido.
      * @param _articulo
      * @param _pedido
-     * @throws SQLException
      * @see recuperarDatos()
      * @see setArticuloPrecio()
      */
-    public ArticuloPedido(String _articulo, int _pedido) throws SQLException{
+    public ArticuloPedido(String _articulo, int _pedido){
         this.articuloRef = _articulo;
         this.pedidoId = _pedido;
         recuperarDatos();
@@ -106,10 +105,9 @@ public class ArticuloPedido {
      * Pasa de Articulo a ArticuloPedido con su cantidad y su descuento.
      * @param _articulo
      * @param _cant
-     * @param _dto
-     * @throws SQLException 
+     * @param _dto 
      */
-    public ArticuloPedido(Articulo _articulo, int _cant, int _dto) throws SQLException{
+    public ArticuloPedido(Articulo _articulo, int _cant, double _dto){
         this.articuloRef = _articulo.getReferencia();
         this.cantidad = _cant;
         this.descuento = _dto;
@@ -151,7 +149,7 @@ public class ArticuloPedido {
         return cantidad;
     }
 
-    public int getDescuento() {
+    public double getDescuento() {
         return descuento;
     }
 
@@ -176,17 +174,17 @@ public class ArticuloPedido {
     /**
      * Llama a la Base de Datos para recuperar el precio del articulo
      * y se lo aplica a articuloPrecio.
-     * @throws SQLException
      * @see articuloPrecio
      * @see bd
      */
-    public void setArticuloPrecio() throws SQLException {
+    public final void setArticuloPrecio() {
         String sql = "select PVP from articulos where ref = '" + this.articuloRef + "';";
         ResultSet rs = bd.Consulta(sql);
         try{
             while (rs.next()) {
                 this.articuloPrecio = (double) rs.getLong("pvp");
             }
+            bd.cerrarConexion();
         }
         catch(SQLException ex){
             System.out.println(ex.getCause());
@@ -223,15 +221,16 @@ public class ArticuloPedido {
      * Tiene que ser un articulo ya añadido a un pedido en la tabla "Contiene"
      * @see bd
      */
-    public void recuperarDatos() {
+    public final void recuperarDatos() {
         String sql = "select * from contiene where articulosRef = '" + this.articuloRef + "' and pedidosId = " + this.pedidoId + " ;";
             // Informamos que la conexión es correcta
             try {
-               ResultSet rs = bd.Consulta(sql);
+                ResultSet rs = bd.Consulta(sql);
                 while (rs.next()) {
                     this.cantidad = rs.getInt("cantidad");
                     this.precio = (double) rs.getLong("precio");
                 }
+                bd.cerrarConexion();
             } catch (SQLException ex) {
                 System.out.println(ex.getCause());
             }
@@ -248,6 +247,9 @@ public class ArticuloPedido {
         String sql = "insert into contiene VALUES('" + this.articuloRef + "'," + this.pedidoId + "," + this.cantidad + "," + this.precio + ");";
         try {
             int nr = bd.Sentencia(sql);
+            System.out.println("numero de registros actualizados:" + nr);
+            sql = "update Articulos set stock = stock - " + this.cantidad + " where ref = '" + this.articuloRef + "';";
+            nr = bd.Sentencia(sql);
             System.out.println("numero de registros actualizados:" + nr);
         } catch (Exception ex) {
             System.out.println("Error de Registro");

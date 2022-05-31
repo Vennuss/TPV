@@ -3,7 +3,11 @@ package Pedidos.Interfaces;
 import Pedidos.ArticuloPedido;
 import Pedidos.Carrito;
 import Persona.Cliente;
+import java.awt.Image;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
@@ -25,6 +29,7 @@ public class PanelCarrito extends javax.swing.JFrame {
      */
     public PanelCarrito(final Cliente cliente) {
         initComponents();
+        cargarIMG("/Imagenes/delete.png",jBDel);
         cliente.recuperaDatos();
         System.out.println(cliente.getDni());
         carro = new Carrito(cliente);
@@ -51,6 +56,18 @@ public class PanelCarrito extends javax.swing.JFrame {
     }
     
     /**
+     * 
+     * @param url: String img
+     * @param boton: JButton al que aplicarle
+     */
+    private void cargarIMG(String url, JButton boton) {
+        
+        ImageIcon icon = new ImageIcon(getClass().getResource(url));
+        ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT));
+        boton.setIcon(icono);
+    }
+    
+    /**
      * Añade los Articulos de su cesta a la tabla
      */
     private void refrescar(){
@@ -66,14 +83,14 @@ public class PanelCarrito extends javax.swing.JFrame {
             int cantidad = a.getCantidad();
             double precioDelArticulo = a.getArticuloPrecio();
             double precioTotal = a.getArticuloPrecio() * a.getCantidad();
-            int descuento = a.getDescuento();
+            double descuento = a.getDescuento();
             double precioFinal = a.getPrecio();
             
             Object nuev[] = {articulo, cantidad, precioDelArticulo, precioTotal, descuento, precioFinal};
             tm.addRow(nuev);
             PFinal += precioFinal;
         }
-        jTPrecio.setText(Double.toString(PFinal));
+        jTPrecio.setText(String.format("%.02f", PFinal));
         if(carro.getArticulos().size() <= 0) jBFin.setEnabled(false);
         else jBFin.setEnabled(true);
     }
@@ -98,6 +115,7 @@ public class PanelCarrito extends javax.swing.JFrame {
         jTPrecio = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jBFin = new javax.swing.JButton();
+        jBDel = new javax.swing.JButton();
 
         jLabel2.setText("jLabel2");
 
@@ -144,10 +162,10 @@ public class PanelCarrito extends javax.swing.JFrame {
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class, java.lang.Integer.class, java.lang.Double.class
+                java.lang.String.class, java.lang.Integer.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class, java.lang.Double.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, true, false, true
+                false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -197,6 +215,15 @@ public class PanelCarrito extends javax.swing.JFrame {
             }
         });
 
+        jBDel.setMaximumSize(new java.awt.Dimension(40, 40));
+        jBDel.setMinimumSize(new java.awt.Dimension(40, 40));
+        jBDel.setPreferredSize(new java.awt.Dimension(40, 40));
+        jBDel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBDelActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -207,7 +234,9 @@ public class PanelCarrito extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jCBPago, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jCBPago, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jBDel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1088, Short.MAX_VALUE)
@@ -225,7 +254,10 @@ public class PanelCarrito extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jCBPago, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jCBPago, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jBDel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 421, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -265,6 +297,20 @@ public class PanelCarrito extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jBFinActionPerformed
 
+    private void jBDelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBDelActionPerformed
+        int fila = this.jTAP.getSelectedRow();
+        System.out.println("Fila seleccionada es" + fila);
+        
+        if (this.jTAP.getSelectedRow() != -1) {
+            int resp = JOptionPane.showConfirmDialog(null, "¿Esta seguro?", "Alerta!", JOptionPane.YES_NO_OPTION);
+            if (resp == JOptionPane.OK_OPTION) {
+                carro.eliminar(String.valueOf(jTAP.getValueAt(fila, 0)));
+                carro.delArticulo(fila);
+                refrescar();
+            }
+        }else JOptionPane.showMessageDialog(this, "Seleccione un campo que eliminar.");
+    }//GEN-LAST:event_jBDelActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -301,6 +347,7 @@ public class PanelCarrito extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jBDel;
     private javax.swing.JButton jBFin;
     private javax.swing.JComboBox<String> jCBPago;
     private javax.swing.JLabel jLabel1;

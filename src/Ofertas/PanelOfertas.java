@@ -21,7 +21,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author Familia
+ * @author Ronal Arrayaza DAM1C
  */
 public class PanelOfertas extends javax.swing.JDialog {
 
@@ -139,7 +139,7 @@ public class PanelOfertas extends javax.swing.JDialog {
         DefaultTableModel tm = (DefaultTableModel) this.tOfertas.getModel();
         this.tOfertas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        String sql = "select * from ofertas" + filtro;
+        String sql = "select id, nombre, descripcion, fechaini, fechafin from ofertas" + filtro;
         try {
 
             ResultSet rs = bd.Consulta(sql);
@@ -149,9 +149,9 @@ public class PanelOfertas extends javax.swing.JDialog {
                 String descripcion = rs.getString("descripcion");
                 Date fechaIni = rs.getDate("fechaini");
                 Date fechaFin = rs.getDate("fechafin");
-                boolean vip = rs.getBoolean("vip");
+               // boolean vip = rs.getBoolean("vip");
 
-                Object nuev[] = {id, nombre, descripcion, fomatoFecha.format(fechaIni), fomatoFecha.format(fechaFin), vip};
+                Object nuev[] = {id, nombre, descripcion, fomatoFecha.format(fechaIni), fomatoFecha.format(fechaFin)};
                 tm.addRow(nuev);
             }
             bd.cerrarConexion();
@@ -166,17 +166,16 @@ public class PanelOfertas extends javax.swing.JDialog {
             modelo = (new DefaultTableModel(
                     null, new String[]{
                         "ID", "Nombre",
-                        "Descripción", "FechaIni", "FechaFin", "VIP"}) {
+                        "Descripción", "FechaIni", "FechaFin"}) {
                 Class[] types = new Class[]{
                     java.lang.Integer.class,
                     java.lang.String.class,
                     java.lang.String.class,
                     java.lang.String.class,
-                    java.lang.String.class,
-                    java.lang.Boolean.class
+                    java.lang.String.class
                 };
                 boolean[] canEdit = new boolean[]{
-                    false, false, false, false, false, false
+                    false, false, false, false, false
                 };
 
                 @Override
@@ -228,6 +227,7 @@ public class PanelOfertas extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("PANEL DE ADMINISTRACION DE OFERTAS");
 
         tOfertas.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         tOfertas.setModel(new javax.swing.table.DefaultTableModel(
@@ -300,12 +300,15 @@ public class PanelOfertas extends javax.swing.JDialog {
         jToolBar1.add(btEliminar);
         jToolBar1.add(jSeparator1);
 
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setText("Busquedas:");
         jToolBar1.add(jLabel2);
 
+        cmbBusqueda.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         cmbBusqueda.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Defecto:", "Nombre:", "Descripción:" }));
         jToolBar1.add(cmbBusqueda);
 
+        txtBusqueda.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtBusqueda.setToolTipText("");
         txtBusqueda.setMinimumSize(new java.awt.Dimension(150, 35));
         txtBusqueda.setPreferredSize(new java.awt.Dimension(250, 35));
@@ -420,8 +423,8 @@ public class PanelOfertas extends javax.swing.JDialog {
                 Date fechaIni = ofertas.getFechaIni();
                 Date fechaFin = ofertas.getFechaFin();
                 modelo.setValueAt(this.fomatoFecha.format(fechaIni), fila, 3);
-                modelo.setValueAt(this.fomatoFecha.format(fechaIni), fila, 4);
-                modelo.setValueAt(ofertas.isVip(), fila, 5);
+                modelo.setValueAt(this.fomatoFecha.format(fechaFin), fila, 4);
+               // modelo.setValueAt(ofertas.isVip(), fila, 5);
 
             } else {
             }

@@ -224,6 +224,7 @@ public class PanelCMPedido extends javax.swing.JFrame {
                 _Pf += precio;
                 jTPF.setText(Double.toString(_Pf));
             }
+            bd.cerrarConexion();
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }

@@ -22,7 +22,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author Familia
+ * @author Ronal Arrayaza DAM1C
  */
 public class PanelOfertasCli extends javax.swing.JFrame {
 
@@ -82,16 +82,16 @@ public class PanelOfertasCli extends javax.swing.JFrame {
 
             //select * from articulos a, aplican n WHERE n.ofertasId=29 and a.ref=n.articulosRef and (a.ref like '%REF%' or a.descripcion like '%REF%');
             if (this.txtArticulos.getText().length() > 0) {
-                sql = "select * from articulos a, aplican n WHERE n.ofertasId=" + this.txtOfertas.getText() + " and a.ref=n.articulosRef ";
-            } else {
                 sql = "select * from articulos a, aplican n WHERE n.ofertasId=" + this.txtOfertas.getText()
                         + " and a.ref=n.articulosRef and (a.ref like '%" + this.txtArticulos.getText()
                         + "%' or a.descripcion like '%" + this.txtArticulos.getText() + "%')";
+            } else {
+                
+                sql = "select * from articulos a, aplican n WHERE n.ofertasId=" + this.txtOfertas.getText() + " and a.ref=n.articulosRef ";
             }
         } else {
-
             if (this.txtArticulos.getText().length() > 0) {
-                sql = "select * from articulos where ref like '%" + this.txtArticulos + "%' or ref like '%" + this.txtArticulos + "%'";
+                sql = "select * from articulos where ref like '%" + this.txtArticulos.getText() + "%' or ref like '%" + this.txtArticulos.getText() + "%'";
             } else {
                 sql = "select * from articulos";
             }
@@ -177,9 +177,9 @@ public class PanelOfertasCli extends javax.swing.JFrame {
         btPerfil.setText("PERFIL");
         btPerfil.setFocusable(false);
         btPerfil.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btPerfil.setMaximumSize(new java.awt.Dimension(120, 45));
-        btPerfil.setMinimumSize(new java.awt.Dimension(120, 45));
-        btPerfil.setPreferredSize(new java.awt.Dimension(120, 45));
+        btPerfil.setMaximumSize(new java.awt.Dimension(160, 45));
+        btPerfil.setMinimumSize(new java.awt.Dimension(160, 45));
+        btPerfil.setPreferredSize(new java.awt.Dimension(160, 45));
         btPerfil.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btPerfil.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -197,9 +197,9 @@ public class PanelOfertasCli extends javax.swing.JFrame {
         btPedidos.setText("PEDIDOS");
         btPedidos.setFocusable(false);
         btPedidos.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btPedidos.setMaximumSize(new java.awt.Dimension(120, 45));
-        btPedidos.setMinimumSize(new java.awt.Dimension(120, 45));
-        btPedidos.setPreferredSize(new java.awt.Dimension(120, 45));
+        btPedidos.setMaximumSize(new java.awt.Dimension(160, 45));
+        btPedidos.setMinimumSize(new java.awt.Dimension(160, 45));
+        btPedidos.setPreferredSize(new java.awt.Dimension(160, 45));
         btPedidos.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btPedidos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -211,9 +211,9 @@ public class PanelOfertasCli extends javax.swing.JFrame {
         btCesto.setText("CESTA");
         btCesto.setFocusable(false);
         btCesto.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btCesto.setMaximumSize(new java.awt.Dimension(120, 45));
-        btCesto.setMinimumSize(new java.awt.Dimension(120, 45));
-        btCesto.setPreferredSize(new java.awt.Dimension(120, 45));
+        btCesto.setMaximumSize(new java.awt.Dimension(160, 45));
+        btCesto.setMinimumSize(new java.awt.Dimension(160, 45));
+        btCesto.setPreferredSize(new java.awt.Dimension(160, 45));
         btCesto.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         btCesto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -239,7 +239,6 @@ public class PanelOfertasCli extends javax.swing.JFrame {
         });
 
         lDescricpcion.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lDescricpcion.setText("jLabel6");
 
         pnVisor.setAutoscrolls(true);
         pnVisor.setMinimumSize(new java.awt.Dimension(300, 300));

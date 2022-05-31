@@ -55,13 +55,15 @@ public class Cliente extends Persona implements Maqueta{
     }
 
     @Override
-    public void eliminar() {
+    public boolean eliminar() {
         String sql = "delete from clientes where dni='" + this.getDni() + "'";
         int resultado = bd.Sentencia(sql);
         if (resultado > 0) {
             JOptionPane.showMessageDialog(null, "La operacion se ha realizado con Exito");
+            return true;
         } else {
             JOptionPane.showMessageDialog(null, "No se ha podido realizar la operacion");
+            return false;
         }
     }
 

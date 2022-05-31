@@ -11,7 +11,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author Familia
+ * @author Ronal Arrayaza DAM1C
  */
 public class Aplican implements Maqueta {
 
@@ -97,13 +97,15 @@ public class Aplican implements Maqueta {
     }
 
     @Override
-    public void eliminar() {
+    public boolean eliminar() {
         String sql = "delete from aplican where ofertasId=" + this.getOfertasId() + " and articulosRef='" + this.getReferencia() + "'";
         int resultado = bd.Sentencia(sql);
         if (resultado > 0) {
             JOptionPane.showMessageDialog(null, "La operacion se ha realizado con Exito");
+            return true;
         } else {
             JOptionPane.showMessageDialog(null, "No se ha podido realizar la operacion");
+            return false;
         }
     }
 

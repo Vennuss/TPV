@@ -4,15 +4,16 @@
  */
 package Articulos;
 
+import Maqueta.Maqueta;
 import bd.bd;
 import java.sql.ResultSet;
 import javax.swing.JOptionPane;
 
 /**
  *
- * @author admin
+ * @author Ronal Arrayaza DAM1C
  */
-public class Familia {
+public class Familia implements Maqueta {
 
     private int id;
     private String nombre;
@@ -62,6 +63,7 @@ public class Familia {
     /*
     
      */
+    @Override
     public void recuperaDatos() {
         String sql = "select * from familias where id=" + this.getId();
         try {
@@ -78,6 +80,7 @@ public class Familia {
         }
     }
 
+    @Override
     public void registrar() {
         String sql = "insert into familias(nombre, notas) values('" + this.getNombre() + "','" + this.getNotas() + "')";
         int resultado = bd.Sentencia(sql);
@@ -87,22 +90,25 @@ public class Familia {
         }
     }
 
-    public void eliminar() {
+    @Override
+    public boolean eliminar() {
         String sql = "delete from familias where id=" + this.getId();
         int resultado = bd.Sentencia(sql);
         if (resultado > 0) {
             JOptionPane.showMessageDialog(null, "La operacion se ha realizado con Exito");
+            return true;
         } else {
             JOptionPane.showMessageDialog(null, "No se ha podido realizar la operacion");
+            return false;
         }
     }
 
+    @Override
     public void actualizar() {
         String sql = "update familias set nombre='" + this.getNombre() + "', notas='" + this.getNotas() + "' where id=" + this.getId();
         int resultado = bd.Sentencia(sql);
         if (resultado > 0) {
             JOptionPane.showMessageDialog(null, "Registro Exitoso");
-            System.out.println("Se ha detenido y no sale");
         }
     }
 }

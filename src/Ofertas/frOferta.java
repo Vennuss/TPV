@@ -22,7 +22,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author Familia
+ * @author Ronal Arrayaza DAM1C
  */
 public class frOferta extends javax.swing.JDialog {
 
@@ -54,6 +54,7 @@ public class frOferta extends javax.swing.JDialog {
     public frOferta(Oferta ofer, boolean operacion, java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        this.chVip.setVisible(false);
         Modelo();
         this.ofer = ofer;
         this.operacion = operacion;
@@ -187,7 +188,7 @@ public class frOferta extends javax.swing.JDialog {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("ID Oferta"));
 
-        lId.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lId.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         lId.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lId.setText("ID");
 
@@ -205,26 +206,37 @@ public class frOferta extends javax.swing.JDialog {
             .addComponent(lId, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
         );
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel1.setText("Nombre:");
 
+        txtNombre.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        txtFechaFin.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtFechaFin.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtFechaFinFocusLost(evt);
             }
         });
 
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setText("Descripción:");
 
+        txtDescripcion.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel3.setText("Fecha Inicio:");
 
+        txtFechaIni.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtFechaIni.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtFechaIniFocusLost(evt);
             }
         });
 
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel4.setText("Fecha Fin:");
 
+        chVip.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         chVip.setText("Solo para Vip");
 
         tLineas.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -240,6 +252,7 @@ public class frOferta extends javax.swing.JDialog {
         tLineas.setRowMargin(1);
         jScrollPane1.setViewportView(tLineas);
 
+        btAceptar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btAceptar.setText("Aceptar");
         btAceptar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -247,6 +260,7 @@ public class frOferta extends javax.swing.JDialog {
             }
         });
 
+        btCancelar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         btCancelar.setText("Cancelar");
         btCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

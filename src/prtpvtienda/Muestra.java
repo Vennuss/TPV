@@ -13,7 +13,7 @@ import javax.swing.JButton;
 
 /**
  *
- * @author admin
+ * @author Ronal Arrayaza DAM1C
  */
 public final class Muestra extends javax.swing.JPanel {
 
