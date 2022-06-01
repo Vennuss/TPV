@@ -40,11 +40,11 @@ public class PanelClientes extends javax.swing.JDialog {
             this.btSele.setVisible(false);
         }
         recuperarDatos();
-        cargarIMG("/Imagenes/add.png", this.btAñadir);
-        cargarIMG("/Imagenes/edit.png", this.btModificar);
-        cargarIMG("/Imagenes/delete.png", this.btEliminar);
-        cargarIMG("/Imagenes/exit.png", this.btSalir);
-        cargarIMG("/Imagenes/sele.png", this.btSele);
+        cargarIcono("/Imagenes/add.png", this.btAñadir);
+        cargarIcono("/Imagenes/edit.png", this.btModificar);
+        cargarIcono("/Imagenes/delete.png", this.btEliminar);
+        cargarIcono("/Imagenes/exit.png", this.btSalir);
+        cargarIcono("/Imagenes/sele.png", this.btSele);
 
         this.txtBusqueda.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -110,7 +110,7 @@ public class PanelClientes extends javax.swing.JDialog {
         }
     }
     
-    private void cargarIMG(String url, JButton boton) {
+    private void cargarIcono(String url, JButton boton) {
 
         ImageIcon icon = new ImageIcon(getClass().getResource(url));
         ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT));

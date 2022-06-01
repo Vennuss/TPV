@@ -4,11 +4,12 @@
  */
 package Articulos;
 
+import bd.Systema;
 import bd.bd;
 import java.awt.Color;
 import java.awt.Image;
 import java.io.File;
-import java.net.URL;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.sql.ResultSet;
@@ -55,7 +56,13 @@ public class frArticulos extends javax.swing.JDialog {
             this.txtMarca.setText(art.getMarca());
             this.txtFamilia.setText(String.valueOf(art.getFa().getId()));
             this.lFamilia.setText(art.getFa().getNombre());
-            this.cargarImg("/Imagenes/" + art.getRutaImg(), true);
+            if(art.getRutaImg().equals("predeArt.png")){
+                this.cargarImg("/Imagenes/predeArt.png", true);
+            }
+            else{
+                this.cargarImg(Systema.rutaArticulos + art.getRutaImg(), false);
+            }
+            
         } else {
             this.setTitle("REGISTRO DE ARTICULOS");
             this.cargarImg("/Imagenes/predeArt.png", true);
@@ -67,34 +74,20 @@ public class frArticulos extends javax.swing.JDialog {
         if (url.length() > 0) {
             String nombre = "";
             try {
-                URL main = getClass().getResource("/Imagenes/");
-
-                if (!"file".equalsIgnoreCase(main.getProtocol())) {
-                    throw new IllegalStateException("Main class is not stored in a file.");
-                }
-                File rutaSis = new File(main.getPath());
-
                 File origen = new File(url);
-                File destino = new File(rutaSis.getParent().replace("%20", " ") + "/Imagenes/" + origen.getName());
+                File destino=new File(Systema.getRutaArticulos()+origen.getName());
                 nombre = origen.getName();
-
                 System.out.println("Ruta origen:" + origen.getAbsolutePath());
                 System.out.println("Ruta Destino:" + destino.getAbsolutePath());
-
-                ///Files.copy(origen.toPath(), destino.toPath(),)
                 System.out.println(destino.getPath());
-
                 if (origen.exists()) {
-                    //origen.renameTo(destino);
                     Files.copy(origen.toPath(), destino.toPath(), StandardCopyOption.REPLACE_EXISTING);
                     nombre = destino.getName();
                 }
-            } catch (Exception ex) {
+            } catch (IOException ex) {
                 System.out.println("Error:" + ex.getMessage());
             }
-            if (nombre.equals("")) {
-
-            } else {
+            if (!nombre.equals("")) {
                 this.art.setRutaImg(nombre);
             }
         }

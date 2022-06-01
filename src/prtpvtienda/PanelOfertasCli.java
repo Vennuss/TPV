@@ -10,6 +10,7 @@ import Pedidos.Interfaces.PanelCarrito;
 import Pedidos.Interfaces.PanelPedido;
 import Persona.Cliente;
 import Persona.frPerfil;
+import bd.Systema;
 import bd.bd;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -36,16 +37,17 @@ public class PanelOfertasCli extends javax.swing.JFrame {
         this.cliente = cli;
         this.cargarPerfil();
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        cargarIMG("/Imagenes/perfil.png", this.btPerfil);
-        cargarIMG("/Imagenes/lista.png", this.btPedidos);
-        cargarIMG("/Imagenes/carrito2.png", this.btCesto);
+        cargarIcono("/Imagenes/perfil.png", this.btPerfil);
+        cargarIcono("/Imagenes/lista.png", this.btPedidos);
+        cargarIcono("/Imagenes/carrito2.png", this.btCesto);
 
-        ImageIcon icon = new ImageIcon(getClass().getResource("/Imagenes/pedido.png"));
-        ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(35, 35, Image.SCALE_DEFAULT));
+        ImageIcon icon = new ImageIcon(getClass().getResource("/Imagenes/lupa.png"));
+        ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(32, 32, Image.SCALE_DEFAULT));
         this.btOfertas.setIcon(icono);
+        this.setIconImage(new ImageIcon(getClass().getResource("/Imagenes/tpv.png")).getImage());
     }
 
-    private void cargarIMG(String url, JButton boton) {
+    private void cargarIcono(String url, JButton boton) {
 
         ImageIcon icon = new ImageIcon(getClass().getResource(url));
         ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(35, 35, Image.SCALE_DEFAULT));
@@ -63,7 +65,14 @@ public class PanelOfertasCli extends javax.swing.JFrame {
         this.lCorreoCli.setText(cliente.getCorreo());
         this.lNombre.setText(cliente.getApellidos() + ", " + cliente.getNombres());
         try {
-            ImageIcon icon = new ImageIcon(getClass().getResource("/Imagenes/" + cliente.getRutaImg()));
+            ImageIcon icon;
+            if(cliente.getRutaImg().equals("predePer.png")){
+                
+                icon = new ImageIcon(getClass().getResource("/Imagenes/predePer.png"));
+            }else{                
+                icon = new ImageIcon(Systema.getRutaClientes() + cliente.getRutaImg());
+            }
+            
 
             ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(this.lbCliImg.getWidth(), this.lbCliImg.getHeight(), Image.SCALE_DEFAULT));
             this.lbCliImg.setIcon(icono);

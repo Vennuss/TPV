@@ -11,6 +11,7 @@ import Pedidos.Interfaces.PanelPedido;
 import Persona.PanelClientes;
 import Persona.PanelUsuarios;
 import Persona.Usuario;
+import bd.Systema;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -25,24 +26,33 @@ public class PanelAdministrativo extends javax.swing.JFrame {
     private Usuario usuario;
     /**
      * Creates new form PanelAdministrativo
+     * @param usuario
      */
     public PanelAdministrativo(Usuario usuario) {
         initComponents();
         this.usuario=usuario;
         this.cargarPerfil();
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        cargarIMG("/Imagenes/avatar.png", this.btClientes);
-        cargarIMG("/Imagenes/paquete.png", this.btArticulos);
-        cargarIMG("/Imagenes/articulos.png", this.btFamilias);
-        cargarIMG("/Imagenes/oferta.png", this.btOfertas);
-        cargarIMG("/Imagenes/lista.png", this.btPedidos);
-        cargarIMG("/Imagenes/clientes.png", this.btUsuarios);
+        cargarIcono("/Imagenes/avatar.png", this.btClientes);
+        cargarIcono("/Imagenes/paquete.png", this.btArticulos);
+        cargarIcono("/Imagenes/articulos.png", this.btFamilias);
+        cargarIcono("/Imagenes/oferta.png", this.btOfertas);
+        cargarIcono("/Imagenes/lista.png", this.btPedidos);
+        cargarIcono("/Imagenes/clientes.png", this.btUsuarios);
+        this.setIconImage(new ImageIcon(getClass().getResource("/Imagenes/tpv.png")).getImage());
     }
     private void cargarPerfil() {
         this.lCorreoCli.setText(usuario.getCorreo());
         this.lNombre.setText(usuario.getApellidos() + ", " + usuario.getNombres());
         try {
-            ImageIcon icon = new ImageIcon(getClass().getResource("/Imagenes/" + usuario.getRutaImg()));
+            ImageIcon icon;
+            if(usuario.getRutaImg().equals("predePer.png")){
+                
+                icon = new ImageIcon(getClass().getResource("/Imagenes/predePer.png"));
+            }else{                
+                icon = new ImageIcon(Systema.getRutaUsuarios()+ usuario.getRutaImg());
+            }
+            //ImageIcon icon = new ImageIcon(Systema.getRutaClientes() + usuario.getRutaImg());
 
             ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(this.lbCliImg.getWidth(), this.lbCliImg.getHeight(), Image.SCALE_DEFAULT));
             this.lbCliImg.setIcon(icono);
@@ -51,7 +61,7 @@ public class PanelAdministrativo extends javax.swing.JFrame {
         }
     }
 
-    private void cargarIMG(String url, JButton boton) {
+    private void cargarIcono(String url, JButton boton) {
 
         ImageIcon icon = new ImageIcon(getClass().getResource(url));
         ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(35, 35, Image.SCALE_DEFAULT));

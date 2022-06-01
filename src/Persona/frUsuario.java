@@ -4,10 +4,10 @@
  */
 package Persona;
 
+import bd.Systema;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import javax.swing.ImageIcon;
@@ -29,11 +29,15 @@ public class frUsuario extends javax.swing.JDialog {
 
     /**
      * Creates new form frUsuario
+     * @param usuario
+     * @param operacion true--> Registro nuevo false-->Actualizacion
+     * @param parent
+     * @param modal
      */
-    public frUsuario(Usuario usu, boolean operacion, java.awt.Frame parent, boolean modal) {
+    public frUsuario(Usuario usuario, boolean operacion, java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        this.usuario = usu;
+        this.usuario = usuario;
         this.operacion = operacion;
         this.txtDni.setInputVerifier(new Verificador(this.lDNI));
         this.txtCorreo.setInputVerifier(new Verificador(this.lCorreo));
@@ -74,19 +78,24 @@ public class frUsuario extends javax.swing.JDialog {
           });*/
         if (!operacion) {
             this.setTitle("ACTUALIZACION DE USUARIOS");
-            this.txtDni.setText(usuario.getDni());
+            this.txtDni.setText(this.usuario.getDni());
             this.txtDni.setEnabled(false);
-            this.txtApellidos.setText(usuario.getApellidos());
-            this.txtNombres.setText(usuario.getNombres());
-            this.txtCorreo.setText(usuario.getCorreo());
-            this.txtApellidos.setText(usuario.getApellidos());
-            this.txtPassword.setText(usuario.getPass());
-            this.txtUsuario.setText(usuario.getLogin());
-            this.cargarImg("/Imagenes/" + usuario.getRutaImg(), true);
+            this.txtApellidos.setText(this.usuario.getApellidos());
+            this.txtNombres.setText(this.usuario.getNombres());
+            this.txtCorreo.setText(this.usuario.getCorreo());
+            this.txtApellidos.setText(this.usuario.getApellidos());
+            this.txtPassword.setText(this.usuario.getPass());
+            this.txtUsuario.setText(this.usuario.getLogin());
+            if(usuario.getRutaImg().equals("predePer.png")){
+                this.cargarImg("/Imagenes/predePer.png", true);
+            }else{
+                this.cargarImg(Systema.getRutaUsuarios()+ this.usuario.getRutaImg(), false);
+            }
+            
         } else {
             this.setTitle("REGISTRO DE USUARIOS");
             this.cargarImg("/Imagenes/predePer.png", true);
-            usu.setRutaImg("predePer.png");
+            this.usuario.setRutaImg("predePer.png");
         }
     }
 
@@ -105,8 +114,30 @@ public class frUsuario extends javax.swing.JDialog {
 
         }
     }
-
     private void validarRuta(String url) {
+        if (url.length() > 0) {
+            String nombre = "";
+            try {
+                File origen = new File(url);
+                File destino=new File(Systema.getRutaUsuarios()+origen.getName());
+                nombre = origen.getName();
+                System.out.println("Ruta origen:" + origen.getAbsolutePath());
+                System.out.println("Ruta Destino:" + destino.getAbsolutePath());
+                System.out.println(destino.getPath());
+                if (origen.exists()) {
+                    Files.copy(origen.toPath(), destino.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    nombre = destino.getName();
+                }
+            } catch (IOException ex) {
+                System.out.println("Error:" + ex.getMessage());
+            }
+            if (!nombre.equals("")) {
+                this.usuario.setRutaImg(nombre);
+            }
+        }
+    }
+
+    /*private void validarRuta(String url) {
         if (url.length() > 0) {
             String nombre = "";
             try {
@@ -138,7 +169,7 @@ public class frUsuario extends javax.swing.JDialog {
                 this.usuario.setRutaImg(nombre);
             }
         }
-    }
+    }*/
 
     public int getResult() {
         return result;

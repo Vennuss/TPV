@@ -4,8 +4,10 @@
  */
 package Persona;
 
+import bd.Systema;
 import java.awt.Image;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
@@ -17,7 +19,7 @@ import validaciones.Verificador;
 
 /**
  *
-* @author Ronal Arrayaza DAM1C
+ * @author Ronal Arrayaza DAM1C
  */
 public class frPerfil extends javax.swing.JDialog {
 
@@ -33,26 +35,18 @@ public class frPerfil extends javax.swing.JDialog {
         initComponents();
         this.cliente = cliente;
         this.txtActual.setInputVerifier(new Verificador(this.lActual, cliente.getPass()));
-        this.txtDni.setText(cliente.getDni());
-        this.txtApellidos.setText(cliente.getApellidos());
-        this.txtNombres.setText(cliente.getNombres());
-        this.txtCorreo.setText(cliente.getCorreo());
-        this.txtApellidos.setText(cliente.getApellidos());
-        this.txtPassword.setText(cliente.getPass());
-        this.cargarImg("/Imagenes/" + cliente.getRutaImg(), true);
-    }
-
-    private void cargarPerfil() {
-        try {
-            ImageIcon icon = new ImageIcon(getClass().getResource("/Imagenes/" + cliente.getRutaImg()));
-
-            ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(this.lImg.getWidth(), this.lImg.getHeight(), Image.SCALE_DEFAULT));
-            this.lImg.setIcon(icono);
-        } catch (Exception ex) {
-
+        this.txtDni.setText(this.cliente.getDni());
+        this.txtApellidos.setText(this.cliente.getApellidos());
+        this.txtNombres.setText(this.cliente.getNombres());
+        this.txtCorreo.setText(this.cliente.getCorreo());
+        this.txtApellidos.setText(this.cliente.getApellidos());
+        this.txtPassword.setText(this.cliente.getPass());
+        if (this.cliente.getRutaImg().equals("predePer.png")) {
+            this.cargarImg("/Imagenes/predePer.png", true);
+        } else {
+            this.cargarImg(Systema.getRutaClientes() + this.cliente.getRutaImg(), false);
         }
     }
-
     private void cargarImg(String url, boolean almacen) {
         try {
             ImageIcon icon;
@@ -69,43 +63,25 @@ public class frPerfil extends javax.swing.JDialog {
         }
     }
 
-    private void validarRuta(String url) {
+   private void validarRuta(String url) {
         if (url.length() > 0) {
             String nombre = "";
             try {
-                URL main = getClass().getResource("/Imagenes/");
-
-                if (!"file".equalsIgnoreCase(main.getProtocol())) {
-                    throw new IllegalStateException("Main class is not stored in a file.");
-                }
-                File rutaSis = new File(main.getPath());
-
                 File origen = new File(url);
-                File destino = new File(rutaSis.getParent().replace("%20", " ") + "/Imagenes/" + origen.getName());
+                File destino=new File(Systema.getRutaClientes()+origen.getName());
                 nombre = origen.getName();
-
-                System.out.println("Ruta origen:" + origen.getAbsolutePath());
-                System.out.println("Ruta Destino:" + destino.getAbsolutePath());
-
-                ///Files.copy(origen.toPath(), destino.toPath(),)
                 System.out.println(destino.getPath());
-
                 if (origen.exists()) {
-                    //origen.renameTo(destino);
                     Files.copy(origen.toPath(), destino.toPath(), StandardCopyOption.REPLACE_EXISTING);
                     nombre = destino.getName();
                 }
-            } catch (Exception ex) {
-                System.out.println("Error:" + ex.getMessage());
+            } catch (IOException ex) {                
             }
-            if (nombre.equals("")) {
-
-            } else {
+            if (!nombre.equals("")) {
                 this.cliente.setRutaImg(nombre);
             }
         }
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -402,14 +378,13 @@ public class frPerfil extends javax.swing.JDialog {
         cliente.setApellidos(this.txtApellidos.getText());
         cliente.setNombres(this.txtNombres.getText());
         validarRuta(rutaorigen);
-        if(this.chkPassword.isSelected()){
-            if(String.valueOf(this.txtNueva.getPassword()).equals(String.valueOf(this.txtRepita.getText()))){
+        if (this.chkPassword.isSelected()) {
+            if (String.valueOf(this.txtNueva.getPassword()).equals(String.valueOf(this.txtRepita.getText()))) {
                 cliente.setPass(this.txtNueva.getText());
-            }
-            else{
+            } else {
                 System.out.println("no compara");
             }
-        }        
+        }
         cliente.actualizar();
         this.result = JOptionPane.OK_OPTION;
         this.setVisible(false);

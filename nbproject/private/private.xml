@@ -6,6 +6,7 @@
             <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/Persona/Cliente.java</file>
             <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/Ofertas/frLineas.java</file>
             <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/validaciones/Verificador.java</file>
+            <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/EnvioMail/ServicioMail.java</file>
             <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/Persona/Usuario.java</file>
             <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/Ofertas/PanelOfertas.java</file>
             <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/Pedidos/Interfaces/PanelPedido.java</file>
@@ -14,22 +15,33 @@
             <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/Persona/PanelClientes.java</file>
             <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/bd/bd.java</file>
             <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/prtpvtienda/Muestra.java</file>
+            <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/Articulos/Familia.java</file>
             <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/Persona/frRegistro.java</file>
             <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/Ofertas/frOferta.java</file>
             <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/prtpvtienda/PanelOfertasCli.java</file>
             <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/Articulos/Articulo.java</file>
             <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/Persona/frUsuario.java</file>
+            <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/Articulos/Llegada.java</file>
+            <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/Maqueta/Maqueta.java</file>
             <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/Pedidos/Carrito.java</file>
             <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/Ofertas/Oferta.java</file>
+            <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/Ofertas/Aplican.java</file>
             <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/Articulos/PanelArticulos.java</file>
             <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/Articulos/frArticulos.java</file>
             <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/Articulos/frLlegadas.java</file>
             <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/Persona/frCliente.java</file>
             <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/Persona/frPerfil.java</file>
+            <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/bd/Systema.java</file>
+            <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/bd/validaciones.java</file>
             <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/prtpvtienda/PanelAdministrativo.java</file>
+            <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/nbproject/build-impl.xml</file>
+            <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/Persona/Persona.java</file>
             <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/Articulos/PanelFamilias.java</file>
             <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/Articulos/frFamilias.java</file>
+            <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/Pedidos/Pedido.java</file>
+            <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/prtpvtienda/PrTpvTienda.java</file>
             <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/Pedidos/Interfaces/PanelCMPedido.java</file>
+            <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/prtpvtienda/PanelOfertasCliente.java</file>
             <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/Ofertas/Cesta.java</file>
             <file>file:/G:/Mi%20unidad/3TRIMESTRE/PROGRAMACION/PROYECTOS/PrTpvTienda/src/Pedidos/Interfaces/PanelCarrito.java</file>
         </group>

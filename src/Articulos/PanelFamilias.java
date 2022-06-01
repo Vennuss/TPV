@@ -49,11 +49,11 @@ public class PanelFamilias extends javax.swing.JDialog {
             this.btSele.setVisible(false);
         }
         recuperarDatos();
-        cargarIMG("/Imagenes/add.png", this.btAñadir);
-        cargarIMG("/Imagenes/edit.png", this.btModificar);
-        cargarIMG("/Imagenes/delete.png", this.btEliminar);
-        cargarIMG("/Imagenes/sele.png", this.btSele);
-        cargarIMG("/Imagenes/exit.png", this.btSalir);
+        cargarIcono("/Imagenes/add.png", this.btAñadir);
+        cargarIcono("/Imagenes/edit.png", this.btModificar);
+        cargarIcono("/Imagenes/delete.png", this.btEliminar);
+        cargarIcono("/Imagenes/sele.png", this.btSele);
+        cargarIcono("/Imagenes/exit.png", this.btSalir);
         this.txtBusqueda.getDocument().addDocumentListener(new DocumentListener() {
 
             @Override
@@ -123,7 +123,7 @@ public class PanelFamilias extends javax.swing.JDialog {
         this.tFamilias.setRowHeight(30);
     }
 
-    private void cargarIMG(String url, JButton boton) {
+    private void cargarIcono(String url, JButton boton) {
         ImageIcon icon = new ImageIcon(getClass().getResource(url));
         ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT));
         boton.setIcon(icono);

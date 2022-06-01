@@ -6,10 +6,10 @@ package prtpvtienda;
 
 import Articulos.Articulo;
 import Ofertas.Cesta;
+import bd.Systema;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-
 
 /**
  *
@@ -19,46 +19,55 @@ public final class Muestra extends javax.swing.JPanel {
 
     /**
      * Creates new form Muestra
-     */    
+     */
     private Articulo arti;
     private double dto;
     private int cantidad;
-    private String referencia="";
-    String cli="";
-    private String cliente="";
+    private String referencia = "";
+    String cli = "";
+    private String cliente = "";
 
     public Muestra(Articulo arti, String cliente, double dto, int cantidad) {
-        initComponents();        
+        initComponents();
         this.arti = arti;
-        this.cliente=cliente;
+        this.cliente = cliente;
         arti.recuperaDatos();
-        this.dto=dto;
-        this.cantidad=cantidad;
-       // cantMinima = (int) apli.getCantidad();
-        cargarIMG("/Imagenes/carrito2.png", this.btAñadir);
+        this.dto = dto;
+        this.cantidad = cantidad;
+        // cantMinima = (int) apli.getCantidad();
+        cargarIcono("/Imagenes/carrito2.png", this.btAñadir);
         cargarImaArticulo();
         this.lReferencia.setText("Referencia: " + arti.getReferencia());
         this.lDto.setText("Dto: " + dto);
         this.lDto.setToolTipText("OFERTA  EN XX 4 SSS");
         this.lDescrip.setText(arti.getDescripcion());
-        this.lPrecio.setText("Precio: "+String.valueOf(arti.getPvp()));
+        this.lPrecio.setText("Precio: " + String.valueOf(arti.getPvp()));
         spCantidad.setModel(new javax.swing.SpinnerNumberModel(cantidad, cantidad, null, 1));
     }
 
     public void cargarImaArticulo() {
+        try {
+            ImageIcon icon;
+            if (arti.getRutaImg().equals("predeArt.png")) {
+                //this.cargarImg("/Imagenes/predeArt.png", true);
+                icon = new ImageIcon(getClass().getResource("/Imagenes/" + arti.getRutaImg()));
+            } else {
+                icon = new ImageIcon(Systema.getRutaArticulos() + arti.getRutaImg());
+            }
+            ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT));
+            this.lImagen.setIcon(icono);
+        } catch (Exception ex) {
+        }
 
-        ImageIcon icon = new ImageIcon(getClass().getResource("/Imagenes/" + arti.getRutaImg()));
-        ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT));
-        this.lImagen.setIcon(icono);
     }
 
-    private void cargarIMG(String url, JButton boton) {
+    private void cargarIcono(String url, JButton boton) {
 
         ImageIcon icon = new ImageIcon(getClass().getResource(url));
-        ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(35, 35, Image.SCALE_DEFAULT));
+        ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(32, 32, Image.SCALE_DEFAULT));
         boton.setIcon(icono);
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -160,9 +169,9 @@ public final class Muestra extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btAñadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAñadirActionPerformed
-        
-        this.cantidad=(int)this.spCantidad.getValue();
-        Cesta ces=new Cesta(this.arti, this.cliente, this.cantidad, this.dto);
+
+        this.cantidad = (int) this.spCantidad.getValue();
+        Cesta ces = new Cesta(this.arti, this.cliente, this.cantidad, this.dto);
         ces.registrar();
     }//GEN-LAST:event_btAñadirActionPerformed
 

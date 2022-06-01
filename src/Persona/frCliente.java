@@ -4,8 +4,10 @@
  */
 package Persona;
 
+import bd.Systema;
 import java.awt.Image;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
@@ -46,7 +48,12 @@ public class frCliente extends javax.swing.JDialog {
             this.txtCorreo.setText(cli.getCorreo());
             this.txtApellidos.setText(cli.getApellidos());
             this.txtPassword.setText(cli.getPass());
-            this.cargarImg("/Imagenes/" + cli.getRutaImg(), true);
+            if(cli.getRutaImg().equals("predePer.png")){
+                this.cargarImg("/Imagenes/predePer.png", true);
+            }else{
+                this.cargarImg(Systema.getRutaClientes() + cli.getRutaImg(), false);
+            }
+            
         }
         else{
             this.setTitle("REGISTRO DE CLIENTES");
@@ -79,8 +86,30 @@ public class frCliente extends javax.swing.JDialog {
 
         }
     }
-
     private void validarRuta(String url) {
+        if (url.length() > 0) {
+            String nombre = "";
+            try {
+                File origen = new File(url);
+                File destino=new File(Systema.getRutaClientes()+origen.getName());
+                nombre = origen.getName();
+                System.out.println("Ruta origen:" + origen.getAbsolutePath());
+                System.out.println("Ruta Destino:" + destino.getAbsolutePath());
+                System.out.println(destino.getPath());
+                if (origen.exists()) {
+                    Files.copy(origen.toPath(), destino.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    nombre = destino.getName();
+                }
+            } catch (IOException ex) {
+                System.out.println("Error:" + ex.getMessage());
+            }
+            if (!nombre.equals("")) {
+                this.cliente.setRutaImg(nombre);
+            }
+        }
+    }
+
+   /* private void validarRuta(String url) {
         if (url.length() > 0) {
             String nombre = "";
             try {
@@ -115,7 +144,7 @@ public class frCliente extends javax.swing.JDialog {
                 this.cliente.setRutaImg(nombre);
             }
         }
-    }
+    }*/
 
     /**
      * This method is called from within the constructor to initialize the form.

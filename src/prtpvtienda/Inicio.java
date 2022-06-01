@@ -7,10 +7,17 @@ package prtpvtienda;
 import Persona.Cliente;
 import Persona.Usuario;
 import Persona.frRegistro;
+import bd.Systema;
 import bd.bd;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.sql.ResultSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
@@ -25,9 +32,15 @@ public class Inicio extends javax.swing.JFrame {
      */
     public Inicio() {
         initComponents();
+        //JOptionPane.showMessageDialog(null, "Muestra Ruta:"+ new File(".").getAbsolutePath());
         this.cargarImg("/Imagenes/grupo.png", true);
+        this.setIconImage(new ImageIcon(getClass().getResource("/Imagenes/tpv.png")).getImage());
+        //JOptionPane.showMessageDialog(null, "Muestra Ruta:"+getClass().getProtectionDomain().getCodeSource().getLocation());  
+        Systema.setRutaSistema(System.getProperty("user.dir"));
+        Systema.verificarRutas();
     }
 
+   
     private void cargarImg(String url, boolean almacen) {
         ImageIcon icon;
         if (almacen) {
