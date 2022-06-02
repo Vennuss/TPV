@@ -12,16 +12,17 @@ import validaciones.Verificador;
  * @author Ronal Arrayaza DAM1C
  */
 public class frRegistro extends javax.swing.JDialog {
-    
-     final Cliente cliente;
-      private int result = JOptionPane.CANCEL_OPTION;
+
+    final Cliente cliente;
+    private int result = JOptionPane.CANCEL_OPTION;
+
     /**
      * Creates new form frRegistro
      */
-    public frRegistro(Cliente cliente,java.awt.Frame parent, boolean modal) {
+    public frRegistro(Cliente cliente, java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        this.cliente=cliente;
+        this.cliente = cliente;
         this.txtDni.setInputVerifier(new Verificador(this.lDNI));
         this.txtCorreo.setInputVerifier(new Verificador(this.lCorreo));
     }
@@ -187,18 +188,19 @@ public class frRegistro extends javax.swing.JDialog {
 
     private void btAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAceptarActionPerformed
         cliente.setApellidos(this.txtApellidos.getText());
-        cliente.setNombres(this.txtNombres.getText());  
+        cliente.setNombres(this.txtNombres.getText());
         cliente.setCorreo(this.txtCorreo.getText());
-       if(String.valueOf(this.txtPassword.getPassword()).equals(String.valueOf(this.txtRepita.getText()))){
-                cliente.setPass(this.txtPassword.getText());
-            }
-            else{
-                System.out.println("no compara");
-            }
-        cliente.registrar();
-        this.result = JOptionPane.OK_OPTION;
-        this.setVisible(false);
-        this.dispose();
+        cliente.setDni(this.txtDni.getText());
+        cliente.setRutaImg("predePer.png");
+        if (String.valueOf(this.txtPassword.getPassword()).equals(String.valueOf(this.txtRepita.getPassword()))) {
+            cliente.setPass(this.txtPassword.getText());
+            cliente.registrar();
+            this.result = JOptionPane.OK_OPTION;
+            this.setVisible(false);
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(null, "Las contraseñas no coinciden");
+        }
     }//GEN-LAST:event_btAceptarActionPerformed
 
     private void btCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelarActionPerformed
@@ -237,7 +239,7 @@ public class frRegistro extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                frRegistro dialog = new frRegistro(new Cliente(),new javax.swing.JFrame(), true);
+                frRegistro dialog = new frRegistro(new Cliente(), new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

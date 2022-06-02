@@ -41,8 +41,9 @@ public class frPerfil extends javax.swing.JDialog {
         this.txtCorreo.setText(this.cliente.getCorreo());
         this.txtApellidos.setText(this.cliente.getApellidos());
         this.txtPassword.setText(this.cliente.getPass());
-        if (this.cliente.getRutaImg().equals("predePer.png")) {
+        if (this.cliente.getRutaImg().equals("predePer.png") || this.cliente.getRutaImg().equals("null")) {
             this.cargarImg("/Imagenes/predePer.png", true);
+            this.cliente.setRutaImg("predePer.png");
         } else {
             this.cargarImg(Systema.getRutaClientes() + this.cliente.getRutaImg(), false);
         }

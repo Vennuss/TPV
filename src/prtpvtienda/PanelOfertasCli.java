@@ -81,10 +81,6 @@ public class PanelOfertasCli extends javax.swing.JFrame {
         }
     }
 
-    public void cargarOfertas() {
-
-    }
-
     public String cargarFiltros() {
         String sql = "";
         if (this.txtOfertas.getText().length() > 0) {
@@ -431,6 +427,7 @@ public class PanelOfertasCli extends javax.swing.JFrame {
             }
         });
         dialog.setVisible(true);
+        this.cargarPerfil();
     }//GEN-LAST:event_btPerfilActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed

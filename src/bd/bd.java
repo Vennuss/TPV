@@ -38,24 +38,17 @@ public class bd {
         }
     }
 
-    public static Connection Conexion() {
-        /*Declaramos una variable para almacenar la cadena de conexión.
-    Primero la iniciamos en null.*/
-
-        //Controlamos la excepciones que puedan surgir al conectarnos a la BBDD
+    public static Connection Conexion() {        
         try {
             //Registrar el driver
             Class.forName("com.mysql.cj.jdbc.Driver").newInstance();;
             //Creamos una conexión a la Base de Datos
             conex = DriverManager.getConnection(bbdd, usuario, clave);
-
-            // Si hay errores informamos al usuario. 
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException e) {
 
             System.out.println("Error al conectar con la base de datos.\n"
                     + e.getMessage());
         }
-        // Devolvemos la conexión.
         return conex;
     }
 
@@ -108,7 +101,7 @@ public class bd {
     }
 
     public static ResultSet Consulta(String sql) {
-        conex = Conexion();
+        conex = Conexion();        
         ResultSet rs = null;
         if (conex != null) {
             // Informamos que la conexión es correcta
