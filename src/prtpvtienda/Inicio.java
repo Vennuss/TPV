@@ -11,13 +11,7 @@ import bd.Systema;
 import bd.bd;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.sql.ResultSet;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 

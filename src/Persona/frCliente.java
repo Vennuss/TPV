@@ -8,7 +8,6 @@ import bd.Systema;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import javax.swing.ImageIcon;
@@ -61,6 +60,17 @@ public class frCliente extends javax.swing.JDialog {
             cli.setRutaImg("predePer.png");
         }
 
+    }
+    
+    public boolean validarCampos(){
+        boolean retorno=false;
+        if(this.txtDni.getText().length()>0 && this.txtCorreo.getText().length()>0){
+            retorno=true;
+        }
+        else{
+            retorno=false;
+        }
+        return retorno;
     }
 
     public int getResult() {
@@ -203,7 +213,7 @@ public class frCliente extends javax.swing.JDialog {
         lDNI.setText("DNI:");
 
         txtDni.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        txtDni.setToolTipText("Entrada DNI ");
+        txtDni.setToolTipText("DOCUMENTO IDENTIFICACION");
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel1.setText("Nombres:");
@@ -219,7 +229,7 @@ public class frCliente extends javax.swing.JDialog {
         lCorreo.setText("Correo:");
 
         txtCorreo.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        txtCorreo.setToolTipText("CORREO");
+        txtCorreo.setToolTipText("MAIL");
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel5.setText("Contraseña:");
@@ -316,7 +326,9 @@ public class frCliente extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAceptarActionPerformed
-        cliente.setApellidos(this.txtApellidos.getText());
+if(validarCampos()){
+    cliente.setApellidos(this.txtApellidos.getText());
+
         cliente.setNombres(this.txtNombres.getText());
         cliente.setCorreo(this.txtCorreo.getText());
         String pass = String.valueOf(this.txtPassword.getPassword());
@@ -333,7 +345,10 @@ public class frCliente extends javax.swing.JDialog {
             this.result = JOptionPane.OK_OPTION;
             this.setVisible(false);
             this.dispose();
-        }
+        }}
+else{
+    JOptionPane.showMessageDialog(null, "Existen Campos no Validos");
+}
     }//GEN-LAST:event_btAceptarActionPerformed
 
     private void btCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelarActionPerformed

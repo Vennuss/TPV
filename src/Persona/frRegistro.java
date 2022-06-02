@@ -26,6 +26,16 @@ public class frRegistro extends javax.swing.JDialog {
         this.txtDni.setInputVerifier(new Verificador(this.lDNI));
         this.txtCorreo.setInputVerifier(new Verificador(this.lCorreo));
     }
+    public boolean validarCampos(){
+        boolean retorno=false;
+        if(this.txtDni.getText().length()>0 && this.txtCorreo.getText().length()>0){
+            retorno=true;
+        }
+        else{
+            retorno=false;
+        }
+        return retorno;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -187,6 +197,7 @@ public class frRegistro extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAceptarActionPerformed
+        if(validarCampos()){
         cliente.setApellidos(this.txtApellidos.getText());
         cliente.setNombres(this.txtNombres.getText());
         cliente.setCorreo(this.txtCorreo.getText());
@@ -200,6 +211,10 @@ public class frRegistro extends javax.swing.JDialog {
             this.dispose();
         } else {
             JOptionPane.showMessageDialog(null, "Las contraseñas no coinciden");
+        }
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "Existen Campos no Validos");
         }
     }//GEN-LAST:event_btAceptarActionPerformed
 

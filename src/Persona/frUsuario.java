@@ -41,6 +41,7 @@ public class frUsuario extends javax.swing.JDialog {
         this.operacion = operacion;
         this.txtDni.setInputVerifier(new Verificador(this.lDNI));
         this.txtCorreo.setInputVerifier(new Verificador(this.lCorreo));
+        this.txtUsuario.setInputVerifier(new Verificador(this.lUsuario));
         System.out.println("El color es: " + this.lDNI.getForeground().toString() + " ");
         /*this.txtDni.setInputVerifier(
           new InputVerifier() {
@@ -97,6 +98,17 @@ public class frUsuario extends javax.swing.JDialog {
             this.cargarImg("/Imagenes/predePer.png", true);
             this.usuario.setRutaImg("predePer.png");
         }
+    }
+    
+    public boolean validarCampos(){
+        boolean retorno=false;
+        if(this.txtDni.getText().length()>0 && this.txtUsuario.getText().length()>0){
+            retorno=true;
+        }
+        else{
+            retorno=false;
+        }
+        return retorno;
     }
 
     private void cargarImg(String url, boolean almacen) {
@@ -197,7 +209,7 @@ public class frUsuario extends javax.swing.JDialog {
         btCancelar = new javax.swing.JButton();
         txtCorreo = new javax.swing.JTextField();
         btAyuda = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
+        lUsuario = new javax.swing.JLabel();
         lImg = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         txtPassword = new javax.swing.JPasswordField();
@@ -254,8 +266,8 @@ public class frUsuario extends javax.swing.JDialog {
             }
         });
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel4.setText("Usuario:");
+        lUsuario.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lUsuario.setText("Usuario:");
 
         lImg.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
@@ -265,13 +277,14 @@ public class frUsuario extends javax.swing.JDialog {
         txtPassword.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         txtUsuario.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtUsuario.setToolTipText("LOGIN USUARIOS");
 
         lDNI.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lDNI.setText("DNI:");
         lDNI.setToolTipText("DNI");
 
         txtDni.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        txtDni.setToolTipText("DNI");
+        txtDni.setToolTipText("DOCUMENTO USUARIO");
         txtDni.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtDniActionPerformed(evt);
@@ -297,7 +310,7 @@ public class frUsuario extends javax.swing.JDialog {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(17, 17, 17)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel4)
+                            .addComponent(lUsuario)
                             .addComponent(lCorreo)
                             .addComponent(jLabel2)
                             .addComponent(jLabel1)
@@ -347,7 +360,7 @@ public class frUsuario extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4))
+                            .addComponent(lUsuario))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -395,6 +408,7 @@ public class frUsuario extends javax.swing.JDialog {
     }//GEN-LAST:event_btImgActionPerformed
 
     private void btAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAceptarActionPerformed
+        if(validarCampos()){
         usuario.setApellidos(this.txtApellidos.getText());
         usuario.setNombres(this.txtNombres.getText());
         usuario.setCorreo(this.txtCorreo.getText());
@@ -413,6 +427,9 @@ public class frUsuario extends javax.swing.JDialog {
             this.result = JOptionPane.OK_OPTION;
             this.setVisible(false);
             this.dispose();
+        }
+        }else{
+            JOptionPane.showMessageDialog(null, "Existen Campos no Validos");
         }
     }//GEN-LAST:event_btAceptarActionPerformed
 
@@ -481,11 +498,11 @@ public class frUsuario extends javax.swing.JDialog {
     private javax.swing.JButton btImg;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel lCorreo;
     private javax.swing.JLabel lDNI;
     private javax.swing.JLabel lImg;
+    private javax.swing.JLabel lUsuario;
     private javax.swing.JTextField txtApellidos;
     private javax.swing.JTextField txtCorreo;
     private javax.swing.JTextField txtDni;
