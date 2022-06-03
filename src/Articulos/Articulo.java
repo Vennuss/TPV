@@ -12,10 +12,9 @@ import javax.swing.JOptionPane;
 /**
  *
  * @author Ronal Arrayaza DAM1C
- * 
+ *
  */
-public class Articulo implements Maqueta{
-    
+public class Articulo implements Maqueta {
 
     /**
      * Representa la referencia del Articulo
@@ -57,6 +56,7 @@ public class Articulo implements Maqueta{
         this.rutaImg = "";
         this.fa = new Familia();
     }
+
     /**
      * Constructor sin parametros
      */
@@ -72,7 +72,7 @@ public class Articulo implements Maqueta{
 
     @Override
     public void recuperaDatos() {
-        String sql = "select * from articulos where ref='" + this.getReferencia()+"'";
+        String sql = "select * from articulos where ref='" + this.getReferencia() + "'";
         try {
 
             ResultSet rs = bd.Consulta(sql);
@@ -96,9 +96,9 @@ public class Articulo implements Maqueta{
     @Override
     public void registrar() {
         String sql = "INSERT INTO articulos (ref, descripcion, notas, marca, PVP, stock, rutaimg, idfamilia) VALUES ('"
-                + this.getReferencia() + "', '" + this.getDescripcion() + "', '" + this.getNotas() + "', '" +
-                this.getMarca() + "', '" + this.getPvp() + "', '" + this.getStock() +
-                "', '" + this.getRutaImg() + "'," + this.fa.getId() + " )";
+                + this.getReferencia() + "', '" + this.getDescripcion() + "', '" + this.getNotas() + "', '"
+                + this.getMarca() + "', '" + this.getPvp() + "', '" + this.getStock()
+                + "', '" + this.getRutaImg() + "'," + this.fa.getId() + " )";
         int resultado = bd.Sentencia(sql);
         if (resultado > 0) {
             JOptionPane.showMessageDialog(null, "Registro Exitoso");
@@ -116,20 +116,18 @@ public class Articulo implements Maqueta{
             JOptionPane.showMessageDialog(null, "No se ha podido realizar la operacion");
             return false;
         }
-        
     }
 
     @Override
     public void actualizar() {
-        String sql = "UPDATE articulos set descripcion='" + this.getDescripcion() + "', notas='" + this.getNotas() + 
-                "', marca='" + this.getMarca() + "', PVP=" + this.getPvp() + ", stock=" + this.getStock() + ", rutaimg='" + this.getRutaImg() + 
-                "', idfamilia=" + this.fa.getId() + " where ref='" + this.getReferencia() + "'";
+        String sql = "UPDATE articulos set descripcion='" + this.getDescripcion() + "', notas='" + this.getNotas()
+                + "', marca='" + this.getMarca() + "', PVP=" + this.getPvp() + ", stock=" + this.getStock() + ", rutaimg='" + this.getRutaImg()
+                + "', idfamilia=" + this.fa.getId() + " where ref='" + this.getReferencia() + "'";
         int resultado = bd.Sentencia(sql);
         if (resultado > 0) {
             JOptionPane.showMessageDialog(null, "Registro Exitoso");
         }
     }
-
 
     public String getReferencia() {
         return referencia;

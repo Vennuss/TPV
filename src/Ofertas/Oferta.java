@@ -138,7 +138,7 @@ public class Oferta implements Maqueta {
                 + "','" + this.getDescripcion() + "','" + simpleDateFormat.format(this.getFechaIni()) + "','" + simpleDateFormat.format(this.getFechaIni()) + "'," + this.isVip() + ")";
         int resultado = bd.Sentencia2(sql);
         if (resultado > 0) {
-            //JOptionPane.showMessageDialog(null, "Registro Exitoso");
+            JOptionPane.showMessageDialog(null, "Registro Exitoso");
             this.setId(resultado);
         }
     }
@@ -161,7 +161,8 @@ public class Oferta implements Maqueta {
         String sql = "update ofertas set nombre='" + this.getNombre() + "', descripcion='" + this.getDescripcion() + "', fechaini='"
                 + simpleDateFormat.format(this.getFechaIni()) + "', fechafin='" + simpleDateFormat.format(this.getFechaFin()) + "', vip=" + this.isVip() + " where id=" + this.getId();
         int resultado = bd.Sentencia(sql);
-        if (resultado > 0) {
+       if (resultado > 0) {
+            JOptionPane.showMessageDialog(null, "Registro Exitoso");
         }
     }
 

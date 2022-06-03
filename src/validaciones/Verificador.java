@@ -218,7 +218,19 @@ public class Verificador extends InputVerifier {
                 Etiqueta.setForeground(Color.RED);
                 return false;
             }
-        } else if (campo.getToolTipText().contains("USUARIO")) {
+        }else if (campo.getToolTipText().contains("FECHA")) {            
+            pattern = Pattern.compile("^([0-2][0-9]|3[0-1])(\\/|-)(0[1-9]|1[0-2])\\2(\\d{4})((\\s)([0-1][0-9]|2[0-3])(:)([0-5][0-9]))?$");
+            matcher = pattern.matcher(campo.getText());
+            campo.setText(campo.getText().toLowerCase());
+            if (matcher.matches()) {
+                Etiqueta.setForeground(new Color(0, 0, 0));
+                return true;
+            } else {
+                Etiqueta.setForeground(Color.RED);
+                return false;
+            }
+        }
+        else if (campo.getToolTipText().contains("USUARIO")) {
             pattern = Pattern.compile("[A-Za-z0-9_.]+");
             matcher = pattern.matcher(campo.getText());
             //campo.setText(campo.getText().toLowerCase());

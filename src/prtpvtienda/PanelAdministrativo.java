@@ -8,6 +8,7 @@ import Articulos.PanelFamilias;
 import Articulos.PanelArticulos;
 import Ofertas.PanelOfertas;
 import Pedidos.Interfaces.PanelPedido;
+import Persona.Cliente;
 import Persona.PanelClientes;
 import Persona.PanelUsuarios;
 import Persona.Usuario;
@@ -321,8 +322,16 @@ public class PanelAdministrativo extends javax.swing.JFrame {
     }//GEN-LAST:event_btOfertasActionPerformed
 
     private void btPedidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPedidosActionPerformed
-        PanelPedido pedido=new PanelPedido(true, null);
-        pedido.setVisible(true);
+        /*PanelPedido pedido=new PanelPedido(true, null);
+        pedido.setVisible(true);*/
+         PanelPedido dialog = new PanelPedido(true, null,new javax.swing.JFrame(), true);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                       // System.exit(0);
+                    }
+                });
+                dialog.setVisible(true);
     }//GEN-LAST:event_btPedidosActionPerformed
 
     private void btUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btUsuariosActionPerformed

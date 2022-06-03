@@ -1,3 +1,7 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
+ */
 package Pedidos.Interfaces;
 
 import Articulos.Articulo;
@@ -6,10 +10,7 @@ import Pedidos.ArticuloPedido;
 import Pedidos.Pedido;
 import Persona.PanelClientes;
 import java.awt.Image;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -18,13 +19,12 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 /**
- * Panel que permite al Usuario crear un pedido.
- * @author Hugo de la Torre Pizarro
- * @version 0.1
+ *
+ * @author admin
  */
-public class PanelCrearPedido extends javax.swing.JFrame {
-    
-    /**
+public class PanelCrearPedido extends javax.swing.JDialog {
+
+   /**
      * Pedido sobre el cual se va a trabajar
      * @see Pedido
      */
@@ -33,18 +33,16 @@ public class PanelCrearPedido extends javax.swing.JFrame {
     /**
      * Crea el PanelCrearPedido
      */
-    public PanelCrearPedido() {
+    public PanelCrearPedido(java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
         initComponents();
+        
         _main();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pd.setFormaPago(jCBPago.getItemAt(jCBPago.getSelectedIndex()));
         jBFin.setEnabled(false);
     }
-    
-    /**
-     * Muestra en el Panel los datos del Cliente
-     */
-    private void setCliente(){
+     private void setCliente(){
         if(pd.getCliente() != null){
             jTNA.setText(pd.getCliente().getNombres() + " " + pd.getCliente().getApellidos());
             jTDni.setText(pd.getCliente().getDni());
@@ -54,8 +52,7 @@ public class PanelCrearPedido extends javax.swing.JFrame {
             jTDni.setText("null");
         }
     }
-    
-    /**
+     /**
      * Refresca la tabla con los valores del Pedido (pd).
      * Basicamente elimina las filas y las vuelve a colocar segun los
      * ArticulosPedido del Pedido.
@@ -114,7 +111,7 @@ public class PanelCrearPedido extends javax.swing.JFrame {
     public final void _main(){
         cargarIMG("/Imagenes/add.png", jBArticulo);
         cargarIMG("/Imagenes/delete.png", jBDelete);
-        cargarIMG("/Imagenes/lupa.png", jBCliente);
+        cargarIMG("/Imagenes/buscarcl.png", jBCliente);
     }
     
     /**
@@ -127,7 +124,6 @@ public class PanelCrearPedido extends javax.swing.JFrame {
         ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT));
         boton.setIcon(icono);
     }
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -138,22 +134,60 @@ public class PanelCrearPedido extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel2 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTAP = new javax.swing.JTable();
-        jCBPago = new javax.swing.JComboBox<>();
-        jTPrecio = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
         jBFin = new javax.swing.JButton();
         jBArticulo = new javax.swing.JButton();
         jBCliente = new javax.swing.JButton();
         jTDni = new javax.swing.JLabel();
         jTNA = new javax.swing.JLabel();
         jBDelete = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTAP = new javax.swing.JTable();
+        jCBPago = new javax.swing.JComboBox<>();
+        jTPrecio = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
 
-        jLabel2.setText("jLabel2");
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        jBFin.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        jBFin.setText("Finalizar Pedido");
+        jBFin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBFinActionPerformed(evt);
+            }
+        });
+
+        jBArticulo.setMaximumSize(new java.awt.Dimension(40, 40));
+        jBArticulo.setMinimumSize(new java.awt.Dimension(40, 40));
+        jBArticulo.setPreferredSize(new java.awt.Dimension(40, 40));
+        jBArticulo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBArticuloActionPerformed(evt);
+            }
+        });
+
+        jBCliente.setMaximumSize(new java.awt.Dimension(40, 40));
+        jBCliente.setMinimumSize(new java.awt.Dimension(40, 40));
+        jBCliente.setPreferredSize(new java.awt.Dimension(40, 40));
+        jBCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBClienteActionPerformed(evt);
+            }
+        });
+
+        jTDni.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jTDni.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        jTNA.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        jTNA.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        jBDelete.setMaximumSize(new java.awt.Dimension(40, 40));
+        jBDelete.setMinimumSize(new java.awt.Dimension(40, 40));
+        jBDelete.setPreferredSize(new java.awt.Dimension(40, 40));
+        jBDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBDeleteActionPerformed(evt);
+            }
+        });
 
         jTAP.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jTAP.setModel(new javax.swing.table.DefaultTableModel(
@@ -223,47 +257,6 @@ public class PanelCrearPedido extends javax.swing.JFrame {
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("Precio Final €");
 
-        jBFin.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
-        jBFin.setText("Finalizar Pedido");
-        jBFin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBFinActionPerformed(evt);
-            }
-        });
-
-        jBArticulo.setMaximumSize(new java.awt.Dimension(40, 40));
-        jBArticulo.setMinimumSize(new java.awt.Dimension(40, 40));
-        jBArticulo.setPreferredSize(new java.awt.Dimension(40, 40));
-        jBArticulo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBArticuloActionPerformed(evt);
-            }
-        });
-
-        jBCliente.setMaximumSize(new java.awt.Dimension(40, 40));
-        jBCliente.setMinimumSize(new java.awt.Dimension(40, 40));
-        jBCliente.setPreferredSize(new java.awt.Dimension(40, 40));
-        jBCliente.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBClienteActionPerformed(evt);
-            }
-        });
-
-        jTDni.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jTDni.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-
-        jTNA.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jTNA.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-
-        jBDelete.setMaximumSize(new java.awt.Dimension(40, 40));
-        jBDelete.setMinimumSize(new java.awt.Dimension(40, 40));
-        jBDelete.setPreferredSize(new java.awt.Dimension(40, 40));
-        jBDelete.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBDeleteActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -273,7 +266,7 @@ public class PanelCrearPedido extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1088, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 968, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jBFin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -311,52 +304,39 @@ public class PanelCrearPedido extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jTPrecio)
                     .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jBFin, javax.swing.GroupLayout.DEFAULT_SIZE, 69, Short.MAX_VALUE))
+                    .addComponent(jBFin, javax.swing.GroupLayout.DEFAULT_SIZE, 62, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-    
-    /**
-     * Setea la forma de pago a el valor seleccionado en el desplegable
-     * @param evt 
-     */
-    private void jCBPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBPagoActionPerformed
-        pd.setFormaPago(jCBPago.getItemAt(jCBPago.getSelectedIndex()));
-    }//GEN-LAST:event_jCBPagoActionPerformed
 
-    private void jCBPagoPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jCBPagoPropertyChange
-        
-    }//GEN-LAST:event_jCBPagoPropertyChange
-
-    private void jTPrecioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTPrecioActionPerformed
-        
-    }//GEN-LAST:event_jTPrecioActionPerformed
-
-    /**
-     * Finaliza el pedido refrescando una ultima vez, y registrandolo en la bd.
-     * @param evt
-     * @see bd
-     */
     private void jBFinActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBFinActionPerformed
         refrescar(true);
         pd.registrar();
         this.dispose();
     }//GEN-LAST:event_jBFinActionPerformed
 
-    
-    /**
-     * Selecciona un Clietne de los ya creados en la Base de Datos
-     * @param evt
-     * @see PanelClientes
-     */
+    private void jBArticuloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBArticuloActionPerformed
+        PanelArticulos dialog = new PanelArticulos(true, new javax.swing.JFrame(), true);
+        dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {}
+        });
+        dialog.setVisible(true);
+        if(dialog.getResult() == JOptionPane.OK_OPTION){
+            pd.addArticulo(dialog.getArticulo(), 1, 0);
+            refrescar(false);
+        }
+    }//GEN-LAST:event_jBArticuloActionPerformed
+
     private void jBClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBClienteActionPerformed
         PanelClientes dialog = new PanelClientes(true, new javax.swing.JFrame(), true);
         dialog.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {}
-            });
+        });
         dialog.setVisible(true);
         if(dialog.getResult() == JOptionPane.OK_OPTION){
             pd.setCliente(dialog.getCliente());
@@ -365,50 +345,35 @@ public class PanelCrearPedido extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jBClienteActionPerformed
 
-    /**
-     * Selecciona un Articulo de los ya creados en la Base de Datos
-     * @param evt
-     * @see PanelArticulos
-     */
-    private void jBArticuloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBArticuloActionPerformed
-        PanelArticulos dialog = new PanelArticulos(true, new javax.swing.JFrame(), true);
-        dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosing(java.awt.event.WindowEvent e) {}
-            });
-        dialog.setVisible(true);
-        if(dialog.getResult() == JOptionPane.OK_OPTION){
-            pd.addArticulo(dialog.getArticulo(), 1, 0);
-            refrescar(false);
-        }
-    }//GEN-LAST:event_jBArticuloActionPerformed
-
-    private void jTAPHierarchyChanged(java.awt.event.HierarchyEvent evt) {//GEN-FIRST:event_jTAPHierarchyChanged
-        
-    }//GEN-LAST:event_jTAPHierarchyChanged
-
-    private void jTAPFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTAPFocusLost
-
-    }//GEN-LAST:event_jTAPFocusLost
-
-    /**
-     * Refresca la pantalla seteando valores.
-     * @param evt 
-     */
-    private void jTAPFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTAPFocusGained
-        refrescar(true);
-    }//GEN-LAST:event_jTAPFocusGained
-
-    /**
-     * Borra la fila seleccionada, en caso de no tener selecionada niguna fila
-     * mostrara un mensaje.
-     * @param evt 
-     */
     private void jBDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBDeleteActionPerformed
         if(jTAP.getSelectedRow() != -1) pd.delArticulo(jTAP.getSelectedRow());
         else JOptionPane.showMessageDialog(this, "Selecione un articulo que eliminar");
         refrescar(false);
     }//GEN-LAST:event_jBDeleteActionPerformed
+
+    private void jTAPHierarchyChanged(java.awt.event.HierarchyEvent evt) {//GEN-FIRST:event_jTAPHierarchyChanged
+
+    }//GEN-LAST:event_jTAPHierarchyChanged
+
+    private void jTAPFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTAPFocusGained
+        refrescar(true);
+    }//GEN-LAST:event_jTAPFocusGained
+
+    private void jTAPFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTAPFocusLost
+
+    }//GEN-LAST:event_jTAPFocusLost
+
+    private void jCBPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBPagoActionPerformed
+        pd.setFormaPago(jCBPago.getItemAt(jCBPago.getSelectedIndex()));
+    }//GEN-LAST:event_jCBPagoActionPerformed
+
+    private void jCBPagoPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jCBPagoPropertyChange
+
+    }//GEN-LAST:event_jCBPagoPropertyChange
+
+    private void jTPrecioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTPrecioActionPerformed
+
+    }//GEN-LAST:event_jTPrecioActionPerformed
 
     /**
      * @param args the command line arguments
@@ -438,10 +403,17 @@ public class PanelCrearPedido extends javax.swing.JFrame {
         //</editor-fold>
         //</editor-fold>
 
-        /* Create and display the form */
+        /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new PanelCrearPedido().setVisible(true);
+                PanelCrearPedido dialog = new PanelCrearPedido(new javax.swing.JFrame(), true);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+                dialog.setVisible(true);
             }
         });
     }
@@ -452,7 +424,6 @@ public class PanelCrearPedido extends javax.swing.JFrame {
     private javax.swing.JButton jBDelete;
     private javax.swing.JButton jBFin;
     private javax.swing.JComboBox<String> jCBPago;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTAP;

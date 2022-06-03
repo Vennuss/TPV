@@ -408,13 +408,27 @@ public class PanelOfertasCli extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowStateChanged
 
     private void btPedidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPedidosActionPerformed
-        PanelPedido pedido = new PanelPedido(false, this.cliente);
-        pedido.setVisible(true);
+        
+         PanelPedido dialog = new PanelPedido(false, this.cliente,new javax.swing.JFrame(), true);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                       // System.exit(0);
+                    }
+                });
+                dialog.setVisible(true);
     }//GEN-LAST:event_btPedidosActionPerformed
 
     private void btCestoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCestoActionPerformed
-        PanelCarrito carr = new PanelCarrito(cliente);
-        carr.setVisible(true);
+       
+         PanelCarrito dialog = new PanelCarrito(cliente,new javax.swing.JFrame(), true);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        //System.exit(0);
+                    }
+                });
+                dialog.setVisible(true);
     }//GEN-LAST:event_btCestoActionPerformed
 
     private void btPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPerfilActionPerformed

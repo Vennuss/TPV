@@ -1,6 +1,10 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
+ */
 package Pedidos.Interfaces;
 
-import Pedidos.*;
+import Pedidos.Pedido;
 import Persona.Cliente;
 import bd.bd;
 import java.awt.Image;
@@ -14,13 +18,12 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 /**
- * Panel Administrativo tanto de Clientes como de Usuarios
- * @author Hugo de la Torre Pizarro
- * @version 0.1
+ *
+ * @author admin
  */
-public class PanelPedido extends javax.swing.JFrame {
-    
-    /**
+public class PanelPedido extends javax.swing.JDialog {
+
+     /**
      * Especifica si lo esta abriendo un Usuario o un Cliente
      */
     private final boolean admin;
@@ -36,14 +39,89 @@ public class PanelPedido extends javax.swing.JFrame {
      * @param admin: es usuario o cliente
      * @param client: solo si admin es false
      */
-    public PanelPedido(boolean admin, Cliente client) {
-        initComponents();
-        this.admin = admin;
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    public PanelPedido(boolean admin, Cliente client,java.awt.Frame parent, boolean modal) {
+        super(parent, modal);
+        initComponents();        
+        this.admin = admin;       
         if(admin != true){
             this.client = client;
             jBDelete.setEnabled(false);
             jBAdd.setEnabled(false);
+        }
+        _main();
+    }
+    /**
+     * Funcion que se ejecutara con el inicio del panel
+     */
+    public final void _main(){
+        recuperarDatos();
+        cargarIMG("/Imagenes/add.png", jBAdd);
+        cargarIMG("/Imagenes/edit.png", jBEdit);
+        cargarIMG("/Imagenes/delete.png", jBDelete);
+        cargarIMG("/Imagenes/clean.png", jBClean);
+        cargarIMG("/Imagenes/exit.png", jBExit);
+    }
+    
+    /**
+     * Carga icono seleccionado en el boton especificado
+     * @param url
+     * @param boton 
+     */
+    private void cargarIMG(String url, JButton boton) {
+        
+        ImageIcon icon = new ImageIcon(getClass().getResource(url));
+        ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT));
+        boton.setIcon(icono);
+    }
+    
+    /**
+     * Rellena la sentencia despues de
+     * "select * from pedidos".
+     * @return String.
+     */
+    private final String getFiltro(){
+        if(admin == true){
+            if(jTSearch.getText().isEmpty()) return " ";
+            else{
+                return "where id like '" + jTSearch.getText() + "%' ";
+            }
+        }
+        else{
+            if(jTSearch.getText().isEmpty()) return " where cliente = '" + client.getDni() + "' ";
+            else{
+                return "where id like '" + jTSearch.getText() + "%' and where cliente = '" + client.getDni() + "' ";
+            }
+        }
+    }
+    
+    /**
+     * Obtiene pedidos de la Base de datos y los añade fila a fila.
+     * Utiliza getFiltro().
+     * @see bd
+     * @see getFiltro()
+     */
+    public final void recuperarDatos() {
+        
+        String filtro = "";//getFiltro();
+        DefaultTableModel tm = (DefaultTableModel) this.jTResultados.getModel();
+        this.jTResultados.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
+        tm.setRowCount(0);
+        
+        
+        String sql = "select * from pedidos " + filtro + " order by id;";
+        try {
+            ResultSet rs = bd.Consulta(sql);
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String fecha = rs.getString("fecha");
+                String formaPago = rs.getString("formaPago");
+                Object nuev[] = {id, fecha, formaPago};
+                tm.addRow(nuev);
+            }
+            bd.cerrarConexion();
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
         }
     }
 
@@ -56,7 +134,11 @@ public class PanelPedido extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jBExit = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTResultados = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
+        jBClean = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jBAdd = new javax.swing.JButton();
         jBEdit = new javax.swing.JButton();
@@ -64,25 +146,57 @@ public class PanelPedido extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
         jTSearch = new javax.swing.JTextField();
-        jBExit = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTResultados = new javax.swing.JTable();
-        jBClean = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setLocationByPlatform(true);
-        setMaximumSize(new java.awt.Dimension(1200, 700));
-        setMinimumSize(new java.awt.Dimension(800, 500));
-        setPreferredSize(new java.awt.Dimension(1299, 700));
-        addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentShown(java.awt.event.ComponentEvent evt) {
-                formComponentShown(evt);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        jBExit.setMaximumSize(new java.awt.Dimension(40, 40));
+        jBExit.setMinimumSize(new java.awt.Dimension(40, 40));
+        jBExit.setPreferredSize(new java.awt.Dimension(40, 40));
+        jBExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBExitActionPerformed(evt);
             }
         });
+
+        jTResultados.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jTResultados.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Fecha", "Forma de pago"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTResultados.setRowHeight(40);
+        jScrollPane1.setViewportView(jTResultados);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("ADMINISTRACION DE PEDIDOS");
+
+        jBClean.setMaximumSize(new java.awt.Dimension(40, 40));
+        jBClean.setMinimumSize(new java.awt.Dimension(40, 40));
+        jBClean.setPreferredSize(new java.awt.Dimension(40, 40));
+        jBClean.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBCleanActionPerformed(evt);
+            }
+        });
 
         jBAdd.setMaximumSize(new java.awt.Dimension(40, 40));
         jBAdd.setMinimumSize(new java.awt.Dimension(40, 40));
@@ -152,7 +266,7 @@ public class PanelPedido extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTSearch, javax.swing.GroupLayout.DEFAULT_SIZE, 429, Short.MAX_VALUE)
+                .addComponent(jTSearch, javax.swing.GroupLayout.DEFAULT_SIZE, 576, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -169,51 +283,6 @@ public class PanelPedido extends javax.swing.JFrame {
             .addComponent(jTSearch)
         );
 
-        jBExit.setMaximumSize(new java.awt.Dimension(40, 40));
-        jBExit.setMinimumSize(new java.awt.Dimension(40, 40));
-        jBExit.setPreferredSize(new java.awt.Dimension(40, 40));
-        jBExit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBExitActionPerformed(evt);
-            }
-        });
-
-        jTResultados.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jTResultados.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "ID", "Fecha", "Forma de pago"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jTResultados.setRowHeight(40);
-        jScrollPane1.setViewportView(jTResultados);
-
-        jBClean.setMaximumSize(new java.awt.Dimension(40, 40));
-        jBClean.setMinimumSize(new java.awt.Dimension(40, 40));
-        jBClean.setPreferredSize(new java.awt.Dimension(40, 40));
-        jBClean.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBCleanActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -221,7 +290,7 @@ public class PanelPedido extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 758, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 905, Short.MAX_VALUE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -242,45 +311,67 @@ public class PanelPedido extends javax.swing.JFrame {
                     .addComponent(jBExit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jBClean, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 395, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 472, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-    
-    /**
-     * Borra el buscador y refresca la tabla.
-     * @param evt 
-     */
-    private void jBCleanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBCleanActionPerformed
-        // TODO add your handling code here:
-        jTSearch.setText("");
-        recuperarDatos();  
-    }//GEN-LAST:event_jBCleanActionPerformed
 
-    /**
-     * Cierra la ventana
-     * @param evt 
-     */
     private void jBExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBExitActionPerformed
         // TODO add your handling code here:
         this.setVisible(false);
         this.dispose();
     }//GEN-LAST:event_jBExitActionPerformed
 
-    /**
-     * Como Usuario, borra la de la fila especificada el Pedido en la Base de Datos
-     * @param evt
-     * @see bd
-     */
+    private void jBCleanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBCleanActionPerformed
+        // TODO add your handling code here:
+        jTSearch.setText("");
+        recuperarDatos();
+    }//GEN-LAST:event_jBCleanActionPerformed
+
+    private void jBAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAddActionPerformed
+       
+        PanelCrearPedido dialog = new PanelCrearPedido(new javax.swing.JFrame(), true);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        //System.exit(0);
+                    }
+                });
+                dialog.setVisible(true);
+
+    }//GEN-LAST:event_jBAddActionPerformed
+
+    private void jBEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEditActionPerformed
+        int fila = jTResultados.getSelectedRow();
+        if (this.jTResultados.getSelectedRow() != -1) {
+            int id = Integer.parseInt(String.valueOf(jTResultados.getValueAt(fila, 0)));
+            System.out.println("El codigo es:" + id);
+            Pedido pd = new Pedido(id);
+             PanelCMPedido dialog = new PanelCMPedido(pd, new javax.swing.JFrame(), true);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        //System.exit(0);
+                    }
+                });
+                dialog.setVisible(true);
+            
+            
+        } else {
+            JOptionPane.showMessageDialog(null, "Seleccione un registro");
+        }
+    }//GEN-LAST:event_jBEditActionPerformed
+
     private void jBDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBDeleteActionPerformed
         // TODO add your handling code here:
         int fila = this.jTResultados.getSelectedRow();
         System.out.println("Fila seleccionada es" + fila);
-        
+
         if (this.jTResultados.getSelectedRow() != -1) {
-            
+
             int id = Integer.parseInt(String.valueOf(jTResultados.getValueAt(fila, 0)));
             System.out.println("El codigo es:" + id);
             Pedido pd = new Pedido(id);
@@ -292,65 +383,25 @@ public class PanelPedido extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jBDeleteActionPerformed
 
-    /**
-     * Muestra el contenido del Pedido
-     * @param evt 
-     */
-    private void jBEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEditActionPerformed
-        int fila = jTResultados.getSelectedRow();
-        if (this.jTResultados.getSelectedRow() != -1) {            
-            int id = Integer.parseInt(String.valueOf(jTResultados.getValueAt(fila, 0)));
-            System.out.println("El codigo es:" + id);
-            Pedido pd = new Pedido(id);
-            PanelCMPedido dialog = new PanelCMPedido(pd);
-            dialog.setVisible(true);          
-        } else {
-            JOptionPane.showMessageDialog(null, "Seleccione un registro");
-        }
-    }//GEN-LAST:event_jBEditActionPerformed
-    
-    /**
-     * Como Usuario, crea un Nuevo Pedido
-     * @param evt 
-     */
-    private void jBAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAddActionPerformed
-        PanelCrearPedido dialog = new PanelCrearPedido();
-        dialog.setVisible(true); 
-        
-    }//GEN-LAST:event_jBAddActionPerformed
-    
-    /**
-     * Funcion que se ejecutara con el inicio del panel
-     * @param evt 
-     */
-    private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
-        // TODO add your handling code here
-        _main();
-    }//GEN-LAST:event_formComponentShown
+    private void jTSearchInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_jTSearchInputMethodTextChanged
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_jTSearchInputMethodTextChanged
 
     private void jTSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTSearchActionPerformed
         // TODO add your handling code here:
-        
+
     }//GEN-LAST:event_jTSearchActionPerformed
-    
-    /**
-     * Refresca la tabla cada vez que se modifica la barra de busqueda
-     * @param evt 
-     */
+
     private void jTSearchKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTSearchKeyPressed
         // TODO add your handling code here:
-        recuperarDatos();        
+        recuperarDatos();
     }//GEN-LAST:event_jTSearchKeyPressed
 
     private void jTSearchKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTSearchKeyTyped
         // TODO add your handling code here:
-        
-    }//GEN-LAST:event_jTSearchKeyTyped
 
-    private void jTSearchInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_jTSearchInputMethodTextChanged
-        // TODO add your handling code here:
-        
-    }//GEN-LAST:event_jTSearchInputMethodTextChanged
+    }//GEN-LAST:event_jTSearchKeyTyped
 
     /**
      * @param args the command line arguments
@@ -378,90 +429,24 @@ public class PanelPedido extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(PanelPedido.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
 
-        /* Create and display the form */
+        /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new PanelPedido(true, new Cliente("12345678X")).setVisible(true);
+                PanelPedido dialog = new PanelPedido(true, new Cliente(),new javax.swing.JFrame(), true);
+                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent e) {
+                        System.exit(0);
+                    }
+                });
+                dialog.setVisible(true);
             }
         });
     }
-    
-    /**
-     * Funcion que se ejecutara con el inicio del panel
-     */
-    public final void _main(){
-        recuperarDatos();
-        cargarIMG("/Imagenes/add.png", jBAdd);
-        cargarIMG("/Imagenes/edit.png", jBEdit);
-        cargarIMG("/Imagenes/delete.png", jBDelete);
-        cargarIMG("/Imagenes/clean.png", jBClean);
-        cargarIMG("/Imagenes/exit.png", jBExit);
-    }
-    
-    /**
-     * Carga icono seleccionado en el boton especificado
-     * @param url
-     * @param boton 
-     */
-    private void cargarIMG(String url, JButton boton) {
-        
-        ImageIcon icon = new ImageIcon(getClass().getResource(url));
-        ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(30, 30, Image.SCALE_DEFAULT));
-        boton.setIcon(icono);
-    }
-    
-    /**
-     * Rellena la sentencia despues de
-     * "select * from pedidos".
-     * @return String.
-     */
-    private final String getFiltro(){
-        if(admin == true){
-            if(jTSearch.getText().isEmpty()) return " ";
-            else{
-                return "where id like '" + jTSearch.getText() + "%' ";
-            }
-        }
-        else{
-            if(jTSearch.getText().isEmpty()) return " where cliente = '" + client.getDni() + "' ";
-            else{
-                return "where id like '" + jTSearch.getText() + "%' and where cliente = '" + client.getDni() + "' ";
-            }
-        }
-    }
-    
-    /**
-     * Obtiene pedidos de la Base de datos y los añade fila a fila.
-     * Utiliza getFiltro().
-     * @see bd
-     * @see getFiltro()
-     */
-    public final void recuperarDatos() {
-        
-        String filtro = getFiltro();
-        DefaultTableModel tm = (DefaultTableModel) this.jTResultados.getModel();
-        this.jTResultados.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        
-        tm.setRowCount(0);
-        
-        
-        String sql = "select * from pedidos " + filtro + " order by id;";
-        try {
-            ResultSet rs = bd.Consulta(sql);
-            while (rs.next()) {
-                int id = rs.getInt("id");
-                String fecha = rs.getString("fecha");
-                String formaPago = rs.getString("formaPago");
-                Object nuev[] = {id, fecha, formaPago};
-                tm.addRow(nuev);
-            }
-            bd.cerrarConexion();
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-        }
-    }
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBAdd;

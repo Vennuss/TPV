@@ -5,7 +5,6 @@
 package Ofertas;
 
 import bd.bd;
-import bd.validaciones;
 import java.awt.Image;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,6 +18,7 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
+import validaciones.Verificador;
 
 /**
  *
@@ -55,6 +55,8 @@ public class frOferta extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         this.chVip.setVisible(false);
+        this.txtFechaIni.setInputVerifier(new Verificador(this.lFechaIni));
+        this.txtFechaFin.setInputVerifier(new Verificador(this.lFechaFin));
         Modelo();
         this.ofer = ofer;
         this.operacion = operacion;
@@ -79,11 +81,11 @@ public class frOferta extends javax.swing.JDialog {
         for (int i = 0; i < modelo.getRowCount(); i++) {
             Aplican apli = new Aplican();
             String referencia = String.valueOf(modelo.getValueAt(i, 0));
-            System.out.println("asdasdasd"+modelo.getValueAt(i, 1));
-            System.out.println("sssss"+modelo.getValueAt(i, 2));
-            double dto = (double)modelo.getValueAt(i, 1);
-            double cantidad = (double)modelo.getValueAt(i, 2);
-            
+            System.out.println("asdasdasd" + modelo.getValueAt(i, 1));
+            System.out.println("sssss" + modelo.getValueAt(i, 2));
+            double dto = (double) modelo.getValueAt(i, 1);
+            double cantidad = (double) modelo.getValueAt(i, 2);
+
             apli.setCantidad(cantidad);
             apli.setDescuento(dto);
             apli.setReferencia(referencia);
@@ -97,23 +99,27 @@ public class frOferta extends javax.swing.JDialog {
         DefaultTableModel tm = (DefaultTableModel) this.tLineas.getModel();
         this.tLineas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        String sql = "select * from aplican where ofertasid="+ofer.getId();
+        String sql = "select * from aplican where ofertasid=" + ofer.getId();
         try {
 
             ResultSet rs = bd.Consulta(sql);
             while (rs.next()) {
-                
-                String referencia=rs.getString("articulosref");
+
+                String referencia = rs.getString("articulosref");
                 double cantidad = rs.getInt("cantidad");
-                double descuento= rs.getInt("descuento"); 
-                
-                Object nuev[] = {referencia, descuento,cantidad };
+                double descuento = rs.getInt("descuento");
+
+                Object nuev[] = {referencia, descuento, cantidad};
                 tm.addRow(nuev);
 
             }
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
+    }
+
+    private boolean validarCampos() {
+        return this.txtNombre.getText().length() > 0 && this.txtFechaIni.getText().length() > 0 && this.txtFechaFin.getText().length() > 0;
     }
 
     private void Modelo() {
@@ -171,9 +177,9 @@ public class frOferta extends javax.swing.JDialog {
         txtFechaFin = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         txtDescripcion = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
+        lFechaIni = new javax.swing.JLabel();
         txtFechaIni = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
+        lFechaFin = new javax.swing.JLabel();
         chVip = new javax.swing.JCheckBox();
         jScrollPane1 = new javax.swing.JScrollPane();
         tLineas = new javax.swing.JTable();
@@ -212,6 +218,7 @@ public class frOferta extends javax.swing.JDialog {
         txtNombre.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         txtFechaFin.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtFechaFin.setToolTipText("VALOR FECHA EN FORMATO(dd/mm/yyyy o dd-mm-yyyy)");
         txtFechaFin.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtFechaFinFocusLost(evt);
@@ -223,18 +230,20 @@ public class frOferta extends javax.swing.JDialog {
 
         txtDescripcion.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel3.setText("Fecha Inicio:");
+        lFechaIni.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lFechaIni.setText("Fecha Inicio:");
 
         txtFechaIni.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtFechaIni.setToolTipText("VALOR FECHA EN FORMATO(dd/mm/yyyy o dd-mm-yyyy)");
         txtFechaIni.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 txtFechaIniFocusLost(evt);
             }
         });
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel4.setText("Fecha Fin:");
+        lFechaFin.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        lFechaFin.setText("Fecha Fin:");
+        lFechaFin.setToolTipText("");
 
         chVip.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         chVip.setText("Solo para Vip");
@@ -325,7 +334,7 @@ public class frOferta extends javax.swing.JDialog {
                         .addGap(204, 204, 204))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(lFechaIni, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -333,7 +342,7 @@ public class frOferta extends javax.swing.JDialog {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(txtFechaIni, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel4)
+                                .addComponent(lFechaFin)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtFechaFin, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(txtDescripcion)
@@ -373,9 +382,9 @@ public class frOferta extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtFechaIni, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3)
+                    .addComponent(lFechaIni)
                     .addComponent(txtFechaFin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
+                    .addComponent(lFechaFin))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chVip)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -394,34 +403,43 @@ public class frOferta extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtFechaIniFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtFechaIniFocusLost
-       if(!validaciones.vFecha(this.txtFechaIni.getText())){
-           this.txtFechaIni.requestFocus();
-       }
+
     }//GEN-LAST:event_txtFechaIniFocusLost
 
     private void btAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAceptarActionPerformed
-        ofer.setNombre(this.txtNombre.getText());
-        ofer.setDescripcion(this.txtDescripcion.getText());
-        ofer.setVip(this.chVip.isSelected());
-        
-        try {
-            ofer.setFechaIni(formato.parse(this.txtFechaIni.getText()));
-            ofer.setFechaFin(formato.parse(this.txtFechaFin.getText()));
-        } catch (ParseException ex) {
-            Logger.getLogger(frOferta.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        if (operacion) {
-            ofer.registrar();
-            this.registrarLineas();
-            this.result = JOptionPane.OK_OPTION;
-              this.setVisible(false);
-            this.dispose();
+        int cantidadFilas = this.tLineas.getRowCount();
+        if (validarCampos() && cantidadFilas > 0) {
+            ofer.setNombre(this.txtNombre.getText());
+            ofer.setDescripcion(this.txtDescripcion.getText());
+            ofer.setVip(this.chVip.isSelected());
+
+            try {
+                ofer.setFechaIni(formato.parse(this.txtFechaIni.getText()));
+                ofer.setFechaFin(formato.parse(this.txtFechaFin.getText()));
+            } catch (ParseException ex) {
+                Logger.getLogger(frOferta.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            if (operacion) {
+                ofer.registrar();
+                this.registrarLineas();
+                this.result = JOptionPane.OK_OPTION;
+                this.setVisible(false);
+                this.dispose();
+            } else {
+                ofer.actualizar();
+                this.registrarLineas();
+                this.result = JOptionPane.OK_OPTION;
+                this.setVisible(false);
+                this.dispose();
+            }
         } else {
-            ofer.actualizar();
-            this.registrarLineas();
-            this.result = JOptionPane.OK_OPTION;
-             this.setVisible(false);
-            this.dispose();
+            if (!validarCampos()) {
+                JOptionPane.showMessageDialog(this, "Existen campos no Validos");
+            } else if (cantidadFilas <= 0) {
+                JOptionPane.showMessageDialog(this, "Se debe de seleccionar un Articulo como minimo");
+            } else {
+                JOptionPane.showMessageDialog(this, "Existen campos no Validos y debe de seleccionar un Articulo como minimo");
+            }
         }
     }//GEN-LAST:event_btAceptarActionPerformed
 
@@ -436,7 +454,7 @@ public class frOferta extends javax.swing.JDialog {
         dialog.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent e) {
-                System.exit(0);
+                //System.exit(0);
             }
         });
         dialog.setVisible(true);
@@ -490,9 +508,7 @@ public class frOferta extends javax.swing.JDialog {
     }//GEN-LAST:event_btEliminarActionPerformed
 
     private void txtFechaFinFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtFechaFinFocusLost
-        if(!validaciones.vFecha(this.txtFechaFin.getText())){
-            this.txtFechaFin.requestFocus();
-        }
+
     }//GEN-LAST:event_txtFechaFinFocusLost
 
     /**
@@ -546,11 +562,11 @@ public class frOferta extends javax.swing.JDialog {
     private javax.swing.JCheckBox chVip;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JLabel lFechaFin;
+    private javax.swing.JLabel lFechaIni;
     private javax.swing.JLabel lId;
     private javax.swing.JTable tLineas;
     private javax.swing.JTextField txtDescripcion;

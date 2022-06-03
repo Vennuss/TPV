@@ -12,6 +12,7 @@ import bd.bd;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
@@ -213,7 +214,7 @@ public class Inicio extends javax.swing.JFrame {
                     dni = rs.getString("dni");
                     contador++;
                 }
-            } catch (Exception ex) {
+            } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             }
             if (contador == 1) {

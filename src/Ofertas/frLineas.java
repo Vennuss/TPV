@@ -6,7 +6,6 @@ package Ofertas;
 
 import Articulos.Articulo;
 import Articulos.PanelArticulos;
-import bd.validaciones;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -48,6 +47,14 @@ public class frLineas extends javax.swing.JDialog {
             this.arti = new Articulo();
         }
         cargarIMG("/Imagenes/lupa.png", this.btArticulo);
+    }
+    
+    public boolean validarCampos(){
+        boolean retorno=false;
+        if(this.txtReferencia.getText().length()>0){
+            retorno=true;
+        }        
+        return retorno;
     }
     
     private void cargarIMG(String url, JButton boton) {
@@ -109,6 +116,7 @@ public class frLineas extends javax.swing.JDialog {
         });
 
         txtDto.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        txtDto.setText("0");
         txtDto.setToolTipText("DESCUENTO NUMERICO");
         txtDto.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
@@ -133,6 +141,7 @@ public class frLineas extends javax.swing.JDialog {
 
         lDto.setText("Dto(%):");
 
+        txtReferencia.setEditable(false);
         txtReferencia.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -141,11 +150,13 @@ public class frLineas extends javax.swing.JDialog {
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setText("Notas:");
 
+        txtNotas.setEditable(false);
         txtNotas.setColumns(20);
         txtNotas.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         txtNotas.setRows(5);
         jScrollPane1.setViewportView(txtNotas);
 
+        txtDescripcion.setEditable(false);
         txtDescripcion.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         btAceptar.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -257,18 +268,21 @@ public class frLineas extends javax.swing.JDialog {
     }//GEN-LAST:event_btArticuloActionPerformed
 
     private void txtCantidadFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtCantidadFocusLost
-        if(!validaciones.vDouble(this.txtCantidad.getText())){
-            this.txtCantidad.requestFocus();
-        }
+       
     }//GEN-LAST:event_txtCantidadFocusLost
 
     private void btAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAceptarActionPerformed
+        if(validarCampos()){
         apli.setReferencia(this.txtReferencia.getText());
         apli.setCantidad(Double.parseDouble(this.txtCantidad.getText()));
         apli.setDescuento(Double.parseDouble(this.txtDto.getText()));
         this.result = JOptionPane.OK_OPTION;
         this.setVisible(false);
-        this.dispose();        
+        this.dispose();     
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "No ha seleccionado ningún Articulo");
+        }
     }//GEN-LAST:event_btAceptarActionPerformed
 
     private void btCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelarActionPerformed
@@ -278,9 +292,7 @@ public class frLineas extends javax.swing.JDialog {
     }//GEN-LAST:event_btCancelarActionPerformed
 
     private void txtDtoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDtoFocusLost
-        if(!validaciones.vDouble(this.txtDto.getText())){
-            this.txtDto.requestFocus();
-        }
+       
     }//GEN-LAST:event_txtDtoFocusLost
 
     /**
