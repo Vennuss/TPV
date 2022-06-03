@@ -8,6 +8,7 @@ import Articulos.Articulo;
 import Ofertas.Cesta;
 import bd.Systema;
 import java.awt.Image;
+import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
@@ -44,15 +45,25 @@ public final class Muestra extends javax.swing.JPanel {
         this.lPrecio.setText("Precio: " + String.valueOf(arti.getPvp()));
         spCantidad.setModel(new javax.swing.SpinnerNumberModel(cantidad, cantidad, null, 1));
     }
+    public boolean validarFichero(String ruta) {
+        File archivo = new File(ruta);
+        return archivo.exists();
+    }
 
     public void cargarImaArticulo() {
         try {
             ImageIcon icon;
             if (arti.getRutaImg().equals("predeArt.png")) {
                 //this.cargarImg("/Imagenes/predeArt.png", true);
-                icon = new ImageIcon(getClass().getResource("/Imagenes/" + arti.getRutaImg()));
-            } else {
-                icon = new ImageIcon(Systema.getRutaArticulos() + arti.getRutaImg());
+                icon = new ImageIcon(getClass().getResource("/Imagenes/predeArt.png"));
+            } else {                
+                if (validarFichero(Systema.getRutaArticulos() + arti.getRutaImg()) && arti.getRutaImg().length() > 0) {
+                     icon = new ImageIcon(Systema.getRutaArticulos() + arti.getRutaImg());
+                } else {
+                    icon = new ImageIcon(getClass().getResource("/Imagenes/predeArt.png"));
+                   // this.cliente.set("predePer.png");
+                }
+                //icon = new ImageIcon(Systema.getRutaArticulos() + arti.getRutaImg());
             }
             ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT));
             this.lImagen.setIcon(icono);

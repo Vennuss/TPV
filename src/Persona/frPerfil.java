@@ -45,8 +45,18 @@ public class frPerfil extends javax.swing.JDialog {
             this.cargarImg("/Imagenes/predePer.png", true);
             this.cliente.setRutaImg("predePer.png");
         } else {
-            this.cargarImg(Systema.getRutaClientes() + this.cliente.getRutaImg(), false);
+            
+                 if (validarFichero(Systema.getRutaClientes() + cliente.getRutaImg()) && cliente.getRutaImg().length() > 0) {
+                    this.cargarImg(Systema.getRutaClientes() + cliente.getRutaImg(), false);
+                } else {
+                    this.cargarImg("/Imagenes/predePer.png", true);
+                    this.cliente.setRutaImg("predePer.png");
+                }
         }
+    }
+     public boolean validarFichero(String ruta) {
+        File archivo = new File(ruta);
+        return archivo.exists();
     }
     private void cargarImg(String url, boolean almacen) {
         try {

@@ -47,12 +47,17 @@ public class frCliente extends javax.swing.JDialog {
             this.txtCorreo.setText(cli.getCorreo());
             this.txtApellidos.setText(cli.getApellidos());
             this.txtPassword.setText(cli.getPass());
-            if(cli.getRutaImg().equals("predePer.png")){
+            if(cliente.getRutaImg().equals("predePer.png")){
                 this.cargarImg("/Imagenes/predePer.png", true);
             }else{
-                this.cargarImg(Systema.getRutaClientes() + cli.getRutaImg(), false);
+                 if (validarFichero(Systema.getRutaClientes() + cliente.getRutaImg()) && cliente.getRutaImg().length() > 0) {
+                    this.cargarImg(Systema.getRutaClientes() + cliente.getRutaImg(), false);
+                } else {
+                    this.cargarImg("/Imagenes/predePer.png", true);
+                    this.cliente.setRutaImg("predePer.png");
+                }
             }
-            
+             
         }
         else{
             this.setTitle("REGISTRO DE CLIENTES");
@@ -60,6 +65,11 @@ public class frCliente extends javax.swing.JDialog {
             cli.setRutaImg("predePer.png");
         }
 
+    }
+    
+    public boolean validarFichero(String ruta) {
+        File archivo = new File(ruta);
+        return archivo.exists();
     }
     
     public boolean validarCampos(){

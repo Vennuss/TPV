@@ -15,6 +15,7 @@ import bd.bd;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Image;
+import java.io.File;
 import java.sql.ResultSet;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -66,19 +67,30 @@ public class PanelOfertasCli extends javax.swing.JFrame {
         this.lNombre.setText(cliente.getApellidos() + ", " + cliente.getNombres());
         try {
             ImageIcon icon;
-            if(cliente.getRutaImg().equals("predePer.png")){
-                
+            if (cliente.getRutaImg().equals("predePer.png")) {
+
                 icon = new ImageIcon(getClass().getResource("/Imagenes/predePer.png"));
-            }else{                
-                icon = new ImageIcon(Systema.getRutaClientes() + cliente.getRutaImg());
+            } else {
+                if (validarFichero(Systema.getRutaUsuarios() + this.cliente.getRutaImg()) && this.cliente.getRutaImg().length() > 0) {
+                    icon = new ImageIcon(Systema.getRutaUsuarios() + this.cliente.getRutaImg());
+
+                } else {
+                    icon = new ImageIcon(getClass().getResource("/Imagenes/predePer.png"));
+                    this.cliente.setRutaImg("predePer.png");
+                }
+                // icon = new ImageIcon(Systema.getRutaClientes() + cliente.getRutaImg());
             }
-            
 
             ImageIcon icono = new ImageIcon(icon.getImage().getScaledInstance(this.lbCliImg.getWidth(), this.lbCliImg.getHeight(), Image.SCALE_DEFAULT));
             this.lbCliImg.setIcon(icono);
         } catch (Exception ex) {
 
         }
+    }
+
+    public boolean validarFichero(String ruta) {
+        File archivo = new File(ruta);
+        return archivo.exists();
     }
 
     public String cargarFiltros() {
@@ -91,7 +103,7 @@ public class PanelOfertasCli extends javax.swing.JFrame {
                         + " and a.ref=n.articulosRef and (a.ref like '%" + this.txtArticulos.getText()
                         + "%' or a.descripcion like '%" + this.txtArticulos.getText() + "%')";
             } else {
-                
+
                 sql = "select * from articulos a, aplican n WHERE n.ofertasId=" + this.txtOfertas.getText() + " and a.ref=n.articulosRef ";
             }
         } else {
@@ -143,7 +155,7 @@ public class PanelOfertasCli extends javax.swing.JFrame {
         jMenuItem2 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("TPV-GESTION");
+        setTitle("TPV-EM4S - PANEL DE CLIENTES");
         setType(java.awt.Window.Type.POPUP);
         addWindowStateListener(new java.awt.event.WindowStateListener() {
             public void windowStateChanged(java.awt.event.WindowEvent evt) {
@@ -280,6 +292,11 @@ public class PanelOfertasCli extends javax.swing.JFrame {
         jMenu3.setText("Ayuda");
 
         jMenuItem2.setText("Acerca de");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
         jMenu3.add(jMenuItem2);
 
         jMenuBar1.add(jMenu3);
@@ -408,27 +425,27 @@ public class PanelOfertasCli extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowStateChanged
 
     private void btPedidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPedidosActionPerformed
-        
-         PanelPedido dialog = new PanelPedido(false, this.cliente,new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                       // System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
+
+        PanelPedido dialog = new PanelPedido(false, this.cliente, new javax.swing.JFrame(), true);
+        dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                // System.exit(0);
+            }
+        });
+        dialog.setVisible(true);
     }//GEN-LAST:event_btPedidosActionPerformed
 
     private void btCestoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCestoActionPerformed
-       
-         PanelCarrito dialog = new PanelCarrito(cliente,new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        //System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
+
+        PanelCarrito dialog = new PanelCarrito(cliente, new javax.swing.JFrame(), true);
+        dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                //System.exit(0);
+            }
+        });
+        dialog.setVisible(true);
     }//GEN-LAST:event_btCestoActionPerformed
 
     private void btPerfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPerfilActionPerformed
@@ -447,6 +464,17 @@ public class PanelOfertasCli extends javax.swing.JFrame {
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         System.exit(0);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        AcercaDe dialog = new AcercaDe(new javax.swing.JFrame(), true);
+        dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                //System.exit(0);
+            }
+        });
+        dialog.setVisible(true);
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     /**
      * @param args the command line arguments

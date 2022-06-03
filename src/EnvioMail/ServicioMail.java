@@ -15,6 +15,40 @@ public class ServicioMail {
     }
 
     public void EnvioCorreo() {
+        /*this.txtDni.setInputVerifier(
+          new InputVerifier() {
+            @Override
+            public boolean verify(JComponent input) {
+              boolean isValid = false;
+
+              String text = ((JTextField) input).getText();
+              if (text != null && text.matches("[0-9]{7,8}[A-Z]")) {
+                isValid = true;
+                ((JTextField) input).setBackground(null);
+              }
+              if (!isValid) {
+               ((JTextField) input).setBackground(Color.red);
+              }
+              return isValid;
+            }
+          });
+        this.txtCorreo.setInputVerifier(
+          new InputVerifier() {
+            @Override
+            public boolean verify(JComponent input) {
+              boolean isValid = false;
+
+              String text = ((JTextField) input).getText();
+              if (text != null && text.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+                isValid = true;
+                ((JTextField) input).setBackground(null);
+              }
+              if (!isValid) {
+               ((JTextField) input).setBackground(Color.red);
+              }
+              return isValid;
+            }
+          });*/
        /* Properties props = new Properties();
 
         props.put(

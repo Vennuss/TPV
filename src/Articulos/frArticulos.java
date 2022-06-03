@@ -23,7 +23,7 @@ import validaciones.Verificador;
 
 /**
  *
-* @author Ronal Arrayaza DAM1C
+ * @author Ronal Arrayaza DAM1C
  */
 public class frArticulos extends javax.swing.JDialog {
 
@@ -56,13 +56,17 @@ public class frArticulos extends javax.swing.JDialog {
             this.txtMarca.setText(art.getMarca());
             this.txtFamilia.setText(String.valueOf(art.getFa().getId()));
             this.lFamilia.setText(art.getFa().getNombre());
-            if(art.getRutaImg().equals("predeArt.png")){
+            if (art.getRutaImg().equals("predeArt.png")) {
                 this.cargarImg("/Imagenes/predeArt.png", true);
+            } else {
+                if (validarFichero(Systema.getRutaArticulos() + art.getRutaImg()) && art.getRutaImg().length() > 0) {
+                    this.cargarImg(Systema.getRutaArticulos() + art.getRutaImg(), false);
+                } else {
+                    this.cargarImg("/Imagenes/predeArt.png", true);
+                    this.art.setRutaImg("predeArt.png");
+                }
             }
-            else{
-                this.cargarImg(Systema.rutaArticulos + art.getRutaImg(), false);
-            }
-            
+
         } else {
             this.setTitle("REGISTRO DE ARTICULOS");
             this.cargarImg("/Imagenes/predeArt.png", true);
@@ -70,12 +74,17 @@ public class frArticulos extends javax.swing.JDialog {
         }
     }
 
+    public boolean validarFichero(String ruta) {
+        File archivo = new File(ruta);
+        return archivo.exists();
+    }
+
     private void validarRuta(String url) {
         if (url.length() > 0) {
             String nombre = "";
             try {
                 File origen = new File(url);
-                File destino=new File(Systema.getRutaArticulos()+origen.getName());
+                File destino = new File(Systema.getRutaArticulos() + origen.getName());
                 nombre = origen.getName();
                 System.out.println("Ruta origen:" + origen.getAbsolutePath());
                 System.out.println("Ruta Destino:" + destino.getAbsolutePath());
@@ -171,8 +180,7 @@ public class frArticulos extends javax.swing.JDialog {
             } catch (SQLException ex) {
                 retorno = false;
             }
-        }
-        else{
+        } else {
             return true;
         }
         return retorno;
@@ -470,8 +478,7 @@ public class frArticulos extends javax.swing.JDialog {
                 this.setVisible(false);
                 this.dispose();
             }
-        }
-        else{
+        } else {
             JOptionPane.showMessageDialog(this, "Seleccione Familia");
         }
 

@@ -43,40 +43,7 @@ public class frUsuario extends javax.swing.JDialog {
         this.txtCorreo.setInputVerifier(new Verificador(this.lCorreo));
         this.txtUsuario.setInputVerifier(new Verificador(this.lUsuario));
         System.out.println("El color es: " + this.lDNI.getForeground().toString() + " ");
-        /*this.txtDni.setInputVerifier(
-          new InputVerifier() {
-            @Override
-            public boolean verify(JComponent input) {
-              boolean isValid = false;
-
-              String text = ((JTextField) input).getText();
-              if (text != null && text.matches("[0-9]{7,8}[A-Z]")) {
-                isValid = true;
-                ((JTextField) input).setBackground(null);
-              }
-              if (!isValid) {
-               ((JTextField) input).setBackground(Color.red);
-              }
-              return isValid;
-            }
-          });
-        this.txtCorreo.setInputVerifier(
-          new InputVerifier() {
-            @Override
-            public boolean verify(JComponent input) {
-              boolean isValid = false;
-
-              String text = ((JTextField) input).getText();
-              if (text != null && text.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
-                isValid = true;
-                ((JTextField) input).setBackground(null);
-              }
-              if (!isValid) {
-               ((JTextField) input).setBackground(Color.red);
-              }
-              return isValid;
-            }
-          });*/
+        
         if (!operacion) {
             this.setTitle("ACTUALIZACION DE USUARIOS");
             this.txtDni.setText(this.usuario.getDni());
@@ -90,7 +57,12 @@ public class frUsuario extends javax.swing.JDialog {
             if(usuario.getRutaImg().equals("predePer.png")){
                 this.cargarImg("/Imagenes/predePer.png", true);
             }else{
-                this.cargarImg(Systema.getRutaUsuarios()+ this.usuario.getRutaImg(), false);
+                if (validarFichero(Systema.getRutaUsuarios() + this.usuario.getRutaImg()) && this.usuario.getRutaImg().length() > 0) {
+                    this.cargarImg(Systema.getRutaUsuarios() + this.usuario.getRutaImg(), false);
+                } else {
+                    this.cargarImg("/Imagenes/predePer.png", true);
+                    this.usuario.setRutaImg("predePer.png");
+                }
             }
             
         } else {
@@ -98,6 +70,11 @@ public class frUsuario extends javax.swing.JDialog {
             this.cargarImg("/Imagenes/predePer.png", true);
             this.usuario.setRutaImg("predePer.png");
         }
+    }
+    
+    public boolean validarFichero(String ruta) {
+        File archivo = new File(ruta);
+        return archivo.exists();
     }
     
     public boolean validarCampos(){

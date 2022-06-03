@@ -68,7 +68,7 @@ public class Inicio extends javax.swing.JFrame {
         lIcono = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("INICIO");
+        setTitle("TPV-EM4S");
 
         chkInterno.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         chkInterno.setText("Seleccione para acceso Interno");

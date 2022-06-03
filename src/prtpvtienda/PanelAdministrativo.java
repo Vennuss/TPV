@@ -14,6 +14,7 @@ import Persona.PanelUsuarios;
 import Persona.Usuario;
 import bd.Systema;
 import java.awt.Image;
+import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -25,13 +26,15 @@ import javax.swing.JFrame;
 public class PanelAdministrativo extends javax.swing.JFrame {
 
     private Usuario usuario;
+
     /**
      * Creates new form PanelAdministrativo
+     *
      * @param usuario
      */
     public PanelAdministrativo(Usuario usuario) {
         initComponents();
-        this.usuario=usuario;
+        this.usuario = usuario;
         this.cargarPerfil();
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         cargarIcono("/Imagenes/avatar.png", this.btClientes);
@@ -42,16 +45,22 @@ public class PanelAdministrativo extends javax.swing.JFrame {
         cargarIcono("/Imagenes/clientes.png", this.btUsuarios);
         this.setIconImage(new ImageIcon(getClass().getResource("/Imagenes/tpv.png")).getImage());
     }
+
     private void cargarPerfil() {
         this.lCorreoCli.setText(usuario.getCorreo());
         this.lNombre.setText(usuario.getApellidos() + ", " + usuario.getNombres());
         try {
             ImageIcon icon;
-            if(usuario.getRutaImg().equals("predePer.png")){
-                
+            if (usuario.getRutaImg().equals("predePer.png")) {
                 icon = new ImageIcon(getClass().getResource("/Imagenes/predePer.png"));
-            }else{                
-                icon = new ImageIcon(Systema.getRutaUsuarios()+ usuario.getRutaImg());
+            } else {
+                if (validarFichero(Systema.getRutaUsuarios() + this.usuario.getRutaImg()) && this.usuario.getRutaImg().length() > 0) {
+                    icon = new ImageIcon(Systema.getRutaUsuarios() + usuario.getRutaImg());
+
+                } else {
+                    icon = new ImageIcon(getClass().getResource("/Imagenes/predePer.png"));
+                    this.usuario.setRutaImg("predePer.png");
+                }
             }
             //ImageIcon icon = new ImageIcon(Systema.getRutaClientes() + usuario.getRutaImg());
 
@@ -60,6 +69,11 @@ public class PanelAdministrativo extends javax.swing.JFrame {
         } catch (Exception ex) {
 
         }
+    }
+
+    public boolean validarFichero(String ruta) {
+        File archivo = new File(ruta);
+        return archivo.exists();
     }
 
     private void cargarIcono(String url, JButton boton) {
@@ -108,6 +122,7 @@ public class PanelAdministrativo extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
 
         jMenu3.setText("File");
         jMenuBar2.add(jMenu3);
@@ -116,7 +131,7 @@ public class PanelAdministrativo extends javax.swing.JFrame {
         jMenuBar2.add(jMenu4);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("PANEL ADMINISTRATIVO");
+        setTitle("TPV-EM4S - PANEL ADMINISTRATIVO");
 
         jToolBar1.setOrientation(javax.swing.SwingConstants.VERTICAL);
         jToolBar1.setRollover(true);
@@ -261,6 +276,15 @@ public class PanelAdministrativo extends javax.swing.JFrame {
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Ayuda");
+
+        jMenuItem2.setText("Acerca de");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem2);
+
         jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
@@ -324,14 +348,14 @@ public class PanelAdministrativo extends javax.swing.JFrame {
     private void btPedidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btPedidosActionPerformed
         /*PanelPedido pedido=new PanelPedido(true, null);
         pedido.setVisible(true);*/
-         PanelPedido dialog = new PanelPedido(true, null,new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                       // System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
+        PanelPedido dialog = new PanelPedido(true, null, new javax.swing.JFrame(), true);
+        dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                // System.exit(0);
+            }
+        });
+        dialog.setVisible(true);
     }//GEN-LAST:event_btPedidosActionPerformed
 
     private void btUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btUsuariosActionPerformed
@@ -359,6 +383,17 @@ public class PanelAdministrativo extends javax.swing.JFrame {
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         System.exit(0);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        AcercaDe dialog = new AcercaDe(new javax.swing.JFrame(), true);
+        dialog.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent e) {
+                //  System.exit(0);
+            }
+        });
+        dialog.setVisible(true);
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -413,6 +448,7 @@ public class PanelAdministrativo extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
